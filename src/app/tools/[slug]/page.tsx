@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ToolPageLayout from "@/components/ToolPageLayout";
 import { toolComponents } from "@/lib/tool-components";
-import { getRelatedTools, getToolBySlug, tools } from "@/lib/tools";
+import { getToolBySlug, tools } from "@/lib/tools";
 
 interface ToolPageProps {
   params: Promise<{ slug: string }>;
@@ -33,10 +33,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
   if (!tool || !Component) notFound();
 
-  const related = getRelatedTools(slug);
-
   return (
-    <ToolPageLayout tool={tool} relatedTools={related}>
+    <ToolPageLayout tool={tool}>
       <Component />
     </ToolPageLayout>
   );

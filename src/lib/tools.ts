@@ -300,12 +300,3 @@ export function getToolsByCategory(): Record<ToolCategory, Tool[]> {
 export function getToolBySlug(slug: string): Tool | undefined {
   return tools.find((tool) => tool.slug === slug);
 }
-
-export function getRelatedTools(slug: string, limit = 4): Tool[] {
-  const current = getToolBySlug(slug);
-  if (!current) return [];
-
-  return tools
-    .filter((t) => t.category === current.category && t.slug !== slug)
-    .slice(0, limit);
-}

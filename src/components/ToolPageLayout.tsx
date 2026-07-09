@@ -1,18 +1,15 @@
 import Link from "next/link";
 import AdSlot from "@/components/AdSlot";
-import ToolCard from "@/components/ToolCard";
 import type { Tool } from "@/lib/tools";
 
 interface ToolPageLayoutProps {
   tool: Tool;
   children: React.ReactNode;
-  relatedTools?: Tool[];
 }
 
 export default function ToolPageLayout({
   tool,
   children,
-  relatedTools = [],
 }: ToolPageLayoutProps) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
@@ -44,19 +41,6 @@ export default function ToolPageLayout({
       </div>
 
       <div className="min-w-0">{children}</div>
-
-      {relatedTools.length > 0 && (
-        <section className="mt-14 border-t border-zinc-200 pt-10 dark:border-zinc-800">
-          <h2 className="mb-6 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-            Related tools
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {relatedTools.map((related) => (
-              <ToolCard key={related.slug} tool={related} />
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }

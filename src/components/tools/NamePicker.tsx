@@ -47,12 +47,24 @@ function getContrastColor(hex: string): string {
   return luminance > 0.55 ? "#18181b" : "#ffffff";
 }
 
+function shuffleEntries<T>(arr: T[]): T[] {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 export default function NamePicker() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const editInputRef = useRef<HTMLInputElement>(null);
   const [entries, setEntries] = useState<WheelEntry[]>(createDefaultEntries);
   const [nameInput, setNameInput] = useState("");
   const [newColor, setNewColor] = useState(WHEEL_COLORS[DEFAULT_NAMES.length % WHEEL_COLORS.length]);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState("");
   const [rotation, setRotation] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const [winner, setWinner] = useState<WheelEntry | null>(null);
@@ -112,6 +124,13 @@ export default function NamePicker() {
     drawWheel(rotation);
   }, [entries, rotation, drawWheel]);
 
+  useEffect(() => {
+    if (editingId) {
+      editInputRef.current?.focus();
+      editInputRef.current?.select();
+    }
+  }, [editingId]);
+
   const addName = useCallback(() => {
     const trimmed = nameInput.trim();
     if (!trimmed) return;
@@ -126,29 +145,74 @@ export default function NamePicker() {
     inputRef.current?.focus();
   }, [nameInput, newColor, entries.length]);
 
-  const removeEntry = useCallback((id: string) => {
-    setEntries((prev) => prev.filter((e) => e.id !== id));
-    setWinner(null);
-  }, []);
-
   const updateColor = useCallback((id: string, color: string) => {
     setEntries((prev) =>
       prev.map((e) => (e.id === id ? { ...e, color } : e)),
     );
   }, []);
 
+  const startEditing = useCallback(
+    (entry: WheelEntry) => {
+      if (isSpinning) return;
+      setEditingId(entry.id);
+      setEditingName(entry.name);
+    },
+    [isSpinning],
+  );
+
+  const cancelEditing = useCallback(() => {
+    setEditingId(null);
+    setEditingName("");
+  }, []);
+
+  const saveEditing = useCallback(
+    (id: string) => {
+      const trimmed = editingName.trim();
+      if (trimmed) {
+        setEntries((prev) =>
+          prev.map((e) => (e.id === id ? { ...e, name: trimmed } : e)),
+        );
+        setWinner((prev) =>
+          prev?.id === id ? { ...prev, name: trimmed } : prev,
+        );
+      }
+      cancelEditing();
+    },
+    [editingName, cancelEditing],
+  );
+
+  const removeEntry = useCallback(
+    (id: string) => {
+      setEntries((prev) => prev.filter((e) => e.id !== id));
+      setWinner(null);
+      if (editingId === id) cancelEditing();
+    },
+    [editingId, cancelEditing],
+  );
+
   const clearAllNames = useCallback(() => {
     setEntries([]);
     setWinner(null);
     setRotation(0);
     setNewColor(defaultColor(0));
-  }, []);
+    cancelEditing();
+  }, [cancelEditing]);
+
+  const randomizeNames = useCallback(() => {
+    if (isSpinning || entries.length < 2) return;
+
+    cancelEditing();
+    setWinner(null);
+    setRotation(0);
+    setEntries((prev) => shuffleEntries(prev));
+  }, [isSpinning, entries.length, cancelEditing]);
 
   const spin = useCallback(() => {
     if (isSpinning || entries.length < 2) return;
 
     setIsSpinning(true);
     setWinner(null);
+    cancelEditing();
 
     const extraSpins = 5 + Math.random() * 3;
     const randomOffset = Math.random() * 2 * Math.PI;
@@ -171,18 +235,19 @@ export default function NamePicker() {
       } else {
         setIsSpinning(false);
 
-        const normalized =
-          ((2 * Math.PI - (current % (2 * Math.PI))) % (2 * Math.PI)) +
-          Math.PI / 2;
+        const pointerAngle = -Math.PI / 2;
+        const relativeAngle =
+          ((pointerAngle - current) % (2 * Math.PI) + 2 * Math.PI) %
+          (2 * Math.PI);
         const sliceAngle = (2 * Math.PI) / entries.length;
         const winnerIndex =
-          Math.floor(normalized / sliceAngle) % entries.length;
+          Math.floor(relativeAngle / sliceAngle) % entries.length;
         setWinner(entries[winnerIndex]);
       }
     };
 
     animationRef.current = requestAnimationFrame(animate);
-  }, [isSpinning, entries, rotation]);
+  }, [isSpinning, entries, rotation, cancelEditing]);
 
   useEffect(() => {
     return () => {
@@ -204,24 +269,38 @@ export default function NamePicker() {
     }
   };
 
+  const spinButton = (
+    <button
+      type="button"
+      onClick={spin}
+      disabled={isSpinning || entries.length < 2}
+      className="w-full rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      {isSpinning ? "Spinning…" : "Spin the Wheel!"}
+    </button>
+  );
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-start">
-        <div className="relative shrink-0">
-          <div className="absolute -top-2 left-1/2 z-10 -translate-x-1/2">
-            <div className="h-0 w-0 border-x-[14px] border-t-[24px] border-x-transparent border-t-red-500 drop-shadow-md" />
+        <div className="flex w-full max-w-[400px] shrink-0 flex-col items-center gap-4">
+          <div className="relative">
+            <div className="absolute -top-2 left-1/2 z-10 -translate-x-1/2">
+              <div className="h-0 w-0 border-x-[14px] border-t-[24px] border-x-transparent border-t-red-500 drop-shadow-md" />
+            </div>
+            <canvas
+              ref={canvasRef}
+              width={400}
+              height={400}
+              className="w-full max-w-[400px] rounded-full shadow-lg"
+            />
           </div>
-          <canvas
-            ref={canvasRef}
-            width={400}
-            height={400}
-            className="rounded-full shadow-lg"
-          />
           {entries.length < 2 && (
-            <p className="mt-3 text-center text-sm text-zinc-500">
+            <p className="text-center text-sm text-zinc-500">
               Add at least 2 names to spin
             </p>
           )}
+          <div className="w-full lg:hidden">{spinButton}</div>
         </div>
 
         <div className="w-full flex-1 space-y-4">
@@ -287,9 +366,36 @@ export default function NamePicker() {
                       title={`Change color for ${entry.name}`}
                       className="h-9 w-9 shrink-0 cursor-pointer rounded-md border border-zinc-300 bg-white p-0.5 disabled:opacity-50 dark:border-zinc-600"
                     />
-                    <span className="min-w-0 flex-1 truncate text-sm text-zinc-800 dark:text-zinc-100">
-                      {entry.name}
-                    </span>
+                    {editingId === entry.id ? (
+                      <input
+                        ref={editInputRef}
+                        type="text"
+                        value={editingName}
+                        onChange={(e) => setEditingName(e.target.value)}
+                        onBlur={() => saveEditing(entry.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            saveEditing(entry.id);
+                          }
+                          if (e.key === "Escape") {
+                            e.preventDefault();
+                            cancelEditing();
+                          }
+                        }}
+                        className="min-w-0 flex-1 rounded-md border border-indigo-300 bg-white px-2 py-1 text-sm text-zinc-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-indigo-700 dark:bg-zinc-900 dark:text-zinc-100"
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => startEditing(entry)}
+                        disabled={isSpinning}
+                        title="Click to edit name"
+                        className="min-w-0 flex-1 truncate rounded-md px-1 py-1 text-left text-sm text-zinc-800 transition-colors hover:bg-zinc-200 disabled:opacity-50 dark:text-zinc-100 dark:hover:bg-zinc-700"
+                      >
+                        {entry.name}
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => removeEntry(entry.id)}
@@ -308,25 +414,28 @@ export default function NamePicker() {
               </div>
             )}
             {entries.length > 0 && (
-              <button
-                type="button"
-                onClick={clearAllNames}
-                disabled={isSpinning}
-                className="mt-2 text-xs font-medium text-zinc-500 transition-colors hover:text-red-600 disabled:opacity-50 dark:hover:text-red-400"
-              >
-                Clear all names
-              </button>
+              <div className="mt-2 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={randomizeNames}
+                  disabled={isSpinning || entries.length < 2}
+                  className="text-xs font-medium text-zinc-500 transition-colors hover:text-indigo-600 disabled:opacity-50 dark:hover:text-indigo-400"
+                >
+                  Shuffle names
+                </button>
+                <button
+                  type="button"
+                  onClick={clearAllNames}
+                  disabled={isSpinning}
+                  className="text-xs font-medium text-zinc-500 transition-colors hover:text-red-600 disabled:opacity-50 dark:hover:text-red-400"
+                >
+                  Clear all names
+                </button>
+              </div>
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={spin}
-            disabled={isSpinning || entries.length < 2}
-            className="w-full rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {isSpinning ? "Spinning…" : "Spin the Wheel!"}
-          </button>
+          <div className="hidden lg:block">{spinButton}</div>
         </div>
       </div>
 
@@ -352,7 +461,7 @@ export default function NamePicker() {
             onClick={removeWinner}
             className="mt-4 rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
           >
-            Remove winner & spin again
+            Remove winner
           </button>
         </div>
       )}

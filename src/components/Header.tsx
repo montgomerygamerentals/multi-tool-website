@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HeaderNav from "@/components/HeaderNav";
 
 export default function Header() {
   return (
@@ -12,14 +13,7 @@ export default function Header() {
             ToolBox
           </span>
         </Link>
-        <nav className="flex items-center gap-6">
-          <Link
-            href="/"
-            className="text-sm font-medium text-zinc-600 transition-colors hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400"
-          >
-            All Tools
-          </Link>
-        </nav>
+        <HeaderNav />
       </div>
     </header>
   );

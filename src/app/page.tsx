@@ -23,7 +23,7 @@ export default function Home() {
         </p>
       </section>
 
-      <AdSlot position="banner" className="mb-12" />
+      <AdSlot className="mb-12" />
 
       <div className="space-y-14">
         {categories.map((category) => {
@@ -49,8 +49,6 @@ export default function Home() {
           );
         })}
       </div>
-
-      <AdSlot position="inline" className="mt-14" />
     </div>
   );
 }

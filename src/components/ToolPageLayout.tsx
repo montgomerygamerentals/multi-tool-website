@@ -16,7 +16,7 @@ export default function ToolPageLayout({
 }: ToolPageLayoutProps) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <AdSlot position="banner" className="mb-8" />
+      <AdSlot className="mb-8" />
 
       <nav className="mb-6 text-sm text-zinc-500 dark:text-zinc-400">
         <Link
@@ -43,14 +43,7 @@ export default function ToolPageLayout({
         </p>
       </div>
 
-      <div className="flex flex-col gap-8 lg:flex-row">
-        <div className="min-w-0 flex-1">{children}</div>
-        <aside className="hidden shrink-0 lg:block">
-          <AdSlot position="sidebar" />
-        </aside>
-      </div>
-
-      <AdSlot position="inline" className="mt-8 lg:hidden" />
+      <div className="min-w-0">{children}</div>
 
       {relatedTools.length > 0 && (
         <section className="mt-14 border-t border-zinc-200 pt-10 dark:border-zinc-800">

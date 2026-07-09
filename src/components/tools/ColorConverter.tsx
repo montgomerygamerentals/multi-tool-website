@@ -62,8 +62,15 @@ export default function ColorConverter() {
   const [r, setR] = useState(99);
   const [g, setG] = useState(102);
   const [b, setB] = useState(241);
+  const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
 
   const hsl = useMemo(() => rgbToHsl(r, g, b), [r, g, b]);
+
+  const copyValue = async (label: string, value: string) => {
+    await navigator.clipboard.writeText(value);
+    setCopiedLabel(label);
+    setTimeout(() => setCopiedLabel(null), 2000);
+  };
 
   const updateFromHex = (value: string) => {
     setHex(value);
@@ -94,58 +101,89 @@ export default function ColorConverter() {
         className="h-32 rounded-xl border border-zinc-200 shadow-inner dark:border-zinc-700"
         style={{ backgroundColor: hex }}
       />
-      <ToolPanel title="HEX">
-        <input
-          type="text"
-          value={hex}
-          onChange={(e) => updateFromHex(e.target.value)}
-          className="w-full rounded-lg border border-zinc-300 px-3 py-2 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-800"
-        />
-        <input
-          type="color"
-          value={hex.length === 7 ? hex : "#6366f1"}
-          onChange={(e) => updateFromHex(e.target.value)}
-          className="mt-3 h-12 w-full cursor-pointer rounded-lg"
-        />
-      </ToolPanel>
-      <ToolPanel title="RGB">
-        <div className="grid grid-cols-3 gap-4">
-          {(["r", "g", "b"] as const).map((channel, i) => {
-            const val = [r, g, b][i];
-            return (
-              <div key={channel}>
-                <label className="mb-1 block text-sm font-medium uppercase">
-                  {channel}
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  max={255}
-                  value={val}
-                  onChange={(e) => {
-                    const n = Number(e.target.value);
-                    const next = [r, g, b];
-                    next[i] = n;
-                    updateFromRgb(next[0], next[1], next[2]);
-                  }}
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
-                />
-              </div>
-            );
-          })}
-        </div>
-      </ToolPanel>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <ToolPanel title="HEX">
+          <input
+            type="text"
+            value={hex}
+            onChange={(e) => updateFromHex(e.target.value)}
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-800"
+          />
+        </ToolPanel>
+        <ToolPanel title="RGB">
+          <div className="grid grid-cols-3 gap-4">
+            {(["r", "g", "b"] as const).map((channel, i) => {
+              const val = [r, g, b][i];
+              return (
+                <div key={channel}>
+                  <label className="mb-1 block text-sm font-medium uppercase">
+                    {channel}
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    max={255}
+                    value={val}
+                    onChange={(e) => {
+                      const n = Number(e.target.value);
+                      const next = [r, g, b];
+                      next[i] = n;
+                      updateFromRgb(next[0], next[1], next[2]);
+                    }}
+                    className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </ToolPanel>
+      </div>
       <div className="grid gap-3 sm:grid-cols-3">
         {values.map((v) => (
-          <button
+          <div
             key={v.label}
-            type="button"
-            onClick={() => navigator.clipboard.writeText(v.value)}
-            className="rounded-xl border border-zinc-200 bg-white p-4 text-left transition-colors hover:border-indigo-300 dark:border-zinc-800 dark:bg-zinc-900"
+            className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900"
           >
-            <p className="text-xs font-medium text-zinc-500">{v.label}</p>
-            <p className="mt-1 truncate font-mono text-sm">{v.value}</p>
-          </button>
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-xs font-medium text-zinc-500">{v.label}</p>
+                <p className="mt-1 truncate font-mono text-sm">{v.value}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => copyValue(v.label, v.value)}
+                aria-label={`Copy ${v.label}`}
+                className="shrink-0 rounded-md p-1.5 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+              >
+                {copiedLabel === v.label ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="h-4 w-4 text-emerald-500"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="h-4 w-4"
+                    aria-hidden="true"
+                  >
+                    <path d="M7 3.5A1.5 1.5 0 0 1 8.5 2h3.879a1.5 1.5 0 0 1 1.06.44l3.122 3.12A1.5 1.5 0 0 1 17 6.622V12.5a1.5 1.5 0 0 1-1.5 1.5h-1v-3.379a3 3 0 0 0-.879-2.121L10.5 5.379A3 3 0 0 0 8.379 4.5H7v-1Z" />
+                    <path d="M4.5 6A1.5 1.5 0 0 0 3 7.5v9A1.5 1.5 0 0 0 4.5 18h7a1.5 1.5 0 0 0 1.5-1.5v-5.879a1.5 1.5 0 0 0-.44-1.06L9.44 6.439A1.5 1.5 0 0 0 8.378 6H4.5Z" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
         ))}
       </div>
     </div>

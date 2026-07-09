@@ -272,10 +272,17 @@ export const tools: Tool[] = [
   {
     slug: "list-shuffler",
     name: "List Shuffler",
-    description:
-      "Randomly shuffle any list or randomly split items into teams.",
+    description: "Randomly shuffle any list into a new order.",
     category: "randomizers",
     icon: "🔀",
+  },
+  {
+    slug: "team-splitter",
+    name: "Split into Teams",
+    description:
+      "Randomly divide a list of names or items into balanced teams.",
+    category: "randomizers",
+    icon: "👥",
   },
   {
     slug: "yes-no-picker",

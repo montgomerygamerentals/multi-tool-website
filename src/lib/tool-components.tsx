@@ -14,6 +14,7 @@ import ImageCropper from "@/components/tools/ImageCropper";
 import ImageResizer from "@/components/tools/ImageResizer";
 import JsonFormatter from "@/components/tools/JsonFormatter";
 import ListShuffler from "@/components/tools/ListShuffler";
+import TeamSplitter from "@/components/tools/TeamSplitter";
 import LoanCalculator from "@/components/tools/LoanCalculator";
 import LoremIpsum from "@/components/tools/LoremIpsum";
 import NamePicker from "@/components/tools/NamePicker";
@@ -90,5 +91,6 @@ export const toolComponents: Record<string, ComponentType> = {
   "coin-flip": CoinFlip,
   "dice-roller": DiceRoller,
   "list-shuffler": ListShuffler,
+  "team-splitter": TeamSplitter,
   "yes-no-picker": YesNoPicker,
 };

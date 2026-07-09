@@ -15,7 +15,7 @@ const WHEEL_COLORS = [
   "#3b82f6",
 ];
 
-const DEFAULT_NAMES = ["Alice", "Bob", "Charlie", "Diana", "Eve"];
+const DEFAULT_NAMES = ["Philip", "Anzley", "Sophie"];
 
 interface WheelEntry {
   id: string;
@@ -73,7 +73,7 @@ export default function NamePicker() {
   const drawWheel = useCallback(
     (currentRotation: number) => {
       const canvas = canvasRef.current;
-      if (!canvas || entries.length === 0) return;
+      if (!canvas) return;
 
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -81,39 +81,68 @@ export default function NamePicker() {
       const size = canvas.width;
       const center = size / 2;
       const radius = center - 10;
-      const sliceAngle = (2 * Math.PI) / entries.length;
+      const isDark =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
 
       ctx.clearRect(0, 0, size, size);
 
-      entries.forEach((entry, i) => {
-        const startAngle = currentRotation + i * sliceAngle;
-        const endAngle = startAngle + sliceAngle;
-
+      if (entries.length === 0) {
         ctx.beginPath();
-        ctx.moveTo(center, center);
-        ctx.arc(center, center, radius, startAngle, endAngle);
-        ctx.closePath();
-        ctx.fillStyle = entry.color;
+        ctx.arc(center, center, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = isDark ? "#27272a" : "#f4f4f5";
         ctx.fill();
-        ctx.strokeStyle = "#ffffff";
+        ctx.strokeStyle = isDark ? "#52525b" : "#e4e4e7";
         ctx.lineWidth = 2;
         ctx.stroke();
+      } else if (entries.length === 1) {
+        const entry = entries[0];
+
+        ctx.beginPath();
+        ctx.arc(center, center, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = entry.color;
+        ctx.fill();
 
         ctx.save();
         ctx.translate(center, center);
-        ctx.rotate(startAngle + sliceAngle / 2);
         ctx.textAlign = "right";
         ctx.fillStyle = getContrastColor(entry.color);
-        ctx.font = `bold ${Math.min(16, radius / entries.length + 8)}px sans-serif`;
+        ctx.font = `bold ${Math.min(20, radius / 3)}px sans-serif`;
         ctx.fillText(entry.name, radius - 16, 5);
         ctx.restore();
-      });
+      } else {
+        const sliceAngle = (2 * Math.PI) / entries.length;
+
+        entries.forEach((entry, i) => {
+          const startAngle = currentRotation + i * sliceAngle;
+          const endAngle = startAngle + sliceAngle;
+
+          ctx.beginPath();
+          ctx.moveTo(center, center);
+          ctx.arc(center, center, radius, startAngle, endAngle);
+          ctx.closePath();
+          ctx.fillStyle = entry.color;
+          ctx.fill();
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          ctx.save();
+          ctx.translate(center, center);
+          ctx.rotate(startAngle + sliceAngle / 2);
+          ctx.textAlign = "right";
+          ctx.fillStyle = getContrastColor(entry.color);
+          ctx.font = `bold ${Math.min(16, radius / entries.length + 8)}px sans-serif`;
+          ctx.fillText(entry.name, radius - 16, 5);
+          ctx.restore();
+        });
+      }
 
       ctx.beginPath();
       ctx.arc(center, center, 20, 0, 2 * Math.PI);
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = isDark ? "#18181b" : "#ffffff";
       ctx.fill();
-      ctx.strokeStyle = "#e4e4e7";
+      ctx.strokeStyle = isDark ? "#52525b" : "#e4e4e7";
       ctx.lineWidth = 3;
       ctx.stroke();
     },
@@ -329,7 +358,7 @@ export default function NamePicker() {
                 onChange={(e) => setNewColor(e.target.value)}
                 disabled={isSpinning}
                 title="Color for new name"
-                className="h-[42px] w-12 shrink-0 cursor-pointer rounded-lg border border-zinc-300 bg-white p-1 disabled:opacity-50 dark:border-zinc-700"
+                className="h-[42px] w-12 shrink-0 cursor-pointer rounded-lg border-0 bg-transparent p-0 disabled:opacity-50 [&::-moz-color-swatch]:rounded-lg [&::-moz-color-swatch]:border-0 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-lg [&::-webkit-color-swatch]:border-0"
               />
               <button
                 type="button"
@@ -364,7 +393,7 @@ export default function NamePicker() {
                       onChange={(e) => updateColor(entry.id, e.target.value)}
                       disabled={isSpinning}
                       title={`Change color for ${entry.name}`}
-                      className="h-9 w-9 shrink-0 cursor-pointer rounded-md border border-zinc-300 bg-white p-0.5 disabled:opacity-50 dark:border-zinc-600"
+                      className="h-9 w-9 shrink-0 cursor-pointer rounded-md border-0 bg-transparent p-0 disabled:opacity-50 [&::-moz-color-swatch]:rounded-md [&::-moz-color-swatch]:border-0 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-md [&::-webkit-color-swatch]:border-0"
                     />
                     {editingId === entry.id ? (
                       <input
@@ -414,12 +443,12 @@ export default function NamePicker() {
               </div>
             )}
             {entries.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-3">
+              <div className="mt-3 flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={randomizeNames}
                   disabled={isSpinning || entries.length < 2}
-                  className="text-xs font-medium text-zinc-500 transition-colors hover:text-indigo-600 disabled:opacity-50 dark:hover:text-indigo-400"
+                  className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-indigo-700 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300"
                 >
                   Shuffle names
                 </button>
@@ -427,7 +456,7 @@ export default function NamePicker() {
                   type="button"
                   onClick={clearAllNames}
                   disabled={isSpinning}
-                  className="text-xs font-medium text-zinc-500 transition-colors hover:text-red-600 disabled:opacity-50 dark:hover:text-red-400"
+                  className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-red-800 dark:hover:bg-red-950/30 dark:hover:text-red-400"
                 >
                   Clear all names
                 </button>

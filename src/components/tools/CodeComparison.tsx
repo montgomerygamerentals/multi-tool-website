@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
-import { diffArrays, diffWordsWithSpace } from "diff";
+import { diffArrays, diffWords, diffWordsWithSpace } from "diff";
 
 type CellType = "same" | "removed" | "added" | "empty";
 
@@ -38,7 +38,9 @@ function getInlineParts(
   right: string,
   ignoreWhitespace: boolean,
 ): { left: InlinePart[]; right: InlinePart[] } {
-  const changes = diffWordsWithSpace(left, right, { ignoreWhitespace });
+  const changes = ignoreWhitespace
+    ? diffWords(left, right)
+    : diffWordsWithSpace(left, right);
   const leftParts: InlinePart[] = [];
   const rightParts: InlinePart[] = [];
 

@@ -191,7 +191,7 @@ export default function WordleGame() {
   }, []);
 
   const showStatus = useCallback(
-    (text: string, tone: "normal" | "success" = "normal") => {
+    (text: string, tone: "normal" | "success" | "error" = "normal") => {
       setMessage(text);
       setMessageTone(tone);
     },

@@ -148,6 +148,15 @@ export const tools: Tool[] = [
     icon: "⚖️",
   },
   {
+    slug: "code-comparison",
+    name: "Code Comparison",
+    description:
+      "Compare two code snippets side by side with line numbers and highlighted additions and removals.",
+    category: "text-writing",
+    icon: "💻",
+  },
+
+  {
     slug: "lorem-ipsum",
     name: "Lorem Ipsum Generator",
     description:
@@ -221,6 +230,14 @@ export const tools: Tool[] = [
     icon: "％",
   },
   {
+    slug: "fraction-decimal-converter",
+    name: "Fraction ↔ Decimal Converter",
+    description:
+      "Convert decimals to simplified fractions and fractions to decimals. Supports mixed numbers.",
+    category: "calculators",
+    icon: "½",
+  },
+  {
     slug: "tip-calculator",
     name: "Tip Calculator",
     description:
@@ -235,6 +252,14 @@ export const tools: Tool[] = [
       "Calculate monthly payments, total interest, and amortization for loans.",
     category: "calculators",
     icon: "🏦",
+  },
+  {
+    slug: "debt-payoff-calculator",
+    name: "Debt Payoff Calculator",
+    description:
+      "Plan payoff for multiple debts with the avalanche method, extra payments, and a fixed or shrinking monthly budget.",
+    category: "calculators",
+    icon: "💳",
   },
   // Randomizers
   {
@@ -292,6 +317,14 @@ export const tools: Tool[] = [
     category: "randomizers",
     icon: "❓",
   },
+  {
+    slug: "wordle",
+    name: "Wordle",
+    description:
+      "Guess the 5-letter word in six tries. Green means correct, yellow means wrong spot.",
+    category: "randomizers",
+    icon: "🟩",
+  },
 ];
 
 export function getToolsByCategory(): Record<ToolCategory, Tool[]> {
@@ -306,4 +339,24 @@ export function getToolsByCategory(): Record<ToolCategory, Tool[]> {
 
 export function getToolBySlug(slug: string): Tool | undefined {
   return tools.find((tool) => tool.slug === slug);
+}
+
+export function searchTools(query: string): Tool[] {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return [];
+
+  const terms = normalized.split(/\s+/).filter(Boolean);
+
+  return tools.filter((tool) => {
+    const haystack = [
+      tool.name,
+      tool.description,
+      tool.slug.replace(/-/g, " "),
+      categoryLabels[tool.category],
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return terms.every((term) => haystack.includes(term));
+  });
 }

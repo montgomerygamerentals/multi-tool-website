@@ -3,12 +3,15 @@ import Base64Tool from "@/components/tools/Base64Tool";
 import BmiCalculator from "@/components/tools/BmiCalculator";
 import AgeCalculator from "@/components/tools/AgeCalculator";
 import CaseConverter from "@/components/tools/CaseConverter";
+import CodeComparison from "@/components/tools/CodeComparison";
 import CoinFlip from "@/components/tools/CoinFlip";
 import ColorConverter from "@/components/tools/ColorConverter";
 import DaysBetweenDates from "@/components/tools/DaysBetweenDates";
+import DebtPayoffCalculator from "@/components/tools/DebtPayoffCalculator";
 import DiceRoller from "@/components/tools/DiceRoller";
 import FaviconGenerator from "@/components/tools/FaviconGenerator";
 import FormatConverter from "@/components/tools/FormatConverter";
+import FractionDecimalConverter from "@/components/tools/FractionDecimalConverter";
 import ImageCompressor from "@/components/tools/ImageCompressor";
 import ImageCropper from "@/components/tools/ImageCropper";
 import ImageResizer from "@/components/tools/ImageResizer";
@@ -27,6 +30,7 @@ import TextDiff from "@/components/tools/TextDiff";
 import TipCalculator from "@/components/tools/TipCalculator";
 import UnitConverter from "@/components/tools/UnitConverter";
 import WordCounter from "@/components/tools/WordCounter";
+import WordleGame from "@/components/tools/WordleGame";
 import YesNoPicker from "@/components/tools/YesNoPicker";
 
 export const toolComponents: Record<string, ComponentType> = {
@@ -75,6 +79,7 @@ export const toolComponents: Record<string, ComponentType> = {
   "case-converter": CaseConverter,
   "remove-duplicates": RemoveDuplicates,
   "text-diff": TextDiff,
+  "code-comparison": CodeComparison,
   "lorem-ipsum": LoremIpsum,
   "json-formatter": JsonFormatter,
   "base64-encoder": Base64Tool,
@@ -84,8 +89,10 @@ export const toolComponents: Record<string, ComponentType> = {
   "age-calculator": AgeCalculator,
   "days-between-dates": DaysBetweenDates,
   "percentage-calculator": PercentageCalculator,
+  "fraction-decimal-converter": FractionDecimalConverter,
   "tip-calculator": TipCalculator,
   "loan-calculator": LoanCalculator,
+  "debt-payoff-calculator": DebtPayoffCalculator,
   "name-picker": NamePicker,
   "random-number-generator": RandomNumberGenerator,
   "coin-flip": CoinFlip,
@@ -93,4 +100,5 @@ export const toolComponents: Record<string, ComponentType> = {
   "list-shuffler": ListShuffler,
   "team-splitter": TeamSplitter,
   "yes-no-picker": YesNoPicker,
+  wordle: WordleGame,
 };

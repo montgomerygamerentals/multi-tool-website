@@ -49,7 +49,8 @@ export default function YesNoPicker() {
       </button>
       {history.length > 0 && (
         <div className="text-center">
-          <p className="mb-2 text-sm text-zinc-500">History</p>
+          <p className="mb-1 text-sm text-zinc-500">History</p>
+          <p className="mb-2 text-xs text-zinc-400">Newest → oldest</p>
           <div className="flex flex-wrap justify-center gap-2">
             {history.map((h, i) => (
               <span

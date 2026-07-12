@@ -19,7 +19,7 @@ export default function TipCalculator() {
     return { tipAmount, total, perPerson };
   }, [bill, tipPercent, people]);
 
-  const presets = [15, 18, 20, 25];
+  const presets = [10, 12, 15, 18, 20, 22, 25, 30];
 
   return (
     <div className="space-y-6">

@@ -3,15 +3,32 @@
 import { useState } from "react";
 import ToolPanel from "@/components/ui/ToolPanel";
 
+type Mode = "format" | "minify" | "validate";
+
+const activeBtn =
+  "rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700";
+const idleBtn =
+  "rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700";
+
 export default function JsonFormatter() {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [valid, setValid] = useState<boolean | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [mode, setMode] = useState<Mode | null>(null);
+
+  const copy = async () => {
+    await navigator.clipboard.writeText(output);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2000);
+  };
 
   const format = () => {
+    setMode("format");
     setError(null);
     setValid(null);
+    setCopied(false);
     try {
       const parsed = JSON.parse(input);
       setOutput(JSON.stringify(parsed, null, 2));
@@ -22,8 +39,10 @@ export default function JsonFormatter() {
   };
 
   const minify = () => {
+    setMode("minify");
     setError(null);
     setValid(null);
+    setCopied(false);
     try {
       const parsed = JSON.parse(input);
       setOutput(JSON.stringify(parsed));
@@ -34,8 +53,10 @@ export default function JsonFormatter() {
   };
 
   const validate = () => {
+    setMode("validate");
     setError(null);
     setOutput("");
+    setCopied(false);
     try {
       JSON.parse(input);
       setValid(true);
@@ -58,21 +79,21 @@ export default function JsonFormatter() {
         <button
           type="button"
           onClick={format}
-          className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+          className={mode === "format" ? activeBtn : idleBtn}
         >
           Format (Pretty)
         </button>
         <button
           type="button"
           onClick={minify}
-          className="rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
+          className={mode === "minify" ? activeBtn : idleBtn}
         >
           Minify
         </button>
         <button
           type="button"
           onClick={validate}
-          className="rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
+          className={mode === "validate" ? activeBtn : idleBtn}
         >
           Validate
         </button>
@@ -94,10 +115,10 @@ export default function JsonFormatter() {
           </pre>
           <button
             type="button"
-            onClick={() => navigator.clipboard.writeText(output)}
+            onClick={copy}
             className="mt-3 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
           >
-            Copy
+            {copied ? "Copied!" : "Copy"}
           </button>
         </ToolPanel>
       )}

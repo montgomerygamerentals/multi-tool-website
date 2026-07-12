@@ -16,6 +16,7 @@ import ImageCompressor from "@/components/tools/ImageCompressor";
 import ImageCropper from "@/components/tools/ImageCropper";
 import ImageResizer from "@/components/tools/ImageResizer";
 import JsonFormatter from "@/components/tools/JsonFormatter";
+import JsonGenerator from "@/components/tools/JsonGenerator";
 import ListShuffler from "@/components/tools/ListShuffler";
 import TeamSplitter from "@/components/tools/TeamSplitter";
 import LoanCalculator from "@/components/tools/LoanCalculator";
@@ -26,6 +27,7 @@ import PercentageCalculator from "@/components/tools/PercentageCalculator";
 import QrCodeGenerator from "@/components/tools/QrCodeGenerator";
 import RandomNumberGenerator from "@/components/tools/RandomNumberGenerator";
 import RemoveDuplicates from "@/components/tools/RemoveDuplicates";
+import SudokuGame from "@/components/tools/SudokuGame";
 import TextDiff from "@/components/tools/TextDiff";
 import TipCalculator from "@/components/tools/TipCalculator";
 import UnitConverter from "@/components/tools/UnitConverter";
@@ -82,6 +84,7 @@ export const toolComponents: Record<string, ComponentType> = {
   "code-comparison": CodeComparison,
   "lorem-ipsum": LoremIpsum,
   "json-formatter": JsonFormatter,
+  "json-generator": JsonGenerator,
   "base64-encoder": Base64Tool,
   "password-generator": PasswordGenerator,
   "unit-converter": UnitConverter,
@@ -100,5 +103,6 @@ export const toolComponents: Record<string, ComponentType> = {
   "list-shuffler": ListShuffler,
   "team-splitter": TeamSplitter,
   "yes-no-picker": YesNoPicker,
+  sudoku: SudokuGame,
   wordle: WordleGame,
 };

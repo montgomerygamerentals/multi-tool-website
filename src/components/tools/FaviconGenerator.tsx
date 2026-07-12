@@ -2,12 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import ImageDropzone from "@/components/tools/shared/ImageDropzone";
+import HexColorPicker from "@/components/tools/shared/HexColorPicker";
 import ToolPanel from "@/components/ui/ToolPanel";
 import {
   createFaviconHtml,
   downloadFaviconZip,
-  FAVICON_SIZES,
   generateFaviconPackage,
+  LIVE_PREVIEW_SIZES,
   renderEmojiToCanvas,
   renderImageToCanvas,
   renderTextToCanvas,
@@ -19,31 +20,107 @@ import {
 type GeneratorMode = "image" | "text" | "emoji";
 
 const FONT_OPTIONS = [
-  "Roboto",
-  "Montserrat",
-  "Open Sans",
-  "Poppins",
-  "Lato",
-  "Oswald",
-  "Raleway",
-  "Playfair Display",
-  "Merriweather",
+  "Abril Fatface",
+  "Alegreya",
+  "Anton",
+  "Archivo Black",
+  "Arvo",
+  "Bangers",
+  "Bebas Neue",
+  "Bitter",
+  "Cabin",
+  "Cairo",
+  "Caveat",
+  "Comfortaa",
+  "Comic Neue",
+  "Cormorant Garamond",
+  "Courier Prime",
+  "Crimson Text",
+  "DM Sans",
+  "Dancing Script",
+  "Domine",
+  "Dosis",
+  "Exo 2",
+  "Fira Sans",
+  "Fjalla One",
+  "Fredoka",
+  "IBM Plex Mono",
+  "IBM Plex Sans",
+  "Inconsolata",
+  "Indie Flower",
   "Inter",
+  "Josefin Sans",
+  "Kanit",
+  "Karla",
+  "Lato",
+  "Leckerli One",
+  "Libre Baskerville",
+  "Libre Franklin",
+  "Lobster",
+  "Lora",
+  "Manrope",
+  "Merriweather",
+  "Montserrat",
+  "Mukta",
+  "Mulish",
+  "Nunito",
+  "Nunito Sans",
+  "Open Sans",
+  "Oswald",
+  "Outfit",
+  "Overpass",
+  "Oxygen",
+  "PT Sans",
+  "PT Serif",
+  "Pacifico",
+  "Passion One",
+  "Permanent Marker",
+  "Playfair Display",
+  "Poppins",
+  "Press Start 2P",
+  "Prompt",
+  "Quicksand",
+  "Raleway",
+  "Roboto",
+  "Roboto Condensed",
+  "Roboto Mono",
+  "Roboto Slab",
+  "Righteous",
+  "Rubik",
+  "Satisfy",
+  "Shadows Into Light",
+  "Signika",
+  "Sora",
+  "Source Code Pro",
+  "Source Sans 3",
+  "Source Serif 4",
+  "Space Grotesk",
+  "Space Mono",
+  "Spectral",
+  "Teko",
+  "Titillium Web",
+  "Ubuntu",
+  "Vollkorn",
+  "Work Sans",
+  "Yanone Kaffeesatz",
+  "Zilla Slab",
 ];
+
+const FONT_VARIANTS = [
+  { label: "Regular 400 Normal", weight: 400 },
+  { label: "Medium 500 Normal", weight: 500 },
+  { label: "Semi Bold 600 Normal", weight: 600 },
+  { label: "Bold 700 Normal", weight: 700 },
+] as const;
+
+const fieldClass =
+  "w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800";
+const labelClass = "mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300";
 
 const POPULAR_EMOJIS = [
   "🚀", "🔥", "⭐", "💡", "🎯", "🎨", "🎮", "🎵", "📱", "💻",
   "🌐", "📦", "🏠", "❤️", "✅", "⚡", "🌟", "🍕", "☕", "🎉",
   "🐱", "🐶", "🦊", "🌈", "🌙", "☀️", "🍀", "🎁", "📚", "✨",
-];
-
-const PACKAGE_FILES = [
-  { file: "favicon.ico", desc: "Legacy browser fallback" },
-  ...FAVICON_SIZES.map(({ filename, size, label }) => ({
-    file: filename,
-    desc: `${size}×${size} — ${label}`,
-  })),
-  { file: "site.webmanifest", desc: "PWA install metadata" },
 ];
 
 export default function FaviconGenerator() {
@@ -58,7 +135,8 @@ export default function FaviconGenerator() {
   const [text, setText] = useState("A");
   const [fontFamily, setFontFamily] = useState("Roboto");
   const [fontSize, setFontSize] = useState(280);
-  const [backgroundColor, setBackgroundColor] = useState("#6366f1");
+  const [fontWeight, setFontWeight] = useState(700);
+  const [backgroundColor, setBackgroundColor] = useState("#209cee");
   const [textColor, setTextColor] = useState("#ffffff");
   const [shape, setShape] = useState<FaviconShape>("rounded");
 
@@ -67,12 +145,6 @@ export default function FaviconGenerator() {
   const [emojiBg, setEmojiBg] = useState("#ffffff");
   const [transparentBg, setTransparentBg] = useState(false);
 
-  // Manifest / site settings
-  const [siteName, setSiteName] = useState("My Website");
-  const [shortName, setShortName] = useState("My Site");
-  const [themeColor, setThemeColor] = useState("#ffffff");
-  const [manifestBg, setManifestBg] = useState("#ffffff");
-
   // Output
   const [packageResult, setPackageResult] = useState<FaviconPackageResult | null>(null);
   const packageResultRef = useRef<FaviconPackageResult | null>(null);
@@ -80,16 +152,71 @@ export default function FaviconGenerator() {
   const [error, setError] = useState<string | null>(null);
   const [copiedHtml, setCopiedHtml] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const originalIconsRef = useRef<
+    { rel: string; href: string; type: string; sizes: string }[] | null
+  >(null);
 
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = `https://fonts.googleapis.com/css2?${FONT_OPTIONS.map((f) => `family=${f.replace(/ /g, "+")}:wght@700`).join("&")}&display=swap`;
-    document.head.appendChild(link);
+    if (mode !== "text") return;
+
+    const linkId = "favicon-generator-font";
+    let link = document.getElementById(linkId) as HTMLLinkElement | null;
+    if (!link) {
+      link = document.createElement("link");
+      link.id = linkId;
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+    }
+
+    link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontFamily).replace(/%20/g, "+")}:wght@400;500;600;700&display=swap`;
+  }, [mode, fontFamily]);
+
+  useEffect(() => {
     return () => {
-      document.head.removeChild(link);
+      document.getElementById("favicon-generator-font")?.remove();
     };
   }, []);
+
+  // Capture the site's real favicons once, so we can restore them on leave
+  useEffect(() => {
+    if (originalIconsRef.current) return;
+    originalIconsRef.current = Array.from(
+      document.querySelectorAll<HTMLLinkElement>(
+        'link[rel="icon"], link[rel="shortcut icon"]',
+      ),
+    ).map((el) => ({
+      rel: el.getAttribute("rel") || "icon",
+      href: el.href,
+      type: el.getAttribute("type") || "",
+      sizes: el.getAttribute("sizes") || "",
+    }));
+  }, []);
+
+  // Mirror the generated favicon in the browser tab while working
+  useEffect(() => {
+    const href =
+      packageResult?.previewUrls.get("favicon-32x32.png") ??
+      packageResult?.previewUrls.get("favicon-16x16.png") ??
+      null;
+    if (!href) return;
+
+    let live = document.getElementById(
+      "favicon-live-preview",
+    ) as HTMLLinkElement | null;
+
+    if (!live) {
+      document
+        .querySelectorAll('link[rel="icon"], link[rel="shortcut icon"]')
+        .forEach((el) => el.remove());
+      live = document.createElement("link");
+      live.id = "favicon-live-preview";
+      live.rel = "icon";
+      live.type = "image/png";
+      document.head.appendChild(live);
+    }
+
+    live.href = href;
+  }, [packageResult]);
 
   const handleFileSelect = useCallback((file: File | null) => {
     if (previewRef.current) URL.revokeObjectURL(previewRef.current);
@@ -118,12 +245,6 @@ export default function FaviconGenerator() {
     setIsProcessing(true);
     setError(null);
 
-    if (packageResultRef.current) {
-      revokePreviewUrls(packageResultRef.current.previewUrls);
-      packageResultRef.current = null;
-      setPackageResult(null);
-    }
-
     try {
       let sourceCanvas: HTMLCanvasElement;
 
@@ -142,6 +263,7 @@ export default function FaviconGenerator() {
           text,
           fontFamily,
           fontSize,
+          fontWeight,
           backgroundColor,
           textColor,
           shape,
@@ -158,14 +280,25 @@ export default function FaviconGenerator() {
         });
       }
 
+      const accent =
+        mode === "text"
+          ? backgroundColor
+          : mode === "emoji" && !transparentBg
+            ? emojiBg
+            : "#ffffff";
+
       const result = await generateFaviconPackage(sourceCanvas, {
-        name: siteName,
-        shortName,
-        themeColor,
-        backgroundColor: manifestBg,
+        name: "",
+        shortName: "",
+        themeColor: accent,
+        backgroundColor: accent,
       });
+
+      const previous = packageResultRef.current;
       packageResultRef.current = result;
       setPackageResult(result);
+      if (previous) revokePreviewUrls(previous.previewUrls);
+
       return result;
     } catch {
       setError("Failed to generate favicon package. Please try again.");
@@ -179,16 +312,13 @@ export default function FaviconGenerator() {
     text,
     fontFamily,
     fontSize,
+    fontWeight,
     backgroundColor,
     textColor,
     shape,
     emoji,
     emojiBg,
     transparentBg,
-    siteName,
-    shortName,
-    themeColor,
-    manifestBg,
   ]);
 
   // Auto-preview for text/emoji modes
@@ -210,30 +340,40 @@ export default function FaviconGenerator() {
     text,
     fontFamily,
     fontSize,
+    fontWeight,
     backgroundColor,
     textColor,
     shape,
     emoji,
     emojiBg,
     transparentBg,
-    siteName,
-    shortName,
-    themeColor,
-    manifestBg,
   ]);
 
   useEffect(() => {
     return () => {
       if (packageResultRef.current) revokePreviewUrls(packageResultRef.current.previewUrls);
       if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+
+      document.getElementById("favicon-live-preview")?.remove();
+      document
+        .querySelectorAll('link[rel="icon"], link[rel="shortcut icon"]')
+        .forEach((el) => el.remove());
+
+      for (const orig of originalIconsRef.current ?? []) {
+        const link = document.createElement("link");
+        link.rel = orig.rel;
+        link.href = orig.href;
+        if (orig.type) link.type = orig.type;
+        if (orig.sizes) link.setAttribute("sizes", orig.sizes);
+        document.head.appendChild(link);
+      }
     };
   }, []);
 
   const handleDownload = async () => {
     const result = packageResult ?? (await buildPackage());
     if (!result) return;
-    const baseName = siteName.toLowerCase().replace(/\s+/g, "-") || "favicon";
-    await downloadFaviconZip(result.blobs, `${baseName}-favicon-package.zip`);
+    await downloadFaviconZip(result.blobs, "favicon-package.zip");
   };
 
   const copyHtml = async () => {
@@ -271,104 +411,99 @@ export default function FaviconGenerator() {
 
       {/* Mode-specific inputs */}
       {mode === "image" && (
-        <div className="space-y-4">
-          <ImageDropzone
-            previewUrl={previewUrl}
-            fileName={sourceFile?.name ?? null}
-            onFileSelect={handleFileSelect}
-            accept="image/*,.svg"
-            hint="PNG, JPG, SVG, WebP, and more"
-          />
-          {previewUrl && (
-            <button
-              type="button"
-              onClick={buildPackage}
-              disabled={isProcessing}
-              className="rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
-            >
-              {isProcessing ? "Generating…" : "Generate favicon package"}
-            </button>
-          )}
-        </div>
+        <ImageDropzone
+          previewUrl={previewUrl}
+          fileName={sourceFile?.name ?? null}
+          onFileSelect={handleFileSelect}
+          accept="image/*,.svg"
+          hint="PNG, JPG, SVG, WebP, and more"
+        />
       )}
 
       {mode === "text" && (
-        <ToolPanel title="Text favicon settings">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label className="mb-1 block text-sm font-medium">Text (max 3 chars)</label>
-              <input
-                type="text"
-                value={text}
-                maxLength={3}
-                onChange={(e) => setText(e.target.value)}
-                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-2xl font-bold uppercase dark:border-zinc-700 dark:bg-zinc-800"
-              />
+        <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)_minmax(0,1fr)]">
+            <div className="space-y-4">
+              <div>
+                <label className={labelClass}>Text</label>
+                <input
+                  type="text"
+                  value={text}
+                  maxLength={3}
+                  onChange={(e) => setText(e.target.value)}
+                  className={`${fieldClass} text-lg font-semibold`}
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Background</label>
+                <select
+                  value={shape}
+                  onChange={(e) => setShape(e.target.value as FaviconShape)}
+                  className={fieldClass}
+                >
+                  <option value="rounded">Rounded</option>
+                  <option value="square">Square</option>
+                  <option value="circle">Circle</option>
+                </select>
+              </div>
+              <div>
+                <label className={labelClass}>Font Family</label>
+                <select
+                  value={fontFamily}
+                  onChange={(e) => setFontFamily(e.target.value)}
+                  className={fieldClass}
+                  style={{ fontFamily: `"${fontFamily}", sans-serif` }}
+                >
+                  {FONT_OPTIONS.map((f) => (
+                    <option key={f} value={f} style={{ fontFamily: `"${f}", sans-serif` }}>
+                      {f}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className={labelClass}>Font Variant</label>
+                <select
+                  value={fontWeight}
+                  onChange={(e) => setFontWeight(Number(e.target.value))}
+                  className={fieldClass}
+                >
+                  {FONT_VARIANTS.map((variant) => (
+                    <option key={variant.weight} value={variant.weight}>
+                      {variant.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className={labelClass}>Font Size</label>
+                <input
+                  type="number"
+                  min={120}
+                  max={400}
+                  value={fontSize}
+                  onChange={(e) => {
+                    const next = Number(e.target.value);
+                    if (Number.isNaN(next)) return;
+                    setFontSize(Math.min(400, Math.max(120, next)));
+                  }}
+                  className={fieldClass}
+                />
+              </div>
             </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium">Font</label>
-              <select
-                value={fontFamily}
-                onChange={(e) => setFontFamily(e.target.value)}
-                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
-              >
-                {FONT_OPTIONS.map((f) => (
-                  <option key={f} value={f}>
-                    {f}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium">Background</label>
-              <input
-                type="color"
-                value={backgroundColor}
-                onChange={(e) => setBackgroundColor(e.target.value)}
-                className="h-10 w-full cursor-pointer rounded-lg"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium">Text color</label>
-              <input
-                type="color"
-                value={textColor}
-                onChange={(e) => setTextColor(e.target.value)}
-                className="h-10 w-full cursor-pointer rounded-lg"
-              />
-            </div>
-          </div>
-          <div className="mt-4">
-            <label className="mb-2 block text-sm font-medium">Font size: {fontSize}px</label>
-            <input
-              type="range"
-              min={120}
-              max={400}
-              value={fontSize}
-              onChange={(e) => setFontSize(Number(e.target.value))}
-              className="w-full accent-indigo-600"
+
+            <HexColorPicker
+              label="Font Color"
+              value={textColor}
+              onChange={setTextColor}
+            />
+            <HexColorPicker
+              label="Background Color"
+              value={backgroundColor}
+              onChange={setBackgroundColor}
             />
           </div>
-          <div className="mt-4">
-            <label className="mb-2 block text-sm font-medium">Shape</label>
-            <div className="flex gap-2">
-              {(["square", "rounded", "circle"] as FaviconShape[]).map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setShape(s)}
-                  className={`rounded-lg px-4 py-2 text-sm font-medium capitalize ${
-                    shape === s
-                      ? "bg-indigo-600 text-white"
-                      : "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
-        </ToolPanel>
+        </div>
       )}
 
       {mode === "emoji" && (
@@ -422,97 +557,42 @@ export default function FaviconGenerator() {
         </ToolPanel>
       )}
 
-      {/* Site / manifest settings */}
-      <ToolPanel title="Site settings (for web manifest)">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className="mb-1 block text-sm font-medium">Site name</label>
-            <input
-              type="text"
-              value={siteName}
-              onChange={(e) => setSiteName(e.target.value)}
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium">Short name</label>
-            <input
-              type="text"
-              value={shortName}
-              onChange={(e) => setShortName(e.target.value)}
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium">Theme color</label>
-            <input
-              type="color"
-              value={themeColor}
-              onChange={(e) => setThemeColor(e.target.value)}
-              className="h-10 w-full cursor-pointer rounded-lg"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium">Background color</label>
-            <input
-              type="color"
-              value={manifestBg}
-              onChange={(e) => setManifestBg(e.target.value)}
-              className="h-10 w-full cursor-pointer rounded-lg"
-            />
-          </div>
-        </div>
-      </ToolPanel>
-
       {error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 dark:bg-red-950/30 dark:text-red-400">
           {error}
         </p>
       )}
 
-      {/* Package preview */}
       {packageResult && (
         <>
-          <ToolPanel title="Complete favicon package preview">
-            <p className="mb-4 text-sm text-zinc-500">
-              One download includes every file modern browsers and devices expect — just like{" "}
-              <a
-                href="https://favicon.io/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-indigo-600 hover:underline dark:text-indigo-400"
-              >
-                favicon.io
-              </a>
-              .
-            </p>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {PACKAGE_FILES.map(({ file, desc }) => {
-                const preview = packageResult.previewUrls.get(file);
+          <ToolPanel title="Live preview">
+            <div className="flex flex-wrap items-end gap-6">
+              {LIVE_PREVIEW_SIZES.map((size) => {
+                const src = packageResult.previewUrls.get(`live-${size}.png`);
                 return (
-                  <div
-                    key={file}
-                    className="flex items-center gap-3 rounded-lg border border-zinc-200 p-3 dark:border-zinc-700"
-                  >
-                    {preview ? (
+                  <div key={size} className="flex flex-col items-center gap-2">
+                    {src ? (
                       <img
-                        src={preview}
-                        alt={file}
-                        className="h-12 w-12 shrink-0 rounded border border-zinc-200 object-contain dark:border-zinc-600"
+                        src={src}
+                        alt={`${size}×${size} preview`}
+                        width={size}
+                        height={size}
+                        className="block"
+                        style={{ width: size, height: size }}
                       />
                     ) : (
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded border border-zinc-200 bg-zinc-100 text-xs font-mono dark:border-zinc-600 dark:bg-zinc-800">
-                        ICO
-                      </div>
+                      <div
+                        className="rounded bg-zinc-200 dark:bg-zinc-700"
+                        style={{ width: size, height: size }}
+                      />
                     )}
-                    <div className="min-w-0">
-                      <p className="truncate font-mono text-sm font-medium">{file}</p>
-                      <p className="text-xs text-zinc-500">{desc}</p>
-                    </div>
                   </div>
                 );
               })}
             </div>
+            <p className="mt-4 text-sm text-zinc-500">
+              These sizes mirror the files generated in your ZIP download.
+            </p>
           </ToolPanel>
 
           <div className="flex flex-wrap gap-3">

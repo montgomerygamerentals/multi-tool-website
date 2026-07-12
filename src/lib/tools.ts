@@ -173,6 +173,14 @@ export const tools: Tool[] = [
     icon: "{ }",
   },
   {
+    slug: "json-generator",
+    name: "JSON Generator",
+    description:
+      "Generate mock JSON data from a custom schema. Perfect for APIs, prototypes, and testing.",
+    category: "text-writing",
+    icon: "{+}",
+  },
+  {
     slug: "base64-encoder",
     name: "Base64 Encoder / Decoder",
     description:
@@ -284,7 +292,7 @@ export const tools: Tool[] = [
     description:
       "Flip a virtual coin — heads or tails. Fast, fair, and fun.",
     category: "randomizers",
-    icon: "🪙",
+    icon: "💰",
   },
   {
     slug: "dice-roller",
@@ -316,6 +324,14 @@ export const tools: Tool[] = [
       "Can't decide? Let fate choose yes or no for you with one click.",
     category: "randomizers",
     icon: "❓",
+  },
+  {
+    slug: "sudoku",
+    name: "Sudoku",
+    description:
+      "Play classic Sudoku with easy, medium, and hard puzzles. Notes, conflict highlights, and keyboard support.",
+    category: "randomizers",
+    icon: "9️⃣",
   },
   {
     slug: "wordle",

@@ -83,7 +83,7 @@ export default function NamePicker() {
       const radius = center - 10;
       const isDark =
         typeof window !== "undefined" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.classList.contains("dark");
 
       ctx.clearRect(0, 0, size, size);
 

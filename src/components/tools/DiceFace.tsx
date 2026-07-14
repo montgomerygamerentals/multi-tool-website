@@ -70,14 +70,18 @@ const DIE_STYLES: Record<number, { bg: string; text: string; label: string }> = 
 interface DiceFaceProps {
   value: number;
   sides: number;
-  phase: "idle" | "rolling" | "settling";
+  phase?: "idle" | "rolling" | "settling";
+  size?: "md" | "sm";
 }
 
-function PipGrid({ value }: { value: number }) {
+function PipGrid({ value, size }: { value: number; size: "md" | "sm" }) {
   const pips = D6_PIPS[value] ?? D6_PIPS[1];
+  const pipClass = size === "sm" ? "h-1 w-1" : "h-3.5 w-3.5";
+  const gridClass =
+    size === "sm" ? "gap-0.5 p-1" : "gap-1 p-3";
 
   return (
-    <div className="grid h-full w-full grid-cols-3 grid-rows-3 gap-1 p-3">
+    <div className={`grid h-full w-full grid-cols-3 grid-rows-3 ${gridClass}`}>
       {Array.from({ length: 9 }).map((_, i) => {
         const row = Math.floor(i / 3);
         const col = i % 3;
@@ -85,7 +89,9 @@ function PipGrid({ value }: { value: number }) {
         return (
           <div key={i} className="flex items-center justify-center">
             {hasPip && (
-              <span className="h-3.5 w-3.5 rounded-full bg-zinc-800 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.3)]" />
+              <span
+                className={`rounded-full bg-zinc-800 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.3)] ${pipClass}`}
+              />
             )}
           </div>
         );
@@ -97,7 +103,8 @@ function PipGrid({ value }: { value: number }) {
 export default function DiceFace({
   value,
   sides,
-  phase,
+  phase = "idle",
+  size = "md",
 }: DiceFaceProps) {
   const style = DIE_STYLES[sides] ?? {
     bg: "from-slate-500 to-slate-700",
@@ -106,31 +113,49 @@ export default function DiceFace({
   };
   const isD6 = sides === 6;
   const clampedValue = Math.max(1, Math.min(value, sides));
+  const isSm = size === "sm";
 
   return (
     <div
       className={`die-wrapper ${phase === "rolling" ? "die-tumbling" : ""} ${phase === "settling" ? "die-settled" : ""}`}
     >
       <div
-        className={`die-cube relative flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br shadow-lg ${
+        className={`die-cube relative flex items-center justify-center bg-gradient-to-br shadow-lg ${
+          isSm ? "h-8 w-8 rounded-md" : "h-24 w-24 rounded-2xl"
+        } ${
           isD6
             ? "border border-zinc-300 from-white to-zinc-200 shadow-zinc-400/40 dark:border-zinc-500 dark:from-zinc-100 dark:to-zinc-300"
             : `${style.bg} ${style.text} shadow-black/30`
         }`}
       >
-        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/30 via-transparent to-black/10" />
+        <div
+          className={`pointer-events-none absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-black/10 ${
+            isSm ? "rounded-md" : "rounded-2xl"
+          }`}
+        />
         {isD6 ? (
-          <PipGrid value={clampedValue <= 6 ? clampedValue : ((clampedValue - 1) % 6) + 1} />
+          <PipGrid
+            value={clampedValue <= 6 ? clampedValue : ((clampedValue - 1) % 6) + 1}
+            size={size}
+          />
         ) : (
           <span
             className={`relative z-10 font-bold tabular-nums ${
-              sides >= 20 ? "text-2xl" : sides >= 10 ? "text-3xl" : "text-4xl"
+              isSm
+                ? sides >= 10
+                  ? "text-xs"
+                  : "text-sm"
+                : sides >= 20
+                  ? "text-2xl"
+                  : sides >= 10
+                    ? "text-3xl"
+                    : "text-4xl"
             }`}
           >
             {clampedValue}
           </span>
         )}
-        {!isD6 && (
+        {!isD6 && !isSm && (
           <span className="absolute bottom-1.5 right-2 text-[10px] font-semibold uppercase tracking-wide opacity-60">
             {style.label}
           </span>

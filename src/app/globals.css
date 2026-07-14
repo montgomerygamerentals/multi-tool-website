@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #fafafa;
   --foreground: #18181b;
@@ -12,11 +14,9 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #09090b;
-    --foreground: #fafafa;
-  }
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
 }
 
 body {
@@ -121,6 +121,22 @@ body {
 
 .wordle-confetti-piece {
   animation: wordle-confetti-fall var(--wordle-duration) linear forwards;
+}
+
+@keyframes emoji-rain-fall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--emoji-drift), 110vh, 0) rotate(720deg);
+    opacity: 0.85;
+  }
+}
+
+.emoji-rain-piece {
+  animation: emoji-rain-fall var(--emoji-duration) linear forwards;
+  animation-delay: var(--emoji-delay);
 }
 
 .wordle-win-banner {

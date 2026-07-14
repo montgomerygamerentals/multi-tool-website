@@ -1,5 +1,4 @@
 import Link from "next/link";
-import AdSlot from "@/components/AdSlot";
 import type { Tool } from "@/lib/tools";
 
 interface ToolPageLayoutProps {
@@ -13,8 +12,6 @@ export default function ToolPageLayout({
 }: ToolPageLayoutProps) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <AdSlot className="mb-8" />
-
       <nav className="mb-6 text-sm text-zinc-500 dark:text-zinc-400">
         <Link
           href="/"

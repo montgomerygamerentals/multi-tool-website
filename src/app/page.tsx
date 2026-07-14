@@ -1,4 +1,3 @@
-import AdSlot from "@/components/AdSlot";
 import ToolCard from "@/components/ToolCard";
 import {
   categoryDescriptions,
@@ -22,8 +21,6 @@ export default function Home() {
           No sign-up required — just pick a tool and get started.
         </p>
       </section>
-
-      <AdSlot className="mb-12" />
 
       <div className="space-y-14">
         {categories.map((category) => {

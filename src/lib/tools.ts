@@ -114,6 +114,22 @@ export const tools: Tool[] = [
     category: "image-media",
     icon: "🎨",
   },
+  {
+    slug: "pdf-tools",
+    name: "PDF Tools",
+    description:
+      "Merge PDFs, extract pages, or turn images into a PDF — all in your browser.",
+    category: "image-media",
+    icon: "📎",
+  },
+  {
+    slug: "exif-viewer",
+    name: "EXIF Metadata Viewer",
+    description:
+      "Inspect image EXIF data and download a JPEG copy with metadata removed.",
+    category: "image-media",
+    icon: "🔎",
+  },
   // Text & Writing
   {
     slug: "word-counter",
@@ -122,6 +138,14 @@ export const tools: Tool[] = [
       "Count words, characters, sentences, and paragraphs. Includes reading time.",
     category: "text-writing",
     icon: "📝",
+  },
+  {
+    slug: "notepad",
+    name: "Notepad",
+    description:
+      "A simple notepad that autosaves in your browser. Copy or download your notes anytime.",
+    category: "text-writing",
+    icon: "🗒️",
   },
   {
     slug: "case-converter",
@@ -187,6 +211,38 @@ export const tools: Tool[] = [
       "Encode text to Base64 or decode Base64 strings back to plain text.",
     category: "text-writing",
     icon: "🔐",
+  },
+  {
+    slug: "markdown-editor",
+    name: "Markdown Editor",
+    description:
+      "Write Markdown and preview the rendered HTML side by side in your browser.",
+    category: "text-writing",
+    icon: "📑",
+  },
+  {
+    slug: "regex-tester",
+    name: "Regex Tester",
+    description:
+      "Test regular expressions against sample text with live match highlighting.",
+    category: "text-writing",
+    icon: ".*",
+  },
+  {
+    slug: "hash-generator",
+    name: "Hash Generator",
+    description:
+      "Generate MD5, SHA-1, SHA-256, and other hashes from text or files.",
+    category: "text-writing",
+    icon: "#",
+  },
+  {
+    slug: "uuid-generator",
+    name: "UUID Generator",
+    description:
+      "Generate random UUID v4 identifiers one at a time or in bulk.",
+    category: "text-writing",
+    icon: "🪪",
   },
   // Calculators
   {
@@ -268,6 +324,22 @@ export const tools: Tool[] = [
       "Plan payoff for multiple debts with the avalanche method, extra payments, and a fixed or shrinking monthly budget.",
     category: "calculators",
     icon: "💳",
+  },
+  {
+    slug: "timezone-converter",
+    name: "Timezone Converter",
+    description:
+      "Convert a date and time between time zones and check the time around the world.",
+    category: "calculators",
+    icon: "🌍",
+  },
+  {
+    slug: "timer",
+    name: "Stopwatch & Timer",
+    description:
+      "Run a stopwatch with laps or set a countdown timer — all in your browser.",
+    category: "calculators",
+    icon: "⏱️",
   },
   // Randomizers
   {

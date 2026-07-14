@@ -9,9 +9,11 @@ import ColorConverter from "@/components/tools/ColorConverter";
 import DaysBetweenDates from "@/components/tools/DaysBetweenDates";
 import DebtPayoffCalculator from "@/components/tools/DebtPayoffCalculator";
 import DiceRoller from "@/components/tools/DiceRoller";
+import ExifViewer from "@/components/tools/ExifViewer";
 import FaviconGenerator from "@/components/tools/FaviconGenerator";
 import FormatConverter from "@/components/tools/FormatConverter";
 import FractionDecimalConverter from "@/components/tools/FractionDecimalConverter";
+import HashGenerator from "@/components/tools/HashGenerator";
 import ImageCompressor from "@/components/tools/ImageCompressor";
 import ImageCropper from "@/components/tools/ImageCropper";
 import ImageResizer from "@/components/tools/ImageResizer";
@@ -21,16 +23,23 @@ import ListShuffler from "@/components/tools/ListShuffler";
 import TeamSplitter from "@/components/tools/TeamSplitter";
 import LoanCalculator from "@/components/tools/LoanCalculator";
 import LoremIpsum from "@/components/tools/LoremIpsum";
+import MarkdownEditor from "@/components/tools/MarkdownEditor";
 import NamePicker from "@/components/tools/NamePicker";
+import Notepad from "@/components/tools/Notepad";
 import PasswordGenerator from "@/components/tools/PasswordGenerator";
+import PdfTools from "@/components/tools/PdfTools";
 import PercentageCalculator from "@/components/tools/PercentageCalculator";
 import QrCodeGenerator from "@/components/tools/QrCodeGenerator";
 import RandomNumberGenerator from "@/components/tools/RandomNumberGenerator";
+import RegexTester from "@/components/tools/RegexTester";
 import RemoveDuplicates from "@/components/tools/RemoveDuplicates";
 import SudokuGame from "@/components/tools/SudokuGame";
 import TextDiff from "@/components/tools/TextDiff";
+import TimerTool from "@/components/tools/TimerTool";
 import TipCalculator from "@/components/tools/TipCalculator";
+import TimezoneConverter from "@/components/tools/TimezoneConverter";
 import UnitConverter from "@/components/tools/UnitConverter";
+import UuidGenerator from "@/components/tools/UuidGenerator";
 import WordCounter from "@/components/tools/WordCounter";
 import WordleGame from "@/components/tools/WordleGame";
 import YesNoPicker from "@/components/tools/YesNoPicker";
@@ -77,7 +86,10 @@ export const toolComponents: Record<string, ComponentType> = {
   ),
   "qr-code-generator": QrCodeGenerator,
   "color-converter": ColorConverter,
+  "pdf-tools": PdfTools,
+  "exif-viewer": ExifViewer,
   "word-counter": WordCounter,
+  notepad: Notepad,
   "case-converter": CaseConverter,
   "remove-duplicates": RemoveDuplicates,
   "text-diff": TextDiff,
@@ -86,6 +98,10 @@ export const toolComponents: Record<string, ComponentType> = {
   "json-formatter": JsonFormatter,
   "json-generator": JsonGenerator,
   "base64-encoder": Base64Tool,
+  "markdown-editor": MarkdownEditor,
+  "regex-tester": RegexTester,
+  "hash-generator": HashGenerator,
+  "uuid-generator": UuidGenerator,
   "password-generator": PasswordGenerator,
   "unit-converter": UnitConverter,
   "bmi-calculator": BmiCalculator,
@@ -96,6 +112,8 @@ export const toolComponents: Record<string, ComponentType> = {
   "tip-calculator": TipCalculator,
   "loan-calculator": LoanCalculator,
   "debt-payoff-calculator": DebtPayoffCalculator,
+  "timezone-converter": TimezoneConverter,
+  timer: TimerTool,
   "name-picker": NamePicker,
   "random-number-generator": RandomNumberGenerator,
   "coin-flip": CoinFlip,

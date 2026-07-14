@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -15,6 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 const ADSENSE_CLIENT = "ca-pub-9025214646389350";
+
+const THEME_INIT = `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}})();`;
 
 export const metadata: Metadata = {
   title: {
@@ -39,20 +42,17 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}})();`,
-          }}
-        />
-        {/* Plain script so AdSense crawlers see it in the initial HTML */}
-        <script
+      <body className="flex min-h-full flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+        <Script id="theme-init" strategy="beforeInteractive">
+          {THEME_INIT}
+        </Script>
+        <Script
+          id="adsense"
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
           crossOrigin="anonymous"
+          strategy="afterInteractive"
         />
-      </head>
-      <body className="flex min-h-full flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

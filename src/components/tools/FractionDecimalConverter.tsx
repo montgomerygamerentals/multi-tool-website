@@ -243,78 +243,75 @@ export default function FractionDecimalConverter() {
           )}
 
           {!decimalResult.error && decimal.trim() !== "" && (
-            <div className="mt-6 space-y-3">
+            <div className="mt-6">
               <div className="rounded-lg bg-indigo-50 p-6 text-center dark:bg-indigo-950/30">
-                <p className="text-sm text-zinc-500">Simplified fraction</p>
-                <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">
-                  {decimalResult.denominator === 1
-                    ? decimalResult.numerator
-                    : `${decimalResult.numerator}/${decimalResult.denominator}`}
-                </p>
+                {decimalResult.mixed ? (
+                  <div className="flex flex-wrap items-start justify-center gap-x-16 gap-y-4">
+                    <div>
+                      <p className="text-sm text-zinc-500">Mixed number</p>
+                      <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">
+                        {decimalResult.mixed}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-zinc-500">Improper fraction</p>
+                      <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">
+                        {decimalResult.numerator}/{decimalResult.denominator}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-sm text-zinc-500">Simplified fraction</p>
+                    <p className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">
+                      {decimalResult.denominator === 1
+                        ? decimalResult.numerator
+                        : `${decimalResult.numerator}/${decimalResult.denominator}`}
+                    </p>
+                  </div>
+                )}
               </div>
-              {decimalResult.mixed && (
-                <p className="text-center text-sm text-zinc-500">
-                  Mixed number:{" "}
-                  <span className="font-medium text-zinc-800 dark:text-zinc-200">
-                    {decimalResult.mixed}
-                  </span>
-                </p>
-              )}
             </div>
           )}
         </ToolPanel>
       ) : (
         <ToolPanel title="Convert fraction to decimal">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div>
-              <label
-                htmlFor="fraction-whole"
-                className="mb-1 block text-sm font-medium"
-              >
-                Whole (optional)
-              </label>
-              <input
-                id="fraction-whole"
-                type="text"
-                inputMode="numeric"
-                value={whole}
-                onChange={(e) => setWhole(e.target.value)}
-                placeholder="0"
-                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="fraction-numerator"
-                className="mb-1 block text-sm font-medium"
-              >
-                Numerator
-              </label>
+          <div className="flex flex-wrap items-center justify-center gap-4 py-6">
+            <input
+              id="fraction-whole"
+              type="text"
+              inputMode="numeric"
+              value={whole}
+              onChange={(e) => setWhole(e.target.value)}
+              aria-label="Whole number (optional)"
+              title="Whole number (optional)"
+              className="h-14 w-16 rounded-lg border border-zinc-300 bg-white text-center text-3xl font-semibold tabular-nums dark:border-zinc-700 dark:bg-zinc-800"
+            />
+
+            <div className="flex flex-col items-center">
               <input
                 id="fraction-numerator"
                 type="text"
                 inputMode="numeric"
                 value={numerator}
                 onChange={(e) => setNumerator(e.target.value)}
-                placeholder="3"
-                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
+                aria-label="Numerator"
+                title="Numerator"
+                className="h-12 w-20 rounded-lg border border-zinc-300 bg-white text-center text-2xl font-semibold tabular-nums dark:border-zinc-700 dark:bg-zinc-800"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="fraction-denominator"
-                className="mb-1 block text-sm font-medium"
-              >
-                Denominator
-              </label>
+              <div
+                className="my-2.5 h-0.5 w-18 rounded-full bg-zinc-800 dark:bg-zinc-200"
+                aria-hidden="true"
+              />
               <input
                 id="fraction-denominator"
                 type="text"
                 inputMode="numeric"
                 value={denominator}
                 onChange={(e) => setDenominator(e.target.value)}
-                placeholder="4"
-                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
+                aria-label="Denominator"
+                title="Denominator"
+                className="h-12 w-20 rounded-lg border border-zinc-300 bg-white text-center text-2xl font-semibold tabular-nums dark:border-zinc-700 dark:bg-zinc-800"
               />
             </div>
           </div>

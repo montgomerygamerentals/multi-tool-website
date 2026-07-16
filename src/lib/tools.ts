@@ -334,6 +334,174 @@ export const tools: Tool[] = [
     icon: "💳",
   },
   {
+    slug: "mortgage-calculator",
+    name: "Mortgage Calculator",
+    description:
+      "Free mortgage payment calculator — estimate monthly P&I, total interest, and payments with taxes and insurance.",
+    category: "calculators",
+    icon: "🏠",
+  },
+  {
+    slug: "compound-interest-calculator",
+    name: "Compound Interest Calculator",
+    description:
+      "Calculate compound interest and future value with optional monthly contributions. Free online savings growth tool.",
+    category: "calculators",
+    icon: "📈",
+  },
+  {
+    slug: "roi-calculator",
+    name: "ROI Calculator",
+    description:
+      "Calculate return on investment (ROI) and annualized ROI from your initial cost and final value or gain.",
+    category: "calculators",
+    icon: "💹",
+  },
+  {
+    slug: "retirement-calculator",
+    name: "Retirement Savings Calculator",
+    description:
+      "Project your retirement nest egg from current savings, monthly contributions, and expected annual return.",
+    category: "calculators",
+    icon: "🌴",
+  },
+  {
+    slug: "budget-calculator",
+    name: "Budget Calculator",
+    description:
+      "Build a simple monthly budget — track income vs expenses and see how much you have left over.",
+    category: "calculators",
+    icon: "🧾",
+  },
+  {
+    slug: "sales-tax-calculator",
+    name: "Sales Tax Calculator",
+    description:
+      "Add or remove sales tax from a price. Instantly calculate tax amount and totals for any rate.",
+    category: "calculators",
+    icon: "🏷️",
+  },
+  {
+    slug: "income-tax-estimator",
+    name: "Income Tax Estimator",
+    description:
+      "Estimate U.S. federal income tax from taxable income using current tax brackets. Free rough calculator — not tax advice.",
+    category: "calculators",
+    icon: "🧮",
+  },
+  {
+    slug: "currency-converter",
+    name: "Currency Converter",
+    description:
+      "Convert between world currencies with a live or manual exchange rate. Fast free FX calculator in your browser.",
+    category: "calculators",
+    icon: "💱",
+  },
+  {
+    slug: "salary-hourly-converter",
+    name: "Salary to Hourly Converter",
+    description:
+      "Convert annual salary to hourly wage (and back). See monthly, biweekly, weekly, and hourly pay instantly.",
+    category: "calculators",
+    icon: "💼",
+  },
+  {
+    slug: "inflation-calculator",
+    name: "Inflation Calculator",
+    description:
+      "See how inflation changes purchasing power over time. Compare dollar values between years at any inflation rate.",
+    category: "calculators",
+    icon: "📉",
+  },
+  {
+    slug: "buying-power-calculator",
+    name: "Dollar Buying Power Calculator",
+    description:
+      "Find out how much money from one year is worth in another using historical U.S. CPI data — what a dollar was worth then vs now.",
+    category: "calculators",
+    icon: "💵",
+  },
+  {
+    slug: "refinance-calculator",
+    name: "Refinance Calculator",
+    description:
+      "Compare your current loan to a refinance offer — monthly savings, break-even time, and total interest.",
+    category: "calculators",
+    icon: "🔁",
+  },
+  {
+    slug: "credit-card-payoff-calculator",
+    name: "Credit Card Payoff Calculator",
+    description:
+      "Estimate how long to pay off a credit card balance and total interest at your monthly payment and APR.",
+    category: "calculators",
+    icon: "💳",
+  },
+  {
+    slug: "down-payment-calculator",
+    name: "Down Payment Calculator",
+    description:
+      "Calculate down payment amount, percent, or affordable home price from the numbers you know.",
+    category: "calculators",
+    icon: "🏡",
+  },
+  {
+    slug: "amortization-schedule",
+    name: "Amortization Schedule Calculator",
+    description:
+      "Generate a full loan amortization schedule with monthly principal, interest, and balance. Download as CSV.",
+    category: "calculators",
+    icon: "📋",
+  },
+  {
+    slug: "net-worth-calculator",
+    name: "Net Worth Calculator",
+    description:
+      "Add up assets and liabilities to calculate your net worth. Free personal balance sheet tool — private in your browser.",
+    category: "calculators",
+    icon: "⚖️",
+  },
+  {
+    slug: "emergency-fund-calculator",
+    name: "Emergency Fund Calculator",
+    description:
+      "Find your emergency fund target from monthly expenses and months of coverage. Track how much you still need.",
+    category: "calculators",
+    icon: "🛟",
+  },
+  {
+    slug: "401k-calculator",
+    name: "401(k) Contribution Calculator",
+    description:
+      "Estimate employee and employer 401(k) contributions with match rules, plus optional growth projection.",
+    category: "calculators",
+    icon: "🏦",
+  },
+  {
+    slug: "apr-calculator",
+    name: "APR Calculator",
+    description:
+      "Estimate the true APR of a loan including fees and points — compare stated interest rate vs real cost.",
+    category: "calculators",
+    icon: "📊",
+  },
+  {
+    slug: "discount-markup-calculator",
+    name: "Discount & Markup Calculator",
+    description:
+      "Calculate sale price after a discount, markup from cost, or selling price from desired profit margin.",
+    category: "calculators",
+    icon: "🛍️",
+  },
+  {
+    slug: "break-even-calculator",
+    name: "Break-Even Calculator",
+    description:
+      "Find break-even units and revenue from fixed costs, variable cost per unit, and selling price.",
+    category: "calculators",
+    icon: "🎯",
+  },
+  {
     slug: "timezone-converter",
     name: "Timezone Converter",
     description:

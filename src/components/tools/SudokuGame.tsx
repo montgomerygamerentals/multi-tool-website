@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import ToolPanel from "@/components/ui/ToolPanel";
 import {
   boardsEqual,
@@ -15,11 +22,39 @@ import {
 
 type NotesGrid = Set<number>[][];
 
+interface ConfettiPiece {
+  id: number;
+  left: number;
+  delay: number;
+  duration: number;
+  drift: number;
+  color: string;
+  width: number;
+  height: number;
+  radius: string;
+}
+
 const DIFFICULTIES: { value: Difficulty; label: string }[] = [
   { value: "easy", label: "Easy" },
   { value: "medium", label: "Medium" },
   { value: "hard", label: "Hard" },
 ];
+
+const CONFETTI_COLORS = [
+  "#059669",
+  "#10b981",
+  "#f59e0b",
+  "#f97316",
+  "#6366f1",
+  "#ec4899",
+  "#eab308",
+];
+
+const WIN_TITLES: Record<Difficulty, string> = {
+  easy: "Nice!",
+  medium: "Great!",
+  hard: "Brilliant!",
+};
 
 function emptyNotes(): NotesGrid {
   return Array.from({ length: 9 }, () =>
@@ -33,6 +68,23 @@ function cloneNotes(notes: NotesGrid): NotesGrid {
 
 function cellKey(row: number, col: number): string {
   return `${row}-${col}`;
+}
+
+function createConfetti(count = 48): ConfettiPiece[] {
+  return Array.from({ length: count }, (_, id) => {
+    const size = 6 + Math.random() * 8;
+    return {
+      id,
+      left: Math.random() * 100,
+      delay: Math.random() * 0.35,
+      duration: 1.6 + Math.random() * 1.4,
+      drift: (Math.random() - 0.5) * 180,
+      color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+      width: size,
+      height: size * (Math.random() > 0.4 ? 0.45 : 1),
+      radius: Math.random() > 0.5 ? "2px" : "999px",
+    };
+  });
 }
 
 const activeBtn =
@@ -50,9 +102,12 @@ export default function SudokuGame() {
   const [notesMode, setNotesMode] = useState(false);
   const [showConflicts, setShowConflicts] = useState(true);
   const [won, setWon] = useState(false);
+  const [showWinModal, setShowWinModal] = useState(false);
+  const [confetti, setConfetti] = useState<ConfettiPiece[]>([]);
   const [message, setMessage] = useState("Fill the grid so every row, column, and box has 1–9");
   const [ready, setReady] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const winModalTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const generated = generateSudoku("easy");
@@ -60,6 +115,12 @@ export default function SudokuGame() {
     setSolution(generated.solution);
     setBoard(cloneBoard(generated.puzzle));
     setReady(true);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (winModalTimeoutRef.current) clearTimeout(winModalTimeoutRef.current);
+    };
   }, []);
 
   const given = useMemo(() => {
@@ -82,10 +143,38 @@ export default function SudokuGame() {
       ? board[selected[0]][selected[1]]
       : null;
 
+  const difficultyLabel =
+    DIFFICULTIES.find((d) => d.value === difficulty)?.label ?? difficulty;
+
+  const dismissWinModal = useCallback(() => {
+    setShowWinModal(false);
+  }, []);
+
+  const triggerWin = useCallback(() => {
+    setWon(true);
+    setShowWinModal(false);
+    setConfetti(createConfetti());
+
+    if (winModalTimeoutRef.current) clearTimeout(winModalTimeoutRef.current);
+    winModalTimeoutRef.current = setTimeout(() => {
+      setShowWinModal(true);
+    }, 700);
+
+    window.setTimeout(() => setConfetti([]), 3200);
+  }, []);
+
+  const resetWinUi = useCallback(() => {
+    if (winModalTimeoutRef.current) clearTimeout(winModalTimeoutRef.current);
+    setWon(false);
+    setShowWinModal(false);
+    setConfetti([]);
+  }, []);
+
   const newGame = useCallback(
     (nextDifficulty: Difficulty = difficulty) => {
       setReady(false);
       setMessage("Generating puzzle…");
+      resetWinUi();
       // Defer so the UI can show the loading state before heavy generation
       window.setTimeout(() => {
         const generated = generateSudoku(nextDifficulty);
@@ -95,12 +184,11 @@ export default function SudokuGame() {
         setBoard(cloneBoard(generated.puzzle));
         setNotes(emptyNotes());
         setSelected([0, 0]);
-        setWon(false);
         setMessage("Fill the grid so every row, column, and box has 1–9");
         setReady(true);
       }, 20);
     },
-    [difficulty],
+    [difficulty, resetWinUi],
   );
 
   const placeNumber = useCallback(
@@ -129,8 +217,7 @@ export default function SudokuGame() {
         const next = cloneBoard(prev);
         next[row][col] = num;
         if (isComplete(next) && boardsEqual(next, solution)) {
-          setWon(true);
-          setMessage("Puzzle complete — nice work!");
+          triggerWin();
         } else {
           setWon(false);
           setMessage("Fill the grid so every row, column, and box has 1–9");
@@ -143,7 +230,7 @@ export default function SudokuGame() {
         return next;
       });
     },
-    [selected, won, given, notesMode, solution],
+    [selected, won, given, notesMode, solution, triggerWin],
   );
 
   const erase = useCallback(() => {
@@ -166,7 +253,7 @@ export default function SudokuGame() {
   const clearBoard = () => {
     setBoard(cloneBoard(puzzle));
     setNotes(emptyNotes());
-    setWon(false);
+    resetWinUi();
     setMessage("Fill the grid so every row, column, and box has 1–9");
     setShowClearConfirm(false);
   };
@@ -180,8 +267,7 @@ export default function SudokuGame() {
     }
     if (mistakes === 0) {
       if (isComplete(board)) {
-        setWon(true);
-        setMessage("Puzzle complete — nice work!");
+        if (!won) triggerWin();
       } else {
         setMessage("Looking good so far — keep going!");
       }
@@ -233,6 +319,18 @@ export default function SudokuGame() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [selected, placeNumber, erase]);
 
+  useEffect(() => {
+    if (!showWinModal) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        dismissWinModal();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [dismissWinModal, showWinModal]);
+
   const borderClass = (row: number, col: number) => {
     const parts: string[] = [];
     if (col < 8) {
@@ -254,6 +352,78 @@ export default function SudokuGame() {
 
   return (
     <div className="relative space-y-6">
+      {confetti.length > 0 && (
+        <div
+          className="pointer-events-none absolute inset-0 z-20 overflow-hidden"
+          aria-hidden="true"
+        >
+          {confetti.map((piece) => (
+            <span
+              key={piece.id}
+              className="wordle-confetti-piece absolute top-0"
+              style={
+                {
+                  left: `${piece.left}%`,
+                  width: piece.width,
+                  height: piece.height,
+                  backgroundColor: piece.color,
+                  borderRadius: piece.radius,
+                  animationDelay: `${piece.delay}s`,
+                  "--wordle-duration": `${piece.duration}s`,
+                  "--wordle-drift": `${piece.drift}px`,
+                } as CSSProperties
+              }
+            />
+          ))}
+        </div>
+      )}
+
+      {showWinModal && won && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <button
+            type="button"
+            className="absolute inset-0 bg-zinc-950/55 backdrop-blur-[2px]"
+            aria-label="Close win dialog"
+            onClick={dismissWinModal}
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="sudoku-win-title"
+            className="wordle-win-banner relative z-10 w-full max-w-sm rounded-2xl border border-emerald-300 bg-gradient-to-br from-emerald-50 to-teal-50 px-6 py-8 text-center shadow-2xl dark:border-emerald-800 dark:from-emerald-950 dark:to-teal-950"
+          >
+            <p
+              id="sudoku-win-title"
+              className="text-3xl font-bold tracking-tight text-emerald-700 dark:text-emerald-300"
+            >
+              {WIN_TITLES[difficulty] ?? "You win!"}
+            </p>
+            <p className="mt-3 text-lg font-semibold tracking-wide text-emerald-800 dark:text-emerald-200">
+              Puzzle complete
+            </p>
+            <p className="mt-1 text-sm text-emerald-800/80 dark:text-emerald-200/80">
+              Solved on {difficultyLabel}
+            </p>
+            <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+              <button
+                type="button"
+                onClick={() => newGame()}
+                className="rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+              >
+                New puzzle
+              </button>
+              <button
+                type="button"
+                onClick={dismissWinModal}
+                className="rounded-lg border border-emerald-300 bg-white/80 px-5 py-2.5 text-sm font-semibold text-emerald-800 transition-colors hover:bg-white dark:border-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-200 dark:hover:bg-emerald-900"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showClearConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <button
@@ -321,13 +491,7 @@ export default function SudokuGame() {
 
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
         <ToolPanel title="Board" className="flex-1">
-          <p
-            className={`mb-4 text-sm ${
-              won
-                ? "text-emerald-600 dark:text-emerald-400"
-                : "text-zinc-600 dark:text-zinc-400"
-            }`}
-          >
+          <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
             {message}
           </p>
 

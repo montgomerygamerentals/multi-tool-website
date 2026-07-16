@@ -61,6 +61,14 @@ export const tools: Tool[] = [
     icon: "✂️",
   },
   {
+    slug: "background-remover",
+    name: "Background Remover",
+    description:
+      "Make solid or simple backgrounds transparent. Adjust tolerance, soft edges, and download a PNG.",
+    category: "image-media",
+    icon: "🪄",
+  },
+  {
     slug: "favicon-generator",
     name: "Favicon Generator",
     description:

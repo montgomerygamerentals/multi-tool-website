@@ -14,6 +14,7 @@ import FaviconGenerator from "@/components/tools/FaviconGenerator";
 import FormatConverter from "@/components/tools/FormatConverter";
 import FractionDecimalConverter from "@/components/tools/FractionDecimalConverter";
 import HashGenerator from "@/components/tools/HashGenerator";
+import BackgroundRemover from "@/components/tools/BackgroundRemover";
 import ImageCompressor from "@/components/tools/ImageCompressor";
 import ImageCropper from "@/components/tools/ImageCropper";
 import ImageResizer from "@/components/tools/ImageResizer";
@@ -51,6 +52,7 @@ export const toolComponents: Record<string, ComponentType> = {
   "image-compressor": ImageCompressor,
   "image-resizer": ImageResizer,
   "image-cropper": ImageCropper,
+  "background-remover": BackgroundRemover,
   "favicon-generator": FaviconGenerator,
   "jpg-to-png": () => (
     <FormatConverter

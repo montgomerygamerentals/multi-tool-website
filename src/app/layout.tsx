@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import AdSenseScript from "@/components/AdSenseScript";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -22,12 +23,32 @@ const ADSENSE_CLIENT = "ca-pub-9025214646389350";
 const THEME_INIT = `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}})();`;
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "ToolBox — Free Online Utilities",
-    template: "%s | ToolBox",
+    default: `${SITE_NAME} — Free Online Utilities`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Free online utility tools — image converters, random name pickers, and more. Fast, private, and runs in your browser.",
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — Free Online Utilities`,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — Free Online Utilities`,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },

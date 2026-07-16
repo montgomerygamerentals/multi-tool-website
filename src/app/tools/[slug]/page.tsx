@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ToolPageLayout from "@/components/ToolPageLayout";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { toolComponents } from "@/lib/tool-components";
 import { getToolBySlug, tools } from "@/lib/tools";
 
@@ -20,9 +21,30 @@ export async function generateMetadata({
 
   if (!tool) return { title: "Tool Not Found" };
 
+  const title = tool.name;
+  const description = tool.description;
+  const url = `${SITE_URL}/tools/${tool.slug}`;
+  const fullTitle = `${title} | ${SITE_NAME}`;
+
   return {
-    title: tool.name,
-    description: tool.description,
+    title,
+    description,
+    alternates: {
+      canonical: `/tools/${tool.slug}`,
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url,
+      siteName: SITE_NAME,
+      title: fullTitle,
+      description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description,
+    },
   };
 }
 

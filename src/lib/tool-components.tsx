@@ -4,6 +4,7 @@ import AprCalculator from "@/components/tools/AprCalculator";
 import Base64Tool from "@/components/tools/Base64Tool";
 import BmiCalculator from "@/components/tools/BmiCalculator";
 import AgeCalculator from "@/components/tools/AgeCalculator";
+import AspectRatioFinder from "@/components/tools/AspectRatioFinder";
 import BreakEvenCalculator from "@/components/tools/BreakEvenCalculator";
 import BudgetCalculator from "@/components/tools/BudgetCalculator";
 import BuyingPowerCalculator from "@/components/tools/BuyingPowerCalculator";
@@ -73,6 +74,7 @@ export const toolComponents: Record<string, ComponentType> = {
   "image-compressor": ImageCompressor,
   "image-resizer": ImageResizer,
   "image-cropper": ImageCropper,
+  "aspect-ratio-finder": AspectRatioFinder,
   "background-remover": BackgroundRemover,
   "favicon-generator": FaviconGenerator,
   "jpg-to-png": () => (

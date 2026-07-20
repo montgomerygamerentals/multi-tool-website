@@ -61,6 +61,14 @@ export const tools: Tool[] = [
     icon: "✂️",
   },
   {
+    slug: "aspect-ratio-finder",
+    name: "Image Aspect Ratio Finder",
+    description:
+      "Upload an image to find its aspect ratio, pixel dimensions, orientation, and closest common ratio (16:9, 4:3, 1:1, and more).",
+    category: "image-media",
+    icon: "▣",
+  },
+  {
     slug: "background-remover",
     name: "Background Remover",
     description:

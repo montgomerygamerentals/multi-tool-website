@@ -56,7 +56,7 @@ export const tools: Tool[] = [
     slug: "image-cropper",
     name: "Image Cropper",
     description:
-      "Crop images to a custom region. Perfect for profile photos and thumbnails.",
+      "Crop images to a custom rectangle or circle. Perfect for profile photos, thumbnails, and avatars.",
     category: "image-media",
     icon: "✂️",
   },

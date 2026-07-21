@@ -13,6 +13,7 @@ import ToolPanel from "@/components/ui/ToolPanel";
 
 type CropRect = { x: number; y: number; w: number; h: number };
 type Handle = "move" | "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
+type CropShape = "rect" | "circle";
 
 const MIN_CROP = 20;
 
@@ -47,6 +48,13 @@ function clampCrop(crop: CropRect, imgW: number, imgH: number): CropRect {
     w: Math.round(w),
     h: Math.round(h),
   };
+}
+
+function forceSquare(crop: CropRect, imgW: number, imgH: number): CropRect {
+  const side = Math.min(crop.w, crop.h, imgW, imgH);
+  const x = crop.x + (crop.w - side) / 2;
+  const y = crop.y + (crop.h - side) / 2;
+  return clampCrop({ x, y, w: side, h: side }, imgW, imgH);
 }
 
 function centeredCrop(
@@ -97,6 +105,7 @@ export default function ImageCropper() {
   const [imgSize, setImgSize] = useState({ w: 0, h: 0 });
   const [crop, setCrop] = useState<CropRect>({ x: 0, y: 0, w: 200, h: 200 });
   const [aspect, setAspect] = useState<number | null>(null);
+  const [shape, setShape] = useState<CropShape>("rect");
   const [displaySize, setDisplaySize] = useState({ w: 0, h: 0 });
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -112,11 +121,13 @@ export default function ImageCropper() {
   const scale = displaySize.w > 0 && imgSize.w > 0 ? displaySize.w / imgSize.w : 1;
   const cropRef = useRef(crop);
   const aspectRef = useRef(aspect);
+  const shapeRef = useRef(shape);
   const scaleRef = useRef(scale);
   const imgSizeRef = useRef(imgSize);
 
   cropRef.current = crop;
   aspectRef.current = aspect;
+  shapeRef.current = shape;
   scaleRef.current = scale;
   imgSizeRef.current = imgSize;
 
@@ -144,7 +155,8 @@ export default function ImageCropper() {
       const dy = (e.clientY - drag.startY) / currentScale;
       const { startCrop: s, handle } = drag;
       let next: CropRect = { ...s };
-      const currentAspect = aspectRef.current;
+      const currentAspect =
+        shapeRef.current === "circle" ? 1 : aspectRef.current;
 
       if (handle === "move") {
         next = { ...s, x: s.x + dx, y: s.y + dy };
@@ -180,7 +192,11 @@ export default function ImageCropper() {
         next = { x, y, w, h };
       }
 
-      setCrop(clampCrop(next, imgW, imgH));
+      let clamped = clampCrop(next, imgW, imgH);
+      if (shapeRef.current === "circle") {
+        clamped = forceSquare(clamped, imgW, imgH);
+      }
+      setCrop(clamped);
     };
 
     const onUp = () => {
@@ -225,6 +241,7 @@ export default function ImageCropper() {
       const h = img.naturalHeight;
       setImgSize({ w, h });
       setAspect(null);
+      setShape("rect");
       setCrop(centeredCrop(w, h, null));
     } catch {
       setError("Failed to load image.");
@@ -232,10 +249,20 @@ export default function ImageCropper() {
   }, []);
 
   const setAspectPreset = (value: number | null) => {
+    if (shape === "circle") return;
     setAspect(value);
     if (imgSize.w === 0) return;
     if (value == null) return;
     setCrop((c) => applyAspect(c, value, imgSize.w, imgSize.h));
+  };
+
+  const setCropShape = (next: CropShape) => {
+    setShape(next);
+    if (imgSize.w === 0) return;
+    if (next === "circle") {
+      setAspect(1);
+      setCrop((c) => forceSquare(c, imgSize.w, imgSize.h));
+    }
   };
 
   const onPointerDown = (handle: Handle) => (e: ReactPointerEvent) => {
@@ -261,6 +288,15 @@ export default function ImageCropper() {
       canvas.height = crop.h;
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Canvas not supported");
+
+      if (shape === "circle") {
+        ctx.clearRect(0, 0, crop.w, crop.h);
+        ctx.beginPath();
+        ctx.arc(crop.w / 2, crop.h / 2, Math.min(crop.w, crop.h) / 2, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+      }
+
       ctx.drawImage(img, crop.x, crop.y, crop.w, crop.h, 0, 0, crop.w, crop.h);
 
       const blob = await new Promise<Blob | null>((resolve) => {
@@ -269,10 +305,11 @@ export default function ImageCropper() {
       if (!blob) throw new Error("Crop failed");
 
       const baseName = sourceFile.name.replace(/\.[^.]+$/, "");
+      const suffix = shape === "circle" ? "circle" : "cropped";
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${baseName}-cropped.png`;
+      a.download = `${baseName}-${suffix}.png`;
       a.click();
       URL.revokeObjectURL(url);
     } catch {
@@ -280,9 +317,11 @@ export default function ImageCropper() {
     } finally {
       setIsProcessing(false);
     }
-  }, [sourceFile, previewUrl, crop]);
+  }, [sourceFile, previewUrl, crop, shape]);
 
   const handles: Handle[] = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
+  const isCircle = shape === "circle";
+  const activeAspect = isCircle ? 1 : aspect;
 
   return (
     <div className="space-y-6">
@@ -295,9 +334,35 @@ export default function ImageCropper() {
       ) : (
         <ToolPanel title="Adjust crop">
           <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
-            Drag the box to move it. Use the corners and edges to resize. The
-            bright area is what you&apos;ll keep.
+            Drag the {isCircle ? "circle" : "box"} to move it. Use the corners
+            and edges to resize. The bright area is what you&apos;ll keep
+            {isCircle ? " (exported as a transparent PNG circle)" : ""}.
           </p>
+
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <span className="mr-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">
+              Shape
+            </span>
+            {(
+              [
+                { id: "rect" as const, label: "Rectangle" },
+                { id: "circle" as const, label: "Circle" },
+              ] as const
+            ).map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => setCropShape(option.id)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  shape === option.id
+                    ? "bg-indigo-600 text-white"
+                    : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
 
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap gap-2">
@@ -305,9 +370,10 @@ export default function ImageCropper() {
                 <button
                   key={preset.label}
                   type="button"
+                  disabled={isCircle}
                   onClick={() => setAspectPreset(preset.value)}
-                  className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                    aspect === preset.value
+                  className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                    !isCircle && activeAspect === preset.value
                       ? "bg-indigo-600 text-white"
                       : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
                   }`}
@@ -339,47 +405,69 @@ export default function ImageCropper() {
 
             {displaySize.w > 0 && (
               <>
-                {/* Dimmed areas outside crop */}
-                <div
-                  className="pointer-events-none absolute bg-black/55"
-                  style={{
-                    left: 0,
-                    top: 0,
-                    width: displaySize.w,
-                    height: crop.y * scale,
-                  }}
-                />
-                <div
-                  className="pointer-events-none absolute bg-black/55"
-                  style={{
-                    left: 0,
-                    top: (crop.y + crop.h) * scale,
-                    width: displaySize.w,
-                    height: Math.max(0, displaySize.h - (crop.y + crop.h) * scale),
-                  }}
-                />
-                <div
-                  className="pointer-events-none absolute bg-black/55"
-                  style={{
-                    left: 0,
-                    top: crop.y * scale,
-                    width: crop.x * scale,
-                    height: crop.h * scale,
-                  }}
-                />
-                <div
-                  className="pointer-events-none absolute bg-black/55"
-                  style={{
-                    left: (crop.x + crop.w) * scale,
-                    top: crop.y * scale,
-                    width: Math.max(0, displaySize.w - (crop.x + crop.w) * scale),
-                    height: crop.h * scale,
-                  }}
-                />
+                {isCircle ? (
+                  <div
+                    className="pointer-events-none absolute rounded-full"
+                    style={{
+                      left: crop.x * scale,
+                      top: crop.y * scale,
+                      width: crop.w * scale,
+                      height: crop.h * scale,
+                      boxShadow: "0 0 0 9999px rgba(0,0,0,0.55)",
+                    }}
+                  />
+                ) : (
+                  <>
+                    <div
+                      className="pointer-events-none absolute bg-black/55"
+                      style={{
+                        left: 0,
+                        top: 0,
+                        width: displaySize.w,
+                        height: crop.y * scale,
+                      }}
+                    />
+                    <div
+                      className="pointer-events-none absolute bg-black/55"
+                      style={{
+                        left: 0,
+                        top: (crop.y + crop.h) * scale,
+                        width: displaySize.w,
+                        height: Math.max(
+                          0,
+                          displaySize.h - (crop.y + crop.h) * scale,
+                        ),
+                      }}
+                    />
+                    <div
+                      className="pointer-events-none absolute bg-black/55"
+                      style={{
+                        left: 0,
+                        top: crop.y * scale,
+                        width: crop.x * scale,
+                        height: crop.h * scale,
+                      }}
+                    />
+                    <div
+                      className="pointer-events-none absolute bg-black/55"
+                      style={{
+                        left: (crop.x + crop.w) * scale,
+                        top: crop.y * scale,
+                        width: Math.max(
+                          0,
+                          displaySize.w - (crop.x + crop.w) * scale,
+                        ),
+                        height: crop.h * scale,
+                      }}
+                    />
+                  </>
+                )}
 
                 {/* Crop frame */}
                 <div
-                  className="absolute cursor-move border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,0.4)]"
+                  className={`absolute cursor-move border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,0.4)] ${
+                    isCircle ? "rounded-full" : ""
+                  }`}
                   style={{
                     left: crop.x * scale,
                     top: crop.y * scale,
@@ -388,12 +476,13 @@ export default function ImageCropper() {
                   }}
                   onPointerDown={onPointerDown("move")}
                 >
-                  {/* Rule-of-thirds guides */}
-                  <div className="pointer-events-none absolute inset-0 grid grid-cols-3 grid-rows-3">
-                    {Array.from({ length: 9 }).map((_, i) => (
-                      <div key={i} className="border border-white/25" />
-                    ))}
-                  </div>
+                  {!isCircle && (
+                    <div className="pointer-events-none absolute inset-0 grid grid-cols-3 grid-rows-3">
+                      {Array.from({ length: 9 }).map((_, i) => (
+                        <div key={i} className="border border-white/25" />
+                      ))}
+                    </div>
+                  )}
 
                   {handles.map((handle) => {
                     const isCorner = handle.length === 2;
@@ -441,26 +530,54 @@ export default function ImageCropper() {
               Original: {imgSize.w} × {imgSize.h}px
             </p>
             <p className="font-medium text-zinc-800 dark:text-zinc-200">
-              Crop size: {crop.w} × {crop.h}px
+              {isCircle
+                ? `Circle diameter: ${Math.min(crop.w, crop.h)}px`
+                : `Crop size: ${crop.w} × ${crop.h}px`}
             </p>
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={() => setCrop(centeredCrop(imgSize.w, imgSize.h, aspect))}
+              onClick={() =>
+                setCrop(
+                  isCircle
+                    ? forceSquare(
+                        centeredCrop(imgSize.w, imgSize.h, 1),
+                        imgSize.w,
+                        imgSize.h,
+                      )
+                    : centeredCrop(imgSize.w, imgSize.h, aspect),
+                )
+              }
               className="rounded-lg bg-zinc-100 px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
             >
               Reset selection
             </button>
             <button
               type="button"
-              onClick={() =>
-                setCrop({ x: 0, y: 0, w: imgSize.w, h: imgSize.h })
-              }
+              onClick={() => {
+                if (isCircle) {
+                  const side = Math.min(imgSize.w, imgSize.h);
+                  setCrop(
+                    clampCrop(
+                      {
+                        x: (imgSize.w - side) / 2,
+                        y: (imgSize.h - side) / 2,
+                        w: side,
+                        h: side,
+                      },
+                      imgSize.w,
+                      imgSize.h,
+                    ),
+                  );
+                } else {
+                  setCrop({ x: 0, y: 0, w: imgSize.w, h: imgSize.h });
+                }
+              }}
               className="rounded-lg bg-zinc-100 px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
             >
-              Select full image
+              {isCircle ? "Largest circle" : "Select full image"}
             </button>
           </div>
 
@@ -470,7 +587,11 @@ export default function ImageCropper() {
             disabled={!sourceFile || isProcessing}
             className="mt-4 w-full rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
           >
-            {isProcessing ? "Cropping…" : "Crop & Download"}
+            {isProcessing
+              ? "Cropping…"
+              : isCircle
+                ? "Crop Circle & Download"
+                : "Crop & Download"}
           </button>
         </ToolPanel>
       )}

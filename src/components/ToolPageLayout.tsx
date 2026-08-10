@@ -1,5 +1,7 @@
 import Link from "next/link";
+import ToolGuide from "@/components/ToolGuide";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { getToolGuide } from "@/lib/tool-guides";
 import type { Tool } from "@/lib/tools";
 
 interface ToolPageLayoutProps {
@@ -12,6 +14,7 @@ export default function ToolPageLayout({
   children,
 }: ToolPageLayoutProps) {
   const toolUrl = `${SITE_URL}/tools/${tool.slug}`;
+  const guide = getToolGuide(tool.slug);
 
   const jsonLd = [
     {
@@ -90,6 +93,8 @@ export default function ToolPageLayout({
       </div>
 
       <div className="min-w-0">{children}</div>
+
+      {guide ? <ToolGuide toolName={tool.name} guide={guide} /> : null}
     </div>
   );
 }

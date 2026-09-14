@@ -1,7 +1,9 @@
 import Link from "next/link";
+import RelatedTools from "@/components/RelatedTools";
 import ToolGuide from "@/components/ToolGuide";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { getToolGuide } from "@/lib/tool-guides";
+import { categoryLabels } from "@/lib/tools";
 import type { Tool } from "@/lib/tools";
 
 interface ToolPageLayoutProps {
@@ -15,6 +17,7 @@ export default function ToolPageLayout({
 }: ToolPageLayoutProps) {
   const toolUrl = `${SITE_URL}/tools/${tool.slug}`;
   const guide = getToolGuide(tool.slug);
+  const categoryLabel = categoryLabels[tool.category];
 
   const jsonLd = [
     {
@@ -24,12 +27,24 @@ export default function ToolPageLayout({
         {
           "@type": "ListItem",
           position: 1,
-          name: "All Tools",
+          name: "Home",
           item: SITE_URL,
         },
         {
           "@type": "ListItem",
           position: 2,
+          name: "All Tools",
+          item: `${SITE_URL}/tools`,
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: categoryLabel,
+          item: `${SITE_URL}/tools#${tool.category}`,
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
           name: tool.name,
           item: toolUrl,
         },
@@ -44,6 +59,7 @@ export default function ToolPageLayout({
       applicationCategory: "UtilitiesApplication",
       operatingSystem: "Any",
       browserRequirements: "Requires JavaScript",
+      isAccessibleForFree: true,
       offers: {
         "@type": "Offer",
         price: "0",
@@ -68,14 +84,36 @@ export default function ToolPageLayout({
         aria-label="Breadcrumb"
         className="mb-6 text-sm text-zinc-500 dark:text-zinc-400"
       >
-        <Link
-          href="/"
-          className="transition-colors hover:text-indigo-600 dark:hover:text-indigo-400"
-        >
-          All Tools
-        </Link>
-        <span className="mx-2">/</span>
-        <span className="text-zinc-700 dark:text-zinc-300">{tool.name}</span>
+        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <li>
+            <Link
+              href="/"
+              className="transition-colors hover:text-indigo-600 dark:hover:text-indigo-400"
+            >
+              Home
+            </Link>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li>
+            <Link
+              href="/tools"
+              className="transition-colors hover:text-indigo-600 dark:hover:text-indigo-400"
+            >
+              All Tools
+            </Link>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li>
+            <Link
+              href={`/tools#${tool.category}`}
+              className="transition-colors hover:text-indigo-600 dark:hover:text-indigo-400"
+            >
+              {categoryLabel}
+            </Link>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li className="text-zinc-700 dark:text-zinc-300">{tool.name}</li>
+        </ol>
       </nav>
 
       <div className="mb-8">
@@ -95,6 +133,8 @@ export default function ToolPageLayout({
       <div className="min-w-0">{children}</div>
 
       {guide ? <ToolGuide toolName={tool.name} guide={guide} /> : null}
+
+      <RelatedTools tool={tool} />
     </div>
   );
 }

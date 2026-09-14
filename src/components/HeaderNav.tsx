@@ -141,7 +141,7 @@ export default function HeaderNav() {
   return (
     <nav className="flex items-center gap-4 lg:gap-6">
       <Link
-        href="/"
+        href="/tools"
         className="hidden text-sm font-medium text-zinc-600 transition-colors hover:text-indigo-600 sm:inline dark:text-zinc-400 dark:hover:text-indigo-400"
       >
         All Tools
@@ -167,7 +167,7 @@ export default function HeaderNav() {
         {mobileOpen && (
           <div className="absolute right-0 z-50 mt-2 max-h-[70vh] w-[min(20rem,calc(100vw-2rem))] overflow-y-auto rounded-xl border border-zinc-200 bg-white p-3 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
             <Link
-              href="/"
+              href="/tools"
               className={`${linkClassName} mb-3 font-medium`}
               onClick={() => setMobileOpen(false)}
             >

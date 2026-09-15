@@ -19,8 +19,21 @@ export default function ToolGuide({ toolName, guide }: ToolGuideProps) {
     })),
   };
 
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: `How to use ${toolName}`,
+    description: guide.whatItDoes.slice(0, 300),
+    step: guide.howToUse.map((text, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: `Step ${index + 1}`,
+      text,
+    })),
+  };
+
   return (
-    <section
+    <article
       aria-label={`About ${toolName}`}
       className="mt-12 space-y-10 border-t border-zinc-200 pt-10 dark:border-zinc-800"
     >
@@ -28,10 +41,14 @@ export default function ToolGuide({ toolName, guide }: ToolGuideProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+      />
 
       <div>
         <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          What the tool does
+          About {toolName}
         </h2>
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
           {guide.whatItDoes}
@@ -40,7 +57,16 @@ export default function ToolGuide({ toolName, guide }: ToolGuideProps) {
 
       <div>
         <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          How to use it
+          Why use {toolName}?
+        </h2>
+        <p className="mt-3 max-w-3xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
+          {guide.whyUse}
+        </p>
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          How to use {toolName}
         </h2>
         <ol className="mt-3 max-w-3xl list-decimal space-y-2 pl-5 text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
           {guide.howToUse.map((step) => (
@@ -51,7 +77,18 @@ export default function ToolGuide({ toolName, guide }: ToolGuideProps) {
 
       <div>
         <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Supported formats
+          Common use cases
+        </h2>
+        <ul className="mt-3 max-w-3xl list-disc space-y-2 pl-5 text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
+          {guide.useCases.map((useCase) => (
+            <li key={useCase}>{useCase}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          Supported formats &amp; inputs
         </h2>
         <ul className="mt-3 max-w-3xl list-disc space-y-2 pl-5 text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
           {guide.supportedFormats.map((format) => (
@@ -71,7 +108,7 @@ export default function ToolGuide({ toolName, guide }: ToolGuideProps) {
 
       <div>
         <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          FAQs
+          Frequently asked questions
         </h2>
         <dl className="mt-4 max-w-3xl space-y-6">
           {guide.faqs.map((faq) => (
@@ -86,6 +123,6 @@ export default function ToolGuide({ toolName, guide }: ToolGuideProps) {
           ))}
         </dl>
       </div>
-    </section>
+    </article>
   );
 }

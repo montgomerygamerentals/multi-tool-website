@@ -47,6 +47,12 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   icons: {
     icon: [
@@ -82,6 +88,23 @@ export default function RootLayout({
         />
       </head>
       <body className="flex min-h-full flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: SITE_NAME,
+              url: SITE_URL,
+              description: SITE_DESCRIPTION,
+              publisher: {
+                "@type": "Organization",
+                name: SITE_NAME,
+                url: SITE_URL,
+              },
+            }),
+          }}
+        />
         <Script id="theme-init" strategy="beforeInteractive">
           {THEME_INIT}
         </Script>

@@ -21,14 +21,22 @@ export async function generateMetadata({
 
   if (!tool) return { title: "Tool Not Found" };
 
-  const title = tool.name;
-  const description = tool.description;
+  const title = `${tool.name} — Free Online Tool`;
+  const description = `${tool.description} Free, private, and runs in your browser — no sign-up required.`;
   const url = `${SITE_URL}/tools/${tool.slug}`;
-  const fullTitle = `${title} | ${SITE_NAME}`;
+  const fullTitle = `${tool.name} | ${SITE_NAME}`;
 
   return {
     title,
     description,
+    keywords: [
+      tool.name,
+      `free ${tool.name}`,
+      `online ${tool.name}`,
+      "browser tool",
+      "no signup",
+      SITE_NAME,
+    ],
     alternates: {
       canonical: `/tools/${tool.slug}`,
     },
@@ -45,8 +53,18 @@ export async function generateMetadata({
       title: fullTitle,
       description,
     },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
   };
 }
+
+export const dynamicParams = false;
 
 export default async function ToolPage({ params }: ToolPageProps) {
   const { slug } = await params;

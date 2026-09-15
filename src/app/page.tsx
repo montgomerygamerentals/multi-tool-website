@@ -1,10 +1,29 @@
+import Link from "next/link";
+import type { Metadata } from "next";
 import ToolCard from "@/components/ToolCard";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   categoryDescriptions,
   categoryLabels,
   getToolsByCategory,
+  tools,
   type ToolCategory,
 } from "@/lib/tools";
+
+export const metadata: Metadata = {
+  description: `Free online utility tools — image converters, calculators, text utilities, and randomizers. ${tools.length}+ tools that run in your browser with no sign-up.`,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — Free Online Utilities`,
+    description: `Free online utility tools — image converters, calculators, text utilities, and randomizers. ${tools.length}+ tools that run in your browser.`,
+  },
+};
 
 export default function Home() {
   const toolsByCategory = getToolsByCategory();
@@ -19,6 +38,14 @@ export default function Home() {
         <p className="mx-auto max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
           A collection of fast, free utilities that run entirely in your browser.
           No sign-up required — just pick a tool and get started.
+        </p>
+        <p className="mt-4">
+          <Link
+            href="/tools"
+            className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
+          >
+            View the full All Tools directory →
+          </Link>
         </p>
       </section>
 

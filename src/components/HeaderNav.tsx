@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
   categoryLabels,
+  getCategoryPath,
   getToolsByCategory,
   type Tool,
   type ToolCategory,
@@ -80,28 +81,34 @@ function CategoryDropdown({
   };
 
   return (
-    <div ref={ref} className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((value) => !value)}
-        aria-expanded={open}
-        className="flex items-center gap-1 text-sm font-medium text-zinc-600 transition-colors hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400"
-      >
-        {categoryLabels[category]}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
-          aria-hidden="true"
+    <div ref={ref} className="relative flex items-center gap-0.5">
+        <Link
+          href={getCategoryPath(category)}
+          className="text-sm font-medium text-zinc-600 transition-colors hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400"
         >
-          <path
-            fillRule="evenodd"
-            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </button>
+          {categoryLabels[category]}
+        </Link>
+        <button
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+          aria-label={`Show ${categoryLabels[category]} tools`}
+          className="flex items-center text-zinc-600 transition-colors hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
 
       {open && (
         <div className="absolute right-0 z-50 mt-2 w-64 rounded-xl border border-zinc-200 bg-white p-2 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
@@ -176,9 +183,13 @@ export default function HeaderNav() {
             <div className="space-y-4">
               {categories.map((category) => (
                 <div key={category}>
-                  <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                  <Link
+                    href={getCategoryPath(category)}
+                    className="mb-2 block px-3 text-xs font-semibold uppercase tracking-wide text-zinc-500 hover:text-indigo-600"
+                    onClick={() => setMobileOpen(false)}
+                  >
                     {categoryLabels[category]}
-                  </p>
+                  </Link>
                   <ToolLinks
                     tools={toolsByCategory[category]}
                     onNavigate={() => setMobileOpen(false)}

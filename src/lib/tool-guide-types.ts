@@ -3,6 +3,11 @@ export interface ToolFaq {
   answer: string;
 }
 
+export interface ToolExample {
+  title: string;
+  body: string;
+}
+
 export interface ToolGuide {
   whatItDoes: string;
   whyUse: string;
@@ -11,4 +16,5 @@ export interface ToolGuide {
   supportedFormats: string[];
   privacy: string;
   faqs: ToolFaq[];
+  examples?: ToolExample[];
 }

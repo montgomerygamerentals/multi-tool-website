@@ -5,6 +5,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   categoryDescriptions,
   categoryLabels,
+  getCategoryPath,
   getToolsByCategory,
   tools,
   type ToolCategory,
@@ -36,8 +37,9 @@ export default function Home() {
           Free Online Tools
         </h1>
         <p className="mx-auto max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
-          A collection of fast, free utilities that run entirely in your browser.
-          No sign-up required — just pick a tool and get started.
+          {tools.length} utilities for images, text, everyday math, and random
+          picks. Each page is a working tool with a unique explanation and
+          worked example. Processing stays in your browser — no account.
         </p>
         <p className="mt-4">
           <Link
@@ -58,7 +60,12 @@ export default function Home() {
             <section key={category}>
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
-                  {categoryLabels[category]}
+                  <Link
+                    href={getCategoryPath(category)}
+                    className="hover:text-indigo-600 dark:hover:text-indigo-400"
+                  >
+                    {categoryLabels[category]}
+                  </Link>
                 </h2>
                 <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
                   {categoryDescriptions[category]}

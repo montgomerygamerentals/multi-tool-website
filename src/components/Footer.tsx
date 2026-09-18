@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   categoryLabels,
+  getCategoryPath,
   getToolsByCategory,
   type ToolCategory,
 } from "@/lib/tools";
@@ -18,8 +19,9 @@ export default function Footer() {
               ToolBox
             </p>
             <p className="mt-2 max-w-md text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-              Free online utilities that run in your browser. No sign-up
-              required.
+              Fast Free Tools — browser utilities from Ferrari Group LLC. No
+              sign-up required. Files and numbers you enter stay on your device
+              unless a page says otherwise.
             </p>
           </div>
           <Link
@@ -32,12 +34,12 @@ export default function Footer() {
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((category) => {
-            const categoryTools = toolsByCategory[category].slice(0, 6);
+            const categoryTools = toolsByCategory[category];
             return (
               <div key={category}>
                 <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                   <Link
-                    href={`/tools#${category}`}
+                    href={getCategoryPath(category)}
                     className="hover:text-indigo-600 dark:hover:text-indigo-400"
                   >
                     {categoryLabels[category]}
@@ -54,23 +56,43 @@ export default function Footer() {
                       </Link>
                     </li>
                   ))}
-                  {toolsByCategory[category].length > 6 ? (
-                    <li>
-                      <Link
-                        href={`/tools#${category}`}
-                        className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
-                      >
-                        View all →
-                      </Link>
-                    </li>
-                  ) : null}
                 </ul>
               </div>
             );
           })}
         </div>
 
-        <p className="mt-10 border-t border-zinc-200 pt-6 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+        <nav
+          aria-label="About this site"
+          className="mt-10 flex flex-wrap justify-center gap-x-5 gap-y-2 border-t border-zinc-200 pt-6 text-sm text-zinc-500 dark:border-zinc-800 dark:text-zinc-400"
+        >
+          <Link
+            href="/about"
+            className="hover:text-indigo-600 dark:hover:text-indigo-400"
+          >
+            About
+          </Link>
+          <Link
+            href="/privacy"
+            className="hover:text-indigo-600 dark:hover:text-indigo-400"
+          >
+            Privacy
+          </Link>
+          <Link
+            href="/contact"
+            className="hover:text-indigo-600 dark:hover:text-indigo-400"
+          >
+            Contact
+          </Link>
+          <Link
+            href="/tools"
+            className="hover:text-indigo-600 dark:hover:text-indigo-400"
+          >
+            All tools
+          </Link>
+        </nav>
+
+        <p className="mt-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
           &copy; {new Date().getFullYear()} Ferrari Group LLC. Free online
           utilities for everyone.
         </p>

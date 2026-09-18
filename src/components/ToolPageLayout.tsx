@@ -73,14 +73,17 @@ export default function ToolPageLayout({
     },
   ];
 
-  return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+  const isQrGenerator = tool.slug === 'qr-code-generator';
 
-      <nav
+  return (
+    <div className={isQrGenerator ? 'bg-pink-100 dark:bg-pink-950 min-h-screen' : ''}>
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+
+        <nav
         aria-label="Breadcrumb"
         className="mb-6 text-sm text-zinc-500 dark:text-zinc-400"
       >
@@ -135,6 +138,7 @@ export default function ToolPageLayout({
       {guide ? <ToolGuide toolName={tool.name} guide={guide} /> : null}
 
       <RelatedTools tool={tool} />
+      </div>
     </div>
   );
 }

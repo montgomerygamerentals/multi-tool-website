@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   categoryLabels,
+  getCategoryPath,
   getToolsByCategory,
   type Tool,
   type ToolCategory,
@@ -42,7 +43,7 @@ export default function RelatedTools({ tool, limit = 6 }: RelatedToolsProps) {
           </p>
         </div>
         <Link
-          href={`/tools#${tool.category}`}
+          href={getCategoryPath(tool.category)}
           className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-400"
         >
           View full category →

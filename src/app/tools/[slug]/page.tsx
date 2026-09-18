@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import ToolPageLayout from "@/components/ToolPageLayout";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { toolComponents } from "@/lib/tool-components";
+import { getToolSeo } from "@/lib/tool-seo";
 import { getToolBySlug, tools } from "@/lib/tools";
 
 interface ToolPageProps {
@@ -21,37 +22,27 @@ export async function generateMetadata({
 
   if (!tool) return { title: "Tool Not Found" };
 
-  const title = `${tool.name} — Free Online Tool`;
-  const description = `${tool.description} Free, private, and runs in your browser — no sign-up required.`;
+  const seo = getToolSeo(tool);
   const url = `${SITE_URL}/tools/${tool.slug}`;
-  const fullTitle = `${tool.name} | ${SITE_NAME}`;
 
   return {
-    title,
-    description,
-    keywords: [
-      tool.name,
-      `free ${tool.name}`,
-      `online ${tool.name}`,
-      "browser tool",
-      "no signup",
-      SITE_NAME,
-    ],
+    title: seo.title,
+    description: seo.description,
     alternates: {
-      canonical: `/tools/${tool.slug}`,
+      canonical: url,
     },
     openGraph: {
       type: "website",
       locale: "en_US",
       url,
       siteName: SITE_NAME,
-      title: fullTitle,
-      description,
+      title: `${seo.title} | ${SITE_NAME}`,
+      description: seo.description,
     },
     twitter: {
       card: "summary_large_image",
-      title: fullTitle,
-      description,
+      title: `${seo.title} | ${SITE_NAME}`,
+      description: seo.description,
     },
     robots: {
       index: true,
@@ -59,6 +50,9 @@ export async function generateMetadata({
       googleBot: {
         index: true,
         follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
       },
     },
   };

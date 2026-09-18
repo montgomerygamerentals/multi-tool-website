@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_ALTERNATE_NAME, SITE_DESCRIPTION, SITE_LEGAL_NAME, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,9 +28,6 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -93,15 +90,26 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "WebSite",
-              name: SITE_NAME,
-              url: SITE_URL,
-              description: SITE_DESCRIPTION,
-              publisher: {
-                "@type": "Organization",
-                name: SITE_NAME,
-                url: SITE_URL,
-              },
+              "@graph": [
+                {
+                  "@type": "WebSite",
+                  "@id": `${SITE_URL}/#website`,
+                  name: SITE_NAME,
+                  alternateName: SITE_ALTERNATE_NAME,
+                  url: SITE_URL,
+                  description: SITE_DESCRIPTION,
+                  inLanguage: "en-US",
+                  publisher: { "@id": `${SITE_URL}/#organization` },
+                },
+                {
+                  "@type": "Organization",
+                  "@id": `${SITE_URL}/#organization`,
+                  name: SITE_NAME,
+                  alternateName: SITE_ALTERNATE_NAME,
+                  legalName: SITE_LEGAL_NAME,
+                  url: SITE_URL,
+                },
+              ],
             }),
           }}
         />

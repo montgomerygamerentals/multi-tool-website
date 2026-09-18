@@ -26,6 +26,25 @@ export const categoryDescriptions: Record<ToolCategory, string> = {
   calculators: "Quick math and unit conversion tools.",
 };
 
+export const categoryIntros: Record<ToolCategory, string> = {
+  "image-media":
+    "Browser-based image tools for converting formats, compressing files, cropping, reading EXIF, building favicons, and generating QR codes. Files stay on your device — nothing is uploaded to a converter farm.",
+  randomizers:
+    "Fair, transparent randomizers for classrooms, giveaways, game nights, and team splits. Add your own list, spin or shuffle, and keep names on this device.",
+  "text-writing":
+    "Text utilities for counting words, comparing drafts, formatting JSON, testing regex, and generating hashes or UUIDs. Paste locally when the content should not go to a random website.",
+  calculators:
+    "Payment, tax, savings, and everyday math calculators with the formulas shown on each page. Worked examples are in plain HTML so you can check the math before you trust a result.",
+};
+
+export function isToolCategory(value: string): value is ToolCategory {
+  return Object.prototype.hasOwnProperty.call(categoryLabels, value);
+}
+
+export function getCategoryPath(category: ToolCategory): string {
+  return `/category/${category}`;
+}
+
 export const tools: Tool[] = [
   // Image & Media
   {

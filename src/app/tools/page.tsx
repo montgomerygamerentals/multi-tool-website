@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   categoryDescriptions,
   categoryLabels,
+  getCategoryPath,
   getToolsByCategory,
   tools,
   type ToolCategory,
@@ -131,7 +132,7 @@ export default function ToolsDirectoryPage() {
           {categories.map((category) => (
             <li key={category}>
               <a
-                href={`#${category}`}
+                href={getCategoryPath(category)}
                 className="inline-block rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:border-indigo-300 hover:text-indigo-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-indigo-600 dark:hover:text-indigo-400"
               >
                 {categoryLabels[category]} (

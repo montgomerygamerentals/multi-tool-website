@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate:guides": "node scripts/generate-tool-guides.mjs && node scripts/enrich-tool-guides.mjs"
+    "generate:guides": "node scripts/generate-tool-guides.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

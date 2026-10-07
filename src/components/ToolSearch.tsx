@@ -97,10 +97,7 @@ export default function ToolSearch() {
   };
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full min-w-[12rem] sm:min-w-[16rem] md:min-w-[20rem]"
-    >
+    <div ref={containerRef} className="relative w-full">
       <label htmlFor={inputId} className="sr-only">
         Search tools
       </label>
@@ -149,7 +146,7 @@ export default function ToolSearch() {
           id={listboxId}
           role="listbox"
           aria-label="Search results"
-          className="absolute top-full left-0 z-50 mt-2 w-[max(100%,min(28rem,calc(100vw-2rem)))] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
+          className="absolute top-full left-0 z-50 mt-2 w-full min-w-[min(32rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
         >
           <div className="max-h-[min(24rem,70vh)] overflow-y-auto p-2">
             {results.length === 0 ? (
@@ -183,7 +180,7 @@ export default function ToolSearch() {
                           <span className="block text-sm font-medium">
                             {tool.name}
                           </span>
-                          <span className="mt-0.5 block text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+                          <span className="mt-0.5 line-clamp-2 block text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
                             <span className="font-medium text-zinc-600 dark:text-zinc-300">
                               {categoryLabels[tool.category]}
                             </span>

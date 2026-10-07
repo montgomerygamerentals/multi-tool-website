@@ -15,7 +15,7 @@ export default function Header() {
             ToolBox
           </span>
         </Link>
-        <div className="min-w-0 flex-1 basis-0">
+        <div className="min-w-[12rem] flex-1 basis-64 sm:min-w-[18rem] sm:basis-80 md:min-w-[22rem]">
           <ToolSearch />
         </div>
         <HeaderNav />

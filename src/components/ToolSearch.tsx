@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
 import { categoryLabels, searchTools } from "@/lib/tools";
 
 export default function ToolSearch() {
@@ -90,7 +97,10 @@ export default function ToolSearch() {
   };
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-md">
+    <div
+      ref={containerRef}
+      className="relative w-full min-w-[12rem] sm:min-w-[16rem] md:min-w-[20rem]"
+    >
       <label htmlFor={inputId} className="sr-only">
         Search tools
       </label>
@@ -130,7 +140,7 @@ export default function ToolSearch() {
           onKeyDown={handleKeyDown}
           placeholder="Search tools…"
           autoComplete="off"
-          className="w-full rounded-lg border border-zinc-300 bg-white py-2 pr-3 pl-9 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+          className="w-full rounded-lg border border-zinc-300 bg-white py-2.5 pr-3 pl-9 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
         />
       </div>
 
@@ -139,48 +149,55 @@ export default function ToolSearch() {
           id={listboxId}
           role="listbox"
           aria-label="Search results"
-          className="absolute top-full right-0 left-0 z-50 mt-2 max-h-[min(24rem,70vh)] overflow-y-auto rounded-xl border border-zinc-200 bg-white p-2 shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
+          className="absolute top-full left-0 z-50 mt-2 w-[max(100%,min(28rem,calc(100vw-2rem)))] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
         >
-          {results.length === 0 ? (
-            <p className="px-3 py-4 text-center text-sm text-zinc-500">
-              No tools match “{query.trim()}”
-            </p>
-          ) : (
-            <ul className="space-y-1">
-              {results.map((tool, index) => {
-                const active = index === activeIndex;
-                return (
-                  <li key={tool.slug} role="option" aria-selected={active}>
-                    <Link
-                      id={`${listboxId}-${tool.slug}`}
-                      href={`/tools/${tool.slug}`}
-                      onClick={close}
-                      onMouseEnter={() => setActiveIndex(index)}
-                      className={`flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors ${
-                        active
-                          ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300"
-                          : "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                      }`}
-                    >
-                      <span className="mt-0.5 text-base" aria-hidden="true">
-                        {tool.icon}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-medium">
-                          {tool.name}
+          <div className="max-h-[min(24rem,70vh)] overflow-y-auto p-2">
+            {results.length === 0 ? (
+              <p className="px-3 py-4 text-center text-sm text-zinc-500">
+                No tools match “{query.trim()}”
+              </p>
+            ) : (
+              <ul className="space-y-1">
+                {results.map((tool, index) => {
+                  const active = index === activeIndex;
+                  return (
+                    <li key={tool.slug} role="option" aria-selected={active}>
+                      <Link
+                        id={`${listboxId}-${tool.slug}`}
+                        href={`/tools/${tool.slug}`}
+                        onClick={close}
+                        onMouseEnter={() => setActiveIndex(index)}
+                        className={`flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors ${
+                          active
+                            ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300"
+                            : "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                        }`}
+                      >
+                        <span
+                          className="mt-0.5 shrink-0 text-base"
+                          aria-hidden="true"
+                        >
+                          {tool.icon}
                         </span>
-                        <span className="mt-0.5 block truncate text-xs text-zinc-500 dark:text-zinc-400">
-                          {categoryLabels[tool.category]}
-                          {" · "}
-                          {tool.description}
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-sm font-medium">
+                            {tool.name}
+                          </span>
+                          <span className="mt-0.5 block text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+                            <span className="font-medium text-zinc-600 dark:text-zinc-300">
+                              {categoryLabels[tool.category]}
+                            </span>
+                            {" · "}
+                            {tool.description}
+                          </span>
                         </span>
-                      </span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -19,6 +19,14 @@ export const categoryLabels: Record<ToolCategory, string> = {
   calculators: "Calculators & Converters",
 };
 
+/** Compact labels for the header nav so the search field keeps usable width. */
+export const categoryNavLabels: Record<ToolCategory, string> = {
+  "image-media": "Images",
+  randomizers: "Randomizers",
+  "text-writing": "Text & Dev",
+  calculators: "Calculators",
+};
+
 export const categoryDescriptions: Record<ToolCategory, string> = {
   "image-media":
     "Convert formats, compress, crop, resize, and inspect images in your browser.",

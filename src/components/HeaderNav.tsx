@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
   categoryLabels,
+  categoryNavLabels,
   getCategoryPath,
   getToolsByCategory,
   type Tool,
@@ -80,38 +81,42 @@ function CategoryDropdown({
     onNavigate?.();
   };
 
+  const navLabel = categoryNavLabels[category];
+  const fullLabel = categoryLabels[category];
+
   return (
     <div ref={ref} className="relative flex items-center gap-0.5">
-        <Link
-          href={getCategoryPath(category)}
-          className="text-sm font-medium text-zinc-600 transition-colors hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400"
+      <Link
+        href={getCategoryPath(category)}
+        title={fullLabel}
+        className="whitespace-nowrap text-sm font-medium text-zinc-600 transition-colors hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400"
+      >
+        {navLabel}
+      </Link>
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-label={`Show ${fullLabel} tools`}
+        className="flex items-center text-zinc-600 transition-colors hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
+          aria-hidden="true"
         >
-          {categoryLabels[category]}
-        </Link>
-        <button
-          type="button"
-          onClick={() => setOpen((value) => !value)}
-          aria-expanded={open}
-          aria-label={`Show ${categoryLabels[category]} tools`}
-          className="flex items-center text-zinc-600 transition-colors hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
-            aria-hidden="true"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
+          <path
+            fillRule="evenodd"
+            d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-64 rounded-xl border border-zinc-200 bg-white p-2 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <div className="absolute top-full right-0 z-50 mt-2 w-72 max-w-[min(18rem,calc(100vw-2rem))] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
           <ToolLinks tools={toolsByCategory[category]} onNavigate={close} />
         </div>
       )}
@@ -146,15 +151,15 @@ export default function HeaderNav() {
   }, [mobileOpen]);
 
   return (
-    <nav className="flex items-center gap-4 lg:gap-6">
+    <nav className="flex shrink-0 items-center gap-3 lg:gap-4">
       <Link
         href="/tools"
-        className="hidden text-sm font-medium text-zinc-600 transition-colors hover:text-indigo-600 sm:inline dark:text-zinc-400 dark:hover:text-indigo-400"
+        className="hidden whitespace-nowrap text-sm font-medium text-zinc-600 transition-colors hover:text-indigo-600 sm:inline dark:text-zinc-400 dark:hover:text-indigo-400"
       >
         All Tools
       </Link>
 
-      <div className="hidden items-center gap-5 lg:flex">
+      <div className="hidden items-center gap-3 xl:gap-4 lg:flex">
         {categories.map((category) => (
           <CategoryDropdown key={category} category={category} />
         ))}

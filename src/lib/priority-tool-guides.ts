@@ -8,6 +8,7 @@ export const priorityToolGuides: Record<string, ToolGuide> = {
   "roi-calculator": {
     whatItDoes:
       "This free online ROI calculator shows return on investment and optional annualized ROI from an initial cost and a final value (or gain). Use it when you need a clear percentage return before comparing deals, projects, or marketing spend.",
+    whatIsHeading: "What is ROI (return on investment)?",
     whatIs:
       "Return on investment (ROI) is a simple performance measure: how much you gained or lost relative to what you put in. A positive ROI means the outcome was worth more than the cost; a negative ROI means you lost money relative to the starting amount. People search for an ROI calculator when they want that percentage quickly — for investments, courses, campaigns, or any cash outlay with a measurable result.",
     howItWorks:
@@ -75,6 +76,7 @@ export const priorityToolGuides: Record<string, ToolGuide> = {
   "down-payment-calculator": {
     whatItDoes:
       "This home down payment calculator solves for cash needed, down payment percentage, or an affordable purchase price from the two numbers you already know — so you can compare 5%, 10%, and 20% down scenarios before you talk to a lender.",
+    whatIsHeading: "What is a down payment?",
     whatIs:
       "A down payment is the portion of a home’s purchase price you pay upfront in cash (or equity). The rest is typically financed with a mortgage. Down payment percentage is cash ÷ purchase price. Loan amount is roughly purchase price minus down payment (before closing costs and other fees).",
     howItWorks:
@@ -137,6 +139,7 @@ export const priorityToolGuides: Record<string, ToolGuide> = {
   "code-comparison": {
     whatItDoes:
       "This online code comparison tool (code diff) lets you paste two snippets side by side and see added, removed, and unchanged lines with line numbers — useful for config changes, small refactors, and reviewing a patch without opening a full IDE.",
+    whatIsHeading: "What is code comparison?",
     whatIs:
       "Code comparison (often called a diff or code compare) shows the differences between two versions of text or source. Green-style additions and red-style removals help you spot what changed. Searchers looking for “code compare,” “code comparison tools,” or “compare two code files” usually want a fast browser diff, not a full Git client.",
     howItWorks:
@@ -199,6 +202,7 @@ export const priorityToolGuides: Record<string, ToolGuide> = {
   "png-to-webp": {
     whatItDoes:
       "Convert PNG images to WebP in your browser. Keep a PNG master when you need lossless editing; ship WebP on the web for smaller file sizes. Conversion and quality controls run on your device.",
+    whatIsHeading: "What is WebP, and why convert from PNG?",
     whatIs:
       "WebP is an image format designed for the web. It often produces smaller files than PNG at similar visual quality, which helps pages load faster and use less bandwidth. A PNG to WebP converter is what people reach for when they have transparent graphics or UI assets in PNG and want a lighter file for production.",
     howItWorks:
@@ -261,6 +265,7 @@ export const priorityToolGuides: Record<string, ToolGuide> = {
   "aspect-ratio-finder": {
     whatItDoes:
       "Upload an image to calculate its aspect ratio from width and height — including pixel dimensions, orientation, and the closest common ratio such as 16:9, 4:3, 3:2, or 1:1.",
+    whatIsHeading: "What is aspect ratio?",
     whatIs:
       "Aspect ratio is the proportional relationship between width and height, written as W:H (for example 16:9). An aspect ratio finder or aspect ratio calculator answers “what ratio is this image?” so you can match social templates, video frames, or print specs without guessing.",
     howItWorks:

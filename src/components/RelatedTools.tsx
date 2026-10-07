@@ -17,7 +17,7 @@ interface RelatedToolsProps {
 function resolveRelated(tool: Tool, limit: number): Tool[] {
   const curated = (relatedToolSlugs[tool.slug] ?? [])
     .map((slug) => getToolBySlug(slug))
-    .filter((item): item is Tool => Boolean(item) && item.slug !== tool.slug);
+    .filter((item): item is Tool => item != null && item.slug !== tool.slug);
 
   if (curated.length >= limit) {
     return curated.slice(0, limit);

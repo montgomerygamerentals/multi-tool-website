@@ -27,6 +27,8 @@ export interface ToolGuide {
   examples?: ToolExample[];
   /** “What is [topic]?” explanatory section. */
   whatIs?: string;
+  /** Optional custom heading for the whatIs section (defaults to “What is {toolName}?”). */
+  whatIsHeading?: string;
   /** How the calculation, conversion, or process works. */
   howItWorks?: string;
   /** Formula or definition shown when applicable. */

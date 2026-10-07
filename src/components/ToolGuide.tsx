@@ -72,7 +72,9 @@ export default function ToolGuide({ toolName, guide }: ToolGuideProps) {
 
       {guide.whatIs ? (
         <section>
-          <SectionHeading>What is {toolName}?</SectionHeading>
+          <SectionHeading>
+            {guide.whatIsHeading ?? `What is ${toolName}?`}
+          </SectionHeading>
           <Prose>{guide.whatIs}</Prose>
         </section>
       ) : null}

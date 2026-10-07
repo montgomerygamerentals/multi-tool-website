@@ -36,12 +36,12 @@ export async function generateMetadata({
       locale: "en_US",
       url,
       siteName: SITE_NAME,
-      title: `${seo.title} | ${SITE_NAME}`,
+      title: seo.title,
       description: seo.description,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${seo.title} | ${SITE_NAME}`,
+      title: seo.title,
       description: seo.description,
     },
     robots: {

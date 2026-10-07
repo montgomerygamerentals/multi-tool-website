@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { relatedToolSlugs } from "@/lib/related-tools";
 import {
   categoryLabels,
   getCategoryPath,
+  getToolBySlug,
   getToolsByCategory,
   type Tool,
   type ToolCategory,
@@ -12,11 +14,25 @@ interface RelatedToolsProps {
   limit?: number;
 }
 
+function resolveRelated(tool: Tool, limit: number): Tool[] {
+  const curated = (relatedToolSlugs[tool.slug] ?? [])
+    .map((slug) => getToolBySlug(slug))
+    .filter((item): item is Tool => Boolean(item) && item.slug !== tool.slug);
+
+  if (curated.length >= limit) {
+    return curated.slice(0, limit);
+  }
+
+  const seen = new Set(curated.map((item) => item.slug));
+  const fromCategory = getToolsByCategory()[tool.category].filter(
+    (item) => item.slug !== tool.slug && !seen.has(item.slug),
+  );
+
+  return [...curated, ...fromCategory].slice(0, limit);
+}
+
 export default function RelatedTools({ tool, limit = 6 }: RelatedToolsProps) {
-  const toolsByCategory = getToolsByCategory();
-  const related = toolsByCategory[tool.category]
-    .filter((t) => t.slug !== tool.slug)
-    .slice(0, limit);
+  const related = resolveRelated(tool, limit);
 
   if (related.length === 0) return null;
 
@@ -28,11 +44,17 @@ export default function RelatedTools({ tool, limit = 6 }: RelatedToolsProps) {
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Related {categoryLabels[tool.category as ToolCategory]} tools
+            Related tools
           </h2>
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            More free utilities in the same category — each page is linked from
-            our{" "}
+            More free utilities you may need next — also listed in{" "}
+            <Link
+              href={getCategoryPath(tool.category)}
+              className="font-medium text-indigo-600 hover:underline dark:text-indigo-400"
+            >
+              {categoryLabels[tool.category as ToolCategory]}
+            </Link>{" "}
+            and the{" "}
             <Link
               href="/tools"
               className="font-medium text-indigo-600 hover:underline dark:text-indigo-400"

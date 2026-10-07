@@ -27,9 +27,9 @@ const seo: Record<string, ToolSeo> = {
       "Crop a photo to a rectangle or circle for avatars and thumbnails. Adjust the selection and download PNG or JPEG locally.",
   },
   "aspect-ratio-finder": {
-    title: "Image Aspect Ratio Finder",
+    title: "Aspect Ratio Finder & Calculator",
     description:
-      "Upload an image to see pixel dimensions, orientation, and the closest common ratio such as 16:9, 4:3, 3:2, or 1:1.",
+      "Calculate an image’s aspect ratio from width and height. See pixel dimensions, orientation, and closest common ratios like 16:9, 4:3, 3:2, or 1:1.",
   },
   "background-remover": {
     title: "Background Remover",
@@ -54,7 +54,7 @@ const seo: Record<string, ToolSeo> = {
   "png-to-webp": {
     title: "PNG to WebP Converter",
     description:
-      "Convert PNG images to WebP for smaller web assets. Keep the PNG master; ship WebP on the site. Conversion stays on your device.",
+      "Convert PNG to WebP online in your browser — smaller web images, quality control, no upload. Keep PNG masters; ship WebP for faster pages.",
   },
   "webp-to-png": {
     title: "WebP to PNG Converter",
@@ -107,9 +107,9 @@ const seo: Record<string, ToolSeo> = {
       "Compare two text blocks side by side and highlight additions and deletions. Useful for bios, policies, and contract wording.",
   },
   "code-comparison": {
-    title: "Code Diff Viewer",
+    title: "Code Comparison Tool — Online Diff",
     description:
-      "Compare two code snippets with line numbers and highlighted changes. Paste configs or functions without opening an IDE.",
+      "Compare two code snippets side by side. Line numbers, added/removed highlighting, inline word diffs, and ignore-whitespace. Runs in your browser.",
   },
   "lorem-ipsum": {
     title: "Lorem Ipsum Generator",
@@ -212,9 +212,9 @@ const seo: Record<string, ToolSeo> = {
       "Project future value from a starting balance, contributions, and annual rate. See how monthly deposits change the total.",
   },
   "roi-calculator": {
-    title: "ROI Calculator",
+    title: "ROI Calculator — Return on Investment",
     description:
-      "Calculate simple return on investment and annualized ROI from cost and final value. Compare deals that lasted different lengths.",
+      "Free online ROI calculator with the ROI formula, simple return, and annualized ROI from cost and final value or gain. Compare investments of different lengths.",
   },
   "retirement-calculator": {
     title: "Retirement Savings Calculator",
@@ -222,14 +222,14 @@ const seo: Record<string, ToolSeo> = {
       "Project a nest egg from current savings, monthly contributions, and an assumed annual return. Change the rate to stress-test.",
   },
   "budget-calculator": {
-    title: "Monthly Budget Calculator",
+    title: "Budget Calculator — Monthly Income vs Expenses",
     description:
-      "Add income and expenses to see surplus or shortfall. A simple monthly budget you can fill in without creating an account.",
+      "Free monthly budget calculator: add income and expenses to see surplus or shortfall. Plan a simple budget without creating an account.",
   },
   "sales-tax-calculator": {
     title: "Sales Tax Calculator",
     description:
-      "Add sales tax to a price or back out the pre-tax amount from a receipt total. Works for any percentage rate you enter.",
+      "Add sales tax to a price or remove tax from a receipt total. Enter any rate to see tax amount and pre-tax or final price instantly.",
   },
   "income-tax-estimator": {
     title: "Federal Income Tax Estimator",
@@ -252,9 +252,9 @@ const seo: Record<string, ToolSeo> = {
       "See how an amount changes at a given inflation rate over years. Useful for savings targets and “future grocery bill” sketches.",
   },
   "buying-power-calculator": {
-    title: "Dollar Buying Power Calculator",
+    title: "Buying Power Calculator — Dollar Then vs Now",
     description:
-      "Compare what a U.S. dollar amount from one year is worth in another using historical CPI-style data packaged with the tool.",
+      "See what a U.S. dollar amount from one year is worth in another using historical CPI-style data. Compare purchasing power across years.",
   },
   "refinance-calculator": {
     title: "Refinance Break-Even Calculator",
@@ -267,9 +267,9 @@ const seo: Record<string, ToolSeo> = {
       "Estimate months to pay off a card balance and total interest from APR and monthly payment. See why minimums take so long.",
   },
   "down-payment-calculator": {
-    title: "Down Payment Calculator",
+    title: "Down Payment Calculator — Home Purchase",
     description:
-      "Solve for down payment cash, percent, or home price from the two numbers you know. Compare 5%, 10%, and 20% down scenarios.",
+      "Home down payment calculator: solve for cash, percent, or purchase price. See how down payment changes loan amount for 5%, 10%, and 20% scenarios.",
   },
   "amortization-schedule": {
     title: "Amortization Schedule Calculator",
@@ -284,7 +284,7 @@ const seo: Record<string, ToolSeo> = {
   "emergency-fund-calculator": {
     title: "Emergency Fund Calculator",
     description:
-      "Set an emergency-fund target from monthly essential expenses and months of coverage. See the gap versus cash you already have.",
+      "Calculate an emergency fund target from monthly essential expenses and months of coverage. See how much you still need to save.",
   },
   "401k-calculator": {
     title: "401(k) Contribution Calculator",
@@ -324,7 +324,7 @@ const seo: Record<string, ToolSeo> = {
   "random-number-generator": {
     title: "Random Number Generator",
     description:
-      "Generate one or many random integers in a range you set. Use a list shuffle instead if you need unique draws without repeats.",
+      "Generate random integers in a min–max range — one or many, with optional no-duplicates mode. Free online RNG in your browser.",
   },
   "coin-flip": {
     title: "Coin Flip",
@@ -342,9 +342,9 @@ const seo: Record<string, ToolSeo> = {
       "Shuffle any list into a random order. Use it for talk lineups, playlists, chore rotations, and tournament seeds.",
   },
   "team-splitter": {
-    title: "Random Team Generator",
+    title: "Team Splitter — Random Team Generator",
     description:
-      "Divide a list of names into balanced random teams. Leftovers are distributed so group sizes differ by at most one.",
+      "Randomly split names into balanced teams for class, sports, or workshops. Uneven counts differ by at most one person per group.",
   },
   "yes-no-picker": {
     title: "Yes or No Picker",

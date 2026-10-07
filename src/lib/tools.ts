@@ -15,26 +15,30 @@ export interface Tool {
 export const categoryLabels: Record<ToolCategory, string> = {
   "image-media": "Image & Media",
   randomizers: "Randomizers & Games",
-  "text-writing": "Text & Writing",
-  calculators: "Calculators",
+  "text-writing": "Text, Writing & Developer Tools",
+  calculators: "Calculators & Converters",
 };
 
 export const categoryDescriptions: Record<ToolCategory, string> = {
-  "image-media": "Convert, resize, and edit images right in your browser.",
-  randomizers: "Pick winners, shuffle lists, and roll the dice.",
-  "text-writing": "Format, count, and transform text.",
-  calculators: "Quick math and unit conversion tools.",
+  "image-media":
+    "Convert formats, compress, crop, resize, and inspect images in your browser.",
+  randomizers:
+    "Pick winners, generate numbers, shuffle lists, and split teams fairly.",
+  "text-writing":
+    "Compare code, format JSON, test regex, count words, and transform text.",
+  calculators:
+    "Finance, tax, ROI, budget, mortgage, and everyday math calculators.",
 };
 
 export const categoryIntros: Record<ToolCategory, string> = {
   "image-media":
-    "Browser-based image tools for converting formats, compressing files, cropping, reading EXIF, building favicons, and generating QR codes. Files stay on your device — nothing is uploaded to a converter farm.",
+    "Free browser-based image tools for PNG/WebP/JPEG conversion, compression, cropping, aspect-ratio checks, EXIF inspection, favicons, and QR codes. Each converter and editor runs locally so your files are not uploaded to a remote farm. Start with the tool you need, then move to a related utility from the same category.",
   randomizers:
-    "Fair, transparent randomizers for classrooms, giveaways, game nights, and team splits. Add your own list, spin or shuffle, and keep names on this device.",
+    "Fair randomizers for classrooms, giveaways, game nights, and workshops — name pickers, random number generators, dice, list shufflers, and team splitters. Paste your own list, generate a result, and keep names on this device.",
   "text-writing":
-    "Text utilities for counting words, comparing drafts, formatting JSON, testing regex, and generating hashes or UUIDs. Paste locally when the content should not go to a random website.",
+    "Text and developer utilities for code comparison, JSON formatting and mock data, regex testing, Markdown preview, hashes, UUIDs, Base64, word counts, and case conversion. Paste locally when drafts or configs should not leave your machine.",
   calculators:
-    "Payment, tax, savings, and everyday math calculators with the formulas shown on each page. Worked examples are in plain HTML so you can check the math before you trust a result.",
+    "Payment, tax, ROI, budget, down payment, mortgage, savings, and everyday math calculators. Each page shows how the math works, with worked examples you can verify before you rely on a result. No account required.",
 };
 
 export function isToolCategory(value: string): value is ToolCategory {
@@ -81,9 +85,9 @@ export const tools: Tool[] = [
   },
   {
     slug: "aspect-ratio-finder",
-    name: "Image Aspect Ratio Finder",
+    name: "Aspect Ratio Finder",
     description:
-      "Upload an image to find its aspect ratio, pixel dimensions, orientation, and closest common ratio (16:9, 4:3, 1:1, and more).",
+      "Find an image’s aspect ratio from its width and height, plus orientation and the closest common ratio (16:9, 4:3, 1:1, and more).",
     category: "image-media",
     icon: "▣",
   },
@@ -122,7 +126,8 @@ export const tools: Tool[] = [
   {
     slug: "png-to-webp",
     name: "PNG to WebP Converter",
-    description: "Convert PNG images to modern WebP format for faster loading.",
+    description:
+      "Convert PNG images to WebP in your browser for smaller web assets — no upload required.",
     category: "image-media",
     icon: "🔄",
   },
@@ -208,9 +213,9 @@ export const tools: Tool[] = [
   },
   {
     slug: "code-comparison",
-    name: "Code Comparison",
+    name: "Code Comparison Tool",
     description:
-      "Compare two code snippets side by side with line numbers and highlighted additions and removals.",
+      "Compare two code snippets side by side — line numbers, added/removed highlighting, and optional whitespace-ignore diff.",
     category: "text-writing",
     icon: "💻",
   },
@@ -380,7 +385,7 @@ export const tools: Tool[] = [
     slug: "roi-calculator",
     name: "ROI Calculator",
     description:
-      "Calculate return on investment (ROI) and annualized ROI from your initial cost and final value or gain.",
+      "Free online return on investment calculator — simple ROI and annualized ROI from cost and final value or gain.",
     category: "calculators",
     icon: "💹",
   },
@@ -468,7 +473,7 @@ export const tools: Tool[] = [
     slug: "down-payment-calculator",
     name: "Down Payment Calculator",
     description:
-      "Calculate down payment amount, percent, or affordable home price from the numbers you know.",
+      "Calculate home down payment amount, percent, or purchase price — and see how down payment changes the loan amount.",
     category: "calculators",
     icon: "🏡",
   },
@@ -586,9 +591,9 @@ export const tools: Tool[] = [
   },
   {
     slug: "team-splitter",
-    name: "Split into Teams",
+    name: "Team Splitter",
     description:
-      "Randomly divide a list of names or items into balanced teams.",
+      "Randomly divide a list of names into balanced teams for games, classes, and workshops.",
     category: "randomizers",
     icon: "👥",
   },

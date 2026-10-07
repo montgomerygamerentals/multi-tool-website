@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { featuredToolSlugsByCategory } from "@/lib/category-featured";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   categoryDescriptions,
   categoryIntros,
   categoryLabels,
+  getToolBySlug,
   getToolsByCategory,
   isToolCategory,
   type ToolCategory,
@@ -34,7 +36,7 @@ export async function generateMetadata({
   const url = `${SITE_URL}/category/${category}`;
 
   return {
-    title: label,
+    title: `${label} — Free Online Tools`,
     description,
     alternates: { canonical: url },
     openGraph: {
@@ -70,6 +72,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const label = categoryLabels[category];
   const toolsInCategory = getToolsByCategory()[category];
   const url = `${SITE_URL}/category/${category}`;
+  const featured = (featuredToolSlugsByCategory[category] ?? [])
+    .map((slug) => getToolBySlug(slug))
+    .filter((tool): tool is NonNullable<typeof tool> => Boolean(tool));
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -142,6 +147,44 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </p>
       </header>
 
+      {featured.length > 0 ? (
+        <section className="mb-12" aria-labelledby="featured-heading">
+          <h2
+            id="featured-heading"
+            className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50"
+          >
+            Popular in {label}
+          </h2>
+          <p className="mt-2 max-w-3xl text-sm text-zinc-500 dark:text-zinc-400">
+            Start with these frequently used tools, then browse the full list
+            below.
+          </p>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+            {featured.map((tool) => (
+              <li key={tool.slug}>
+                <Link
+                  href={`/tools/${tool.slug}`}
+                  className="block rounded-lg border border-zinc-200 bg-white px-4 py-3 transition-colors hover:border-indigo-300 hover:bg-indigo-50/50 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-indigo-700 dark:hover:bg-indigo-950/40"
+                >
+                  <span className="mr-2" aria-hidden="true">
+                    {tool.icon}
+                  </span>
+                  <span className="font-medium text-zinc-900 dark:text-zinc-50">
+                    {tool.name}
+                  </span>
+                  <p className="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                    {tool.description}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <h2 className="mb-4 text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+        All {label} tools
+      </h2>
       <ul className="divide-y divide-zinc-100 dark:divide-zinc-800/80">
         {toolsInCategory.map((tool) => (
           <li key={tool.slug} className="py-4 first:pt-0">

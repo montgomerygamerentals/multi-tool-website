@@ -34,6 +34,10 @@ export const toolExamples: Record<string, ToolExample[]> = {
       title: "Is this photo 16:9 or 4:3?",
       body: "A 1920×1080 frame is exactly 16:9 (1.778). A 4000×3000 camera still is 4:3 (1.333). If you upload 3000×2002, the tool reports ~3:2 and the nearest common ratio. That tells you whether a YouTube thumbnail template will letterbox or crop faces.",
     },
+    {
+      title: "Vertical phone video 1080×1920",
+      body: "1080÷1920 = 0.5625, which simplifies to 9:16 — the usual vertical video / Reels / Shorts frame. Knowing that before you crop a landscape photo into a story template prevents stretched faces.",
+    },
   ],
   "background-remover": [
     {
@@ -63,6 +67,10 @@ export const toolExamples: Record<string, ToolExample[]> = {
     {
       title: "Blog inline images",
       body: "A 1200 px wide PNG diagram at 900 KB may convert to a 150–300 KB WebP at visually similar quality. Keep the PNG master in git; ship WebP (and a PNG/JPEG fallback if you still support older browsers).",
+    },
+    {
+      title: "Transparent UI icon → WebP",
+      body: "A 512×512 PNG icon with transparency often shrinks substantially as WebP while keeping a clean alpha edge. Compare quality 0.85 vs 0.95: if text in the icon softens, raise quality or keep PNG for that asset. Conversion stays in the browser — nothing is uploaded.",
     },
   ],
   "webp-to-png": [
@@ -133,6 +141,10 @@ export const toolExamples: Record<string, ToolExample[]> = {
     {
       title: "Staging vs production JSON config",
       body: "Pretty-print both blobs first (the JSON formatter helps), then diff. A one-line minify vs pretty-print will look like the entire file changed. Line numbers make it obvious whether a key was added or a value flipped from true to false.",
+    },
+    {
+      title: "Indent-only noise with ignore whitespace",
+      body: "If one side was auto-formatted, every line can look “changed.” Enable ignore whitespace to focus on real edits — renamed keys, new conditions, deleted imports — instead of spaces and tabs.",
     },
   ],
   "lorem-ipsum": [
@@ -262,7 +274,15 @@ export const toolExamples: Record<string, ToolExample[]> = {
   "roi-calculator": [
     {
       title: "Spend $2,000, later worth $2,700 after 18 months",
-      body: "Simple ROI = (2700 − 2000) / 2000 = 35%. Annualized ROI is (1.35)^(12/18) − 1 ≈ 22% per year. A 35% gain in three months is a very different annualized result than 35% in three years — always look at both.",
+      body: "Simple ROI = (2700 − 2000) / 2000 = 35%. Annualized ROI is (1.35)^(1/1.5) − 1 ≈ 22% per year. A 35% gain in three months is a very different annualized result than 35% in three years — always look at both.",
+    },
+    {
+      title: "Negative ROI on a $1,000 outlay worth $800",
+      body: "ROI = (800 − 1000) / 1000 = −20%. Profit in dollars is −$200; ROI states that loss as a percent of capital. If the holding period was 2 years, annualized ROI is even lower than −20% simple — the calculator shows both when you enter years.",
+    },
+    {
+      title: "Marketing spend vs revenue (ROI, not ROAS)",
+      body: "You spend $5,000 on a campaign and attribute $8,000 revenue. Simple ROI = (8000 − 5000) / 5000 = 60% if you treat revenue as final value. ROAS would be 8000/5000 = 1.6× and does not subtract cost the same way. Include product cost in the “final” or “gain” inputs if you want a truer ROI.",
     },
   ],
   "retirement-calculator": [
@@ -276,11 +296,19 @@ export const toolExamples: Record<string, ToolExample[]> = {
       title: "$4,800 take-home vs $4,350 expenses",
       body: "Surplus is $450. If rent is $1,800, that is 37.5% of take-home — useful context next to a 30% rent rule of thumb. A $200 “misc” line that is really dining out belongs in its own category or the surplus is fiction.",
     },
+    {
+      title: "Shortfall after a raise that was not take-home",
+      body: "Gross went up $400/month but take-home only rose $260 after tax withholding. If new expenses (commute, lunch) added $300, the budget can still show a shortfall. Always budget with the paycheck that actually lands.",
+    },
   ],
   "sales-tax-calculator": [
     {
       title: "Add 8.25% tax to a $40 item",
       body: "Tax = 40 × 0.0825 = $3.30; total $43.30. Working backwards from a $43.30 receipt: pre-tax = 43.30 / 1.0825 ≈ $40.00. Use “remove tax” when you need the net price from a gross total.",
+    },
+    {
+      title: "Quote a $1,200 service at 7% tax",
+      body: "Tax = 1200 × 0.07 = $84; client total $1,284. If the client only approved $1,200 all-in, pre-tax = 1200 / 1.07 ≈ $1,121.50 — useful before you send an invoice.",
     },
   ],
   "income-tax-estimator": [
@@ -312,6 +340,10 @@ export const toolExamples: Record<string, ToolExample[]> = {
       title: "What $20 in 1995 feels like later",
       body: "U.S. CPI rose substantially from the mid-1990s to the 2020s, so $20 then maps to a much higher amount in recent dollars (often in the $35–$40 neighborhood depending on the exact years in the dataset). Use it for “allowance in today’s money,” not for a specific city’s rent.",
     },
+    {
+      title: "A 2005 salary in recent dollars",
+      body: "Enter the old salary, year 2005, and a recent comparison year. The result is an inflation-adjusted equivalent using the bundled CPI-style series — helpful for articles and family history, not for negotiating a modern offer in a high-cost city.",
+    },
   ],
   "refinance-calculator": [
     {
@@ -330,6 +362,10 @@ export const toolExamples: Record<string, ToolExample[]> = {
       title: "20% down on a $425,000 home",
       body: "Cash needed = 0.20 × 425000 = $85,000, before closing costs. If you only have $50,000, that is 11.8% down and a $375,000 loan. Solve for price: $50,000 / 0.20 = a $250,000 home at a true 20% down.",
     },
+    {
+      title: "5% vs 10% down on a $350,000 purchase",
+      body: "At 5%: $17,500 down and about a $332,500 loan. At 10%: $35,000 down and about a $315,000 loan. Doubling the down payment cuts $17,500 from the loan amount. Monthly payment impact depends on rate and term — use the mortgage calculator for that; this page stays on down payment math.",
+    },
   ],
   "amortization-schedule": [
     {
@@ -347,6 +383,10 @@ export const toolExamples: Record<string, ToolExample[]> = {
     {
       title: "$3,200 essential expenses × 6 months",
       body: "Target = 3200 × 6 = $19,200. If you already have $7,000, the gap is $12,200. Freelancers often use 6–12 months; a dual-income household with disability insurance might choose 3. Count rent, food, insurance, minimum debt payments — not the vacation line.",
+    },
+    {
+      title: "3 months after rent increases",
+      body: "Essentials were $2,800; rent rose $200 so essentials are $3,000. A 3-month target moves from $8,400 to $9,000. Recalculate whenever housing or insurance changes or the old target silently drifts.",
     },
   ],
   "401k-calculator": [
@@ -391,12 +431,6 @@ export const toolExamples: Record<string, ToolExample[]> = {
       body: "Paste one name per line, spin once, and do not quietly reroll until you like the result if you promised fairness. For a raffle, remove the winner before the next spin. Duplicate names in the list get duplicate chance — clean the list first.",
     },
   ],
-  "random-number-generator": [
-    {
-      title: "Integer from 1 to 100, or 10 of them",
-      body: "A single roll is useful for “pick a page.” Generating 10 numbers in 1–100 can produce repeats unless you explicitly need unique draws. For sampling without replacement, shuffle a list instead of rolling independent numbers.",
-    },
-  ],
   "coin-flip": [
     {
       title: "Best of three",
@@ -415,10 +449,24 @@ export const toolExamples: Record<string, ToolExample[]> = {
       body: "Paste 12 titles, shuffle once, and screenshot the order. Shuffling again is a new random permutation — if you promised the first shuffle, do not reroll. A spreadsheet “sort by random” column is the same idea; this is faster when the list is already on your clipboard.",
     },
   ],
+  "random-number-generator": [
+    {
+      title: "Pick 5 numbers from 1–50 without repeats",
+      body: "Set min 1, max 50, count 5, enable no duplicates. You get five distinct integers — useful for raffle-style draws. If you ask for 60 unique numbers in a 1–50 range, unique mode cannot succeed because the range is too small.",
+    },
+    {
+      title: "Single d100-style roll",
+      body: "Min 1, max 100, count 1. Each click is a new independent draw (duplicates allowed across separate generations). For dice with custom sides, the dice roller may feel more natural; for arbitrary ranges, use this RNG.",
+    },
+  ],
   "team-splitter": [
     {
       title: "17 names into 4 groups",
-    body: "17 ÷ 4 cannot be equal: you get groups of 5, 4, 4, and 4 (or similar). That is balanced enough for a workshop. Captains picking friends is what this avoids. If skill balance matters more than randomness, seed strong players manually and randomize the rest.",
+      body: "17 ÷ 4 cannot be equal: you get groups of 5, 4, 4, and 4 (or similar). That is balanced enough for a workshop. Captains picking friends is what this avoids. If skill balance matters more than randomness, seed strong players manually and randomize the rest.",
+    },
+    {
+      title: "12 players into 2 teams",
+      body: "Paste 12 names, choose 2 teams, generate. You should get two groups of 6. Re-roll if you need a different mix; the previous split is not saved on a server.",
     },
   ],
   "yes-no-picker": [

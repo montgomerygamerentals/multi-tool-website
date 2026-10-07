@@ -1,4 +1,5 @@
 import type { ToolGuide } from "./tool-guide-types";
+import { priorityToolGuides } from "./priority-tool-guides";
 import { toolExamples } from "./tool-examples";
 
 export const toolGuides: Record<string, ToolGuide> = {
@@ -2389,7 +2390,10 @@ export const toolGuides: Record<string, ToolGuide> = {
 };
 
 export function getToolGuide(slug: string): ToolGuide | undefined {
-  const guide = toolGuides[slug];
+  const guide = priorityToolGuides[slug] ?? toolGuides[slug];
   if (!guide) return undefined;
-  return { ...guide, examples: toolExamples[slug] ?? [] };
+  return {
+    ...guide,
+    examples: toolExamples[slug] ?? guide.examples ?? [],
+  };
 }

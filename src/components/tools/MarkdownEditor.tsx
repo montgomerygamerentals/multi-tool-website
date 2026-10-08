@@ -38,6 +38,11 @@ export default function MarkdownEditor() {
     setTimeout(() => setCopied(false), 1500);
   };
 
+  const clearInputs = () => {
+    setSource("");
+    setCopied(false);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
@@ -48,17 +53,10 @@ export default function MarkdownEditor() {
         >
           {copied ? "Copied HTML!" : "Copy HTML"}
         </button>
-        <button
-          type="button"
-          onClick={() => setSource("")}
-          className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm font-medium hover:bg-zinc-50 dark:border-zinc-600 dark:hover:bg-zinc-800"
-        >
-          Clear
-        </button>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <ToolPanel title="Markdown">
+        <ToolPanel title="Markdown" onClear={clearInputs}>
           <textarea
             value={source}
             onChange={(e) => setSource(e.target.value)}

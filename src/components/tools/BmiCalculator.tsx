@@ -159,6 +159,13 @@ export default function BmiCalculator() {
     return { bmi: bmiValue.toFixed(1), bmiValue, category };
   }, [weight, height, heightFt, heightIn, unit]);
 
+  const clearInputs = () => {
+    setWeight("");
+    setHeight("");
+    setHeightFt("");
+    setHeightIn("");
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex gap-2">
@@ -177,7 +184,7 @@ export default function BmiCalculator() {
           </button>
         ))}
       </div>
-      <ToolPanel title="Your measurements">
+      <ToolPanel title="Your measurements" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="mb-1 block text-sm font-medium">

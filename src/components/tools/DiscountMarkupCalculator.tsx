@@ -22,8 +22,16 @@ const MODE_LABELS: Record<Mode, string> = {
   margin: "Margin",
 };
 
-export default function DiscountMarkupCalculator() {
-  const [mode, setMode] = useState<Mode>("discount");
+interface DiscountMarkupCalculatorProps {
+  initialMode?: Mode;
+  lockMode?: boolean;
+}
+
+export default function DiscountMarkupCalculator({
+  initialMode = "discount",
+  lockMode = false,
+}: DiscountMarkupCalculatorProps) {
+  const [mode, setMode] = useState<Mode>(initialMode);
   const [valueA, setValueA] = useState("100");
   const [valueB, setValueB] = useState("20");
 
@@ -84,26 +92,33 @@ export default function DiscountMarkupCalculator() {
     margin: { a: "Cost ($)", b: "Desired margin (%)" },
   };
 
+  function clearInputs() {
+    setValueA("");
+    setValueB("");
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap gap-2">
-        {(Object.keys(MODE_LABELS) as Mode[]).map((m) => (
-          <button
-            key={m}
-            type="button"
-            onClick={() => setMode(m)}
-            className={`rounded-lg px-4 py-2 text-sm font-medium ${
-              mode === m
-                ? "bg-indigo-600 text-white"
-                : "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
-            }`}
-          >
-            {MODE_LABELS[m]}
-          </button>
-        ))}
-      </div>
+      {!lockMode && (
+        <div className="flex flex-wrap gap-2">
+          {(Object.keys(MODE_LABELS) as Mode[]).map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => setMode(m)}
+              className={`rounded-lg px-4 py-2 text-sm font-medium ${
+                mode === m
+                  ? "bg-indigo-600 text-white"
+                  : "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+              }`}
+            >
+              {MODE_LABELS[m]}
+            </button>
+          ))}
+        </div>
+      )}
 
-      <ToolPanel title={`${MODE_LABELS[mode]} calculator`}>
+      <ToolPanel title={`${MODE_LABELS[mode]} calculator`} onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <FinanceField label={fieldLabels[mode].a}>
             <input

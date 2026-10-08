@@ -4,18 +4,25 @@ import { useState } from "react";
 import ToolPanel from "@/components/ui/ToolPanel";
 
 export default function RandomNumberGenerator() {
-  const [min, setMin] = useState(1);
-  const [max, setMax] = useState(100);
-  const [count, setCount] = useState(1);
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
+  const [count, setCount] = useState("");
   const [results, setResults] = useState<number[]>([]);
   const [unique, setUnique] = useState(false);
 
   const generate = () => {
-    const lo = Math.min(min, max);
-    const hi = Math.max(min, max);
+    const minN = Number(min);
+    const maxN = Number(max);
+    const countN = Number(count);
+    if (!Number.isFinite(minN) || !Number.isFinite(maxN) || !Number.isFinite(countN) || countN < 1) {
+      setResults([]);
+      return;
+    }
+    const lo = Math.min(minN, maxN);
+    const hi = Math.max(minN, maxN);
     const range = hi - lo + 1;
 
-    if (unique && count > range) {
+    if (unique && countN > range) {
       setResults([]);
       return;
     }
@@ -23,7 +30,7 @@ export default function RandomNumberGenerator() {
     const nums: number[] = [];
     const used = new Set<number>();
 
-    while (nums.length < count) {
+    while (nums.length < countN) {
       const n = Math.floor(Math.random() * range) + lo;
       if (unique) {
         if (!used.has(n)) {
@@ -38,16 +45,24 @@ export default function RandomNumberGenerator() {
     setResults(nums);
   };
 
+  const clearInputs = () => {
+    setMin("");
+    setMax("");
+    setCount("");
+    setUnique(false);
+    setResults([]);
+  };
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Settings">
+      <ToolPanel title="Settings" onClear={clearInputs}>
         <div className="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
           <div>
             <label className="mb-1 block text-sm font-medium">Min</label>
             <input
               type="number"
               value={min}
-              onChange={(e) => setMin(Number(e.target.value))}
+              onChange={(e) => setMin(e.target.value)}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             />
           </div>
@@ -56,7 +71,7 @@ export default function RandomNumberGenerator() {
             <input
               type="number"
               value={max}
-              onChange={(e) => setMax(Number(e.target.value))}
+              onChange={(e) => setMax(e.target.value)}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             />
           </div>
@@ -67,7 +82,7 @@ export default function RandomNumberGenerator() {
               value={count}
               min={1}
               max={100}
-              onChange={(e) => setCount(Number(e.target.value))}
+              onChange={(e) => setCount(e.target.value)}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             />
           </div>

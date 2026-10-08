@@ -258,6 +258,11 @@ export default function SudokuGame() {
     setShowClearConfirm(false);
   };
 
+  const clearInputs = () => {
+    setNotesMode(false);
+    clearBoard();
+  };
+
   const checkPuzzle = () => {
     let mistakes = 0;
     for (let r = 0; r < 9; r++) {
@@ -490,7 +495,7 @@ export default function SudokuGame() {
       </ToolPanel>
 
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-        <ToolPanel title="Board" className="flex-1">
+        <ToolPanel title="Board" className="flex-1" onClear={clearInputs}>
           <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
             {message}
           </p>

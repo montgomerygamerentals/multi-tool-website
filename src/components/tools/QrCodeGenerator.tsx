@@ -68,6 +68,15 @@ export default function QrCodeGenerator() {
     generate();
   }, [generate]);
 
+  const clearInputs = () => {
+    setText("");
+    setSize(MIN_SIZE);
+    setSizeInput("");
+    setTransparentBg(false);
+    setDataUrl(null);
+    setError(null);
+  };
+
   const download = () => {
     if (!dataUrl) return;
     const a = document.createElement("a");
@@ -78,7 +87,7 @@ export default function QrCodeGenerator() {
 
   return (
     <div className="space-y-6">
-      <ToolPanel title="Content">
+      <ToolPanel title="Content" onClear={clearInputs}>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}

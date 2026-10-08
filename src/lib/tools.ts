@@ -2,7 +2,11 @@ export type ToolCategory =
   | "image-media"
   | "randomizers"
   | "text-writing"
-  | "calculators";
+  | "calculators"
+  | "health"
+  | "home-diy"
+  | "audio-video"
+  | "generators";
 
 export interface Tool {
   slug: string;
@@ -17,6 +21,10 @@ export const categoryLabels: Record<ToolCategory, string> = {
   randomizers: "Randomizers & Games",
   "text-writing": "Text, Writing & Developer Tools",
   calculators: "Calculators & Converters",
+  health: "Health & Fitness",
+  "home-diy": "Home & DIY",
+  "audio-video": "Audio & Video",
+  generators: "Generators",
 };
 
 /** Compact labels for the header nav so the search field keeps usable width. */
@@ -25,7 +33,26 @@ export const categoryNavLabels: Record<ToolCategory, string> = {
   randomizers: "Randomizers",
   "text-writing": "Text & Dev",
   calculators: "Calculators",
+  health: "Health",
+  "home-diy": "Home",
+  "audio-video": "Audio/Video",
+  generators: "Generators",
 };
+
+/** Primary nav categories shown inline; the rest fold into a More menu. */
+export const primaryNavCategories: ToolCategory[] = [
+  "image-media",
+  "calculators",
+  "text-writing",
+  "randomizers",
+];
+
+export const secondaryNavCategories: ToolCategory[] = [
+  "health",
+  "home-diy",
+  "audio-video",
+  "generators",
+];
 
 export const categoryDescriptions: Record<ToolCategory, string> = {
   "image-media":
@@ -36,6 +63,14 @@ export const categoryDescriptions: Record<ToolCategory, string> = {
     "Compare code, format JSON, test regex, count words, and transform text.",
   calculators:
     "Finance, tax, ROI, budget, mortgage, and everyday math calculators.",
+  health:
+    "Calorie, TDEE, BMR, macros, height comparison, and pregnancy due-date tools.",
+  "home-diy":
+    "Concrete, paint, tile, fence, deck, mulch, roof pitch, and square-footage calculators.",
+  "audio-video":
+    "Convert video to MP3, compress video, and trim audio for ringtones in your browser.",
+  generators:
+    "Invoices, signatures, memes, name ideas, calendars, and color palettes — built locally.",
 };
 
 export const categoryIntros: Record<ToolCategory, string> = {
@@ -47,6 +82,14 @@ export const categoryIntros: Record<ToolCategory, string> = {
     "Text and developer utilities for code comparison, JSON formatting and mock data, regex testing, Markdown preview, hashes, UUIDs, Base64, word counts, and case conversion. Paste locally when drafts or configs should not leave your machine.",
   calculators:
     "Payment, tax, ROI, budget, down payment, mortgage, savings, and everyday math calculators. Each page shows how the math works, with worked examples you can verify before you rely on a result. No account required.",
+  health:
+    "Browser-based health calculators for daily calories and TDEE, BMR, macros, height comparison, and pregnancy due dates. Enter your numbers locally — nothing is stored on a server.",
+  "home-diy":
+    "Project estimators for concrete volume, square footage, roof pitch, decks, mulch, paint coverage, tile, and fencing. Use them to ballpark materials before you order — then confirm with a pro for structural work.",
+  "audio-video":
+    "Client-side audio and video utilities powered by your browser (and ffmpeg.wasm where needed). Convert video to MP3, compress clips, and cut ringtones without uploading files to a remote encoder.",
+  generators:
+    "Create invoices, quotes, receipts, e-signatures, email signatures, memes, printable calendars, name ideas, and color palettes. Exports and drafts stay on this device unless a page says otherwise.",
 };
 
 export function isToolCategory(value: string): value is ToolCategory {
@@ -628,6 +671,888 @@ export const tools: Tool[] = [
       "Guess the 5-letter word in six tries. Green means correct, yellow means wrong spot.",
     category: "randomizers",
     icon: "🟩",
+  },
+  {
+    slug: "spin-the-wheel",
+    name: "Spin the Wheel",
+    description:
+      "Spin a customizable wheel to pick a random winner from your list of names or options.",
+    category: "randomizers",
+    icon: "🎡",
+  },
+  {
+    slug: "days-from-today",
+    name: "Days From Today",
+    description:
+      "Add or subtract days, weeks, or business days from today and see the resulting calendar date.",
+    category: "calculators",
+    icon: "📆",
+  },
+  {
+    slug: "profit-margin-calculator",
+    name: "Profit Margin Calculator",
+    description:
+      "Calculate selling price from cost and desired profit margin — free online margin tool.",
+    category: "calculators",
+    icon: "📊",
+  },
+  {
+    slug: "ratio-proportion-calculator",
+    name: "Ratio & Proportion Calculator",
+    description:
+      "Solve for the missing value in a proportion a/b = c/d with clear step-by-step math.",
+    category: "calculators",
+    icon: "➗",
+  },
+  {
+    slug: "lcm-calculator",
+    name: "LCM Calculator",
+    description:
+      "Find the least common multiple of two or more integers and see the calculation steps.",
+    category: "calculators",
+    icon: "🔢",
+  },
+  {
+    slug: "gcf-calculator",
+    name: "GCF Calculator",
+    description:
+      "Find the greatest common factor (GCD) of numbers with Euclidean algorithm steps.",
+    category: "calculators",
+    icon: "🧩",
+  },
+  {
+    slug: "final-grade-calculator",
+    name: "Final Grade Calculator",
+    description:
+      "Find what score you need on the final exam to reach your target course grade.",
+    category: "calculators",
+    icon: "📝",
+  },
+  {
+    slug: "weighted-grade-calculator",
+    name: "Weighted Grade Calculator",
+    description:
+      "Combine category scores and weights into your overall course average.",
+    category: "calculators",
+    icon: "⚖️",
+  },
+  {
+    slug: "test-grade-calculator",
+    name: "Test Grade Calculator",
+    description:
+      "See what score you need on your next test to hit a target overall grade.",
+    category: "calculators",
+    icon: "✏️",
+  },
+  {
+    slug: "gpa-calculator",
+    name: "GPA Calculator",
+    description:
+      "Calculate high school or college GPA with weighted or unweighted scales.",
+    category: "calculators",
+    icon: "🎓",
+  },
+  {
+    slug: "prime-factor-calculator",
+    name: "Prime Number & Factor Calculator",
+    description:
+      "Check if a number is prime and list its factors or prime factorization with steps.",
+    category: "calculators",
+    icon: "⚛️",
+  },
+  {
+    slug: "slope-calculator",
+    name: "Slope Calculator",
+    description:
+      "Find the slope between two points, see the line equation, graph, and steps.",
+    category: "calculators",
+    icon: "📈",
+  },
+  {
+    slug: "area-of-circle",
+    name: "Area of a Circle Calculator",
+    description: "Calculate circle area from radius with the πr² formula and steps.",
+    category: "calculators",
+    icon: "⭕",
+  },
+  {
+    slug: "area-of-rectangle",
+    name: "Area of a Rectangle Calculator",
+    description: "Calculate rectangle area from length and width with clear steps.",
+    category: "calculators",
+    icon: "▭",
+  },
+  {
+    slug: "area-of-triangle",
+    name: "Area of a Triangle Calculator",
+    description: "Calculate triangle area from base and height with step-by-step math.",
+    category: "calculators",
+    icon: "△",
+  },
+  {
+    slug: "area-of-trapezoid",
+    name: "Area of a Trapezoid Calculator",
+    description: "Calculate trapezoid area from two bases and height with steps.",
+    category: "calculators",
+    icon: "⏢",
+  },
+  {
+    slug: "volume-of-sphere",
+    name: "Volume of a Sphere Calculator",
+    description: "Calculate sphere volume from radius using (4/3)πr³ with steps.",
+    category: "calculators",
+    icon: "🔵",
+  },
+  {
+    slug: "volume-of-cylinder",
+    name: "Volume of a Cylinder Calculator",
+    description: "Calculate cylinder volume from radius and height with steps.",
+    category: "calculators",
+    icon: "🛢️",
+  },
+  {
+    slug: "volume-of-cone",
+    name: "Volume of a Cone Calculator",
+    description: "Calculate cone volume from radius and height with steps.",
+    category: "calculators",
+    icon: "🍦",
+  },
+  {
+    slug: "volume-of-cube",
+    name: "Volume of a Cube Calculator",
+    description: "Calculate cube volume from side length with steps.",
+    category: "calculators",
+    icon: "🧊",
+  },
+  {
+    slug: "volume-of-rectangular-prism",
+    name: "Volume of a Rectangular Prism Calculator",
+    description: "Calculate rectangular prism (box) volume from length, width, and height.",
+    category: "calculators",
+    icon: "📦",
+  },
+  {
+    slug: "volume-of-pyramid",
+    name: "Volume of a Pyramid Calculator",
+    description: "Calculate pyramid volume from base area and height with steps.",
+    category: "calculators",
+    icon: "▲",
+  },
+  {
+    slug: "number-base-converter",
+    name: "Number Base Converter",
+    description:
+      "Convert between binary, decimal, hex, octal, and text-to-binary in your browser.",
+    category: "text-writing",
+    icon: "01",
+  },
+  {
+    slug: "binary-to-decimal",
+    name: "Binary to Decimal Converter",
+    description: "Convert binary numbers to decimal with clear place-value steps.",
+    category: "text-writing",
+    icon: "01",
+  },
+  {
+    slug: "decimal-to-binary",
+    name: "Decimal to Binary Converter",
+    description: "Convert decimal integers to binary using repeated division by 2.",
+    category: "text-writing",
+    icon: "01",
+  },
+  {
+    slug: "binary-to-hex",
+    name: "Binary to Hex Converter",
+    description: "Convert binary values to hexadecimal for programming and networking.",
+    category: "text-writing",
+    icon: "0x",
+  },
+  {
+    slug: "hex-to-binary",
+    name: "Hex to Binary Converter",
+    description: "Convert hexadecimal values to binary bit strings instantly.",
+    category: "text-writing",
+    icon: "0x",
+  },
+  {
+    slug: "decimal-to-hex",
+    name: "Decimal to Hex Converter",
+    description: "Convert decimal numbers to hexadecimal for coding and debugging.",
+    category: "text-writing",
+    icon: "0x",
+  },
+  {
+    slug: "hex-to-decimal",
+    name: "Hex to Decimal Converter",
+    description: "Convert hexadecimal values to everyday decimal numbers.",
+    category: "text-writing",
+    icon: "0x",
+  },
+  {
+    slug: "decimal-to-octal",
+    name: "Decimal to Octal Converter",
+    description: "Convert decimal integers to octal (base 8) with steps.",
+    category: "text-writing",
+    icon: "8",
+  },
+  {
+    slug: "octal-to-decimal",
+    name: "Octal to Decimal Converter",
+    description: "Convert octal numbers to decimal for math and computing tasks.",
+    category: "text-writing",
+    icon: "8",
+  },
+  {
+    slug: "text-to-binary",
+    name: "Text to Binary Converter",
+    description: "Convert plain text to binary (UTF-8 bytes) for learning and demos.",
+    category: "text-writing",
+    icon: "💬",
+  },
+  {
+    slug: "binary-to-text",
+    name: "Binary to Text Converter",
+    description: "Decode binary byte strings back into readable UTF-8 text.",
+    category: "text-writing",
+    icon: "💬",
+  },
+  {
+    slug: "time-card-calculator",
+    name: "Hours / Time Card Calculator",
+    description:
+      "Add daily start, end, and break times to total hours worked for a pay period.",
+    category: "calculators",
+    icon: "🕒",
+  },
+  {
+    slug: "military-time-converter",
+    name: "Military Time Converter",
+    description: "Convert between 12-hour and 24-hour (military) time formats.",
+    category: "calculators",
+    icon: "🪖",
+  },
+  {
+    slug: "scientific-calculator",
+    name: "Scientific Calculator",
+    description:
+      "Browser scientific calculator with trig, logs, powers, roots, and parentheses.",
+    category: "calculators",
+    icon: "🧮",
+  },
+  {
+    slug: "fancy-text-generator",
+    name: "Fancy Text Generator",
+    description:
+      "Turn plain text into bold, italic, script, bubble, and other Unicode styles for social posts.",
+    category: "text-writing",
+    icon: "✨",
+  },
+  {
+    slug: "fancy-text-bold",
+    name: "Bold Fancy Text",
+    description:
+      "Convert letters to mathematical bold Unicode for bios, Discord, and captions.",
+    category: "text-writing",
+    icon: "𝐁",
+  },
+  {
+    slug: "fancy-text-italic",
+    name: "Italic Fancy Text",
+    description:
+      "Make slanted Unicode italic text for captions and usernames.",
+    category: "text-writing",
+    icon: "𝐼",
+  },
+  {
+    slug: "fancy-text-script",
+    name: "Script Fancy Text",
+    description:
+      "Generate elegant script-style Unicode letters for bios and headers.",
+    category: "text-writing",
+    icon: "𝒮",
+  },
+  {
+    slug: "fancy-text-small-caps",
+    name: "Small Caps Fancy Text",
+    description:
+      "Create small-cap Unicode text for titles and refined labels.",
+    category: "text-writing",
+    icon: "ꜱ",
+  },
+  {
+    slug: "fancy-text-upside-down",
+    name: "Upside Down Text",
+    description:
+      "Flip text upside down for jokes, puzzles, and social posts.",
+    category: "text-writing",
+    icon: "🙃",
+  },
+  {
+    slug: "fancy-text-bubble",
+    name: "Bubble Letter Text",
+    description:
+      "Wrap letters in bubble or circled Unicode for playful headlines.",
+    category: "text-writing",
+    icon: "🫧",
+  },
+  {
+    slug: "fancy-text-monospace",
+    name: "Monospace Fancy Text",
+    description:
+      "Convert text to monospace Unicode for code-like bios and terminal aesthetics.",
+    category: "text-writing",
+    icon: "𝙼",
+  },
+  {
+    slug: "fancy-text-fullwidth",
+    name: "Fullwidth Text",
+    description:
+      "Expand characters to fullwidth Unicode for vaporwave-style spacing.",
+    category: "text-writing",
+    icon: "Ｆ",
+  },
+  {
+    slug: "word-unscrambler",
+    name: "Word Unscrambler",
+    description: "Unscramble letters into valid English words from a built-in dictionary.",
+    category: "text-writing",
+    icon: "🔤",
+  },
+  {
+    slug: "typing-speed-test",
+    name: "Typing Speed Test",
+    description: "Measure WPM and accuracy with a standard English typing test.",
+    category: "randomizers",
+    icon: "⌨️",
+  },
+  {
+    slug: "typing-speed-test-numbers",
+    name: "Number Typing Test",
+    description: "Practice typing numbers and symbols with a timed test.",
+    category: "randomizers",
+    icon: "🔢",
+  },
+  {
+    slug: "name-generator-band",
+    name: "Band Name Generator",
+    description: "Random band name ideas for your next project.",
+    category: "generators",
+    icon: "🎸",
+  },
+  {
+    slug: "name-generator-podcast",
+    name: "Podcast Name Generator",
+    description: "Catchy podcast title ideas in one click.",
+    category: "generators",
+    icon: "🎙️",
+  },
+  {
+    slug: "name-generator-dnd",
+    name: "D&D Name Generator",
+    description: "Fantasy character names for tabletop RPGs.",
+    category: "generators",
+    icon: "🐉",
+  },
+  {
+    slug: "name-generator-clan",
+    name: "Clan Name Generator",
+    description: "Clan and guild names for games and teams.",
+    category: "generators",
+    icon: "⚔️",
+  },
+  {
+    slug: "name-generator-gamer-tag",
+    name: "Gamer Tag Generator",
+    description: "Unique gamer tag and username ideas.",
+    category: "generators",
+    icon: "🎮",
+  },
+  {
+    slug: "name-generator-business",
+    name: "Business Name Generator",
+    description: "Startup and business name ideas.",
+    category: "generators",
+    icon: "💼",
+  },
+  {
+    slug: "name-generator-baby",
+    name: "Baby Name Generator",
+    description: "Inspiration for baby name combinations.",
+    category: "generators",
+    icon: "👶",
+  },
+  {
+    slug: "name-generator-pet",
+    name: "Pet Name Generator",
+    description: "Fun pet name ideas for dogs, cats, and more.",
+    category: "generators",
+    icon: "🐾",
+  },
+  {
+    slug: "text-to-speech",
+    name: "Text to Speech",
+    description: "Listen to text with browser voices — adjust rate and pitch.",
+    category: "text-writing",
+    icon: "🔊",
+  },
+  {
+    slug: "height-comparison",
+    name: "Height Comparison",
+    description: "Compare two heights side by side in feet or centimeters.",
+    category: "health",
+    icon: "📏",
+  },
+  {
+    slug: "yaml-to-json",
+    name: "YAML to JSON",
+    description: "Convert YAML to JSON in your browser.",
+    category: "text-writing",
+    icon: "📄",
+  },
+  {
+    slug: "csv-to-json",
+    name: "CSV to JSON",
+    description: "Convert CSV spreadsheets to JSON arrays.",
+    category: "text-writing",
+    icon: "📊",
+  },
+  {
+    slug: "xml-to-json",
+    name: "XML to JSON",
+    description: "Convert XML documents to JSON with DOMParser.",
+    category: "text-writing",
+    icon: "🗂️",
+  },
+  {
+    slug: "jwt-decoder",
+    name: "JWT Decoder",
+    description: "Decode JWT header and payload (no signature verification).",
+    category: "text-writing",
+    icon: "🔐",
+  },
+  {
+    slug: "url-encoder",
+    name: "URL Encoder / Decoder",
+    description: "Encode or decode URI components and full URLs.",
+    category: "text-writing",
+    icon: "🔗",
+  },
+  {
+    slug: "html-minifier",
+    name: "HTML Minifier",
+    description: "Remove comments and extra whitespace from HTML.",
+    category: "text-writing",
+    icon: "🌐",
+  },
+  {
+    slug: "css-minifier",
+    name: "CSS Minifier",
+    description: "Minify CSS by stripping comments and spaces.",
+    category: "text-writing",
+    icon: "🎨",
+  },
+  {
+    slug: "js-minifier",
+    name: "JavaScript Minifier",
+    description: "Basic JS minifier that preserves strings and comments safely.",
+    category: "text-writing",
+    icon: "📜",
+  },
+  {
+    slug: "webp-to-jpg",
+    name: "WebP to JPG",
+    description: "Convert WebP images to JPEG in your browser.",
+    category: "image-media",
+    icon: "🖼️",
+  },
+  {
+    slug: "jpg-to-webp",
+    name: "JPG to WebP",
+    description: "Convert JPEG photos to smaller WebP files.",
+    category: "image-media",
+    icon: "🖼️",
+  },
+  {
+    slug: "avif-to-jpg",
+    name: "AVIF to JPG",
+    description: "Convert AVIF images to JPEG when your browser supports AVIF.",
+    category: "image-media",
+    icon: "🖼️",
+  },
+  {
+    slug: "avif-to-png",
+    name: "AVIF to PNG",
+    description: "Convert AVIF images to PNG with transparency preserved.",
+    category: "image-media",
+    icon: "🖼️",
+  },
+  {
+    slug: "svg-to-png",
+    name: "SVG to PNG",
+    description: "Rasterize SVG vector files to PNG.",
+    category: "image-media",
+    icon: "📐",
+  },
+  {
+    slug: "png-to-ico",
+    name: "PNG to ICO",
+    description: "Create a multi-size favicon ICO from a PNG image.",
+    category: "image-media",
+    icon: "⭐",
+  },
+  {
+    slug: "tiff-to-jpg",
+    name: "TIFF to JPG",
+    description: "Convert TIFF images to JPEG when the browser can decode them.",
+    category: "image-media",
+    icon: "🖼️",
+  },
+  {
+    slug: "heic-to-jpg",
+    name: "HEIC to JPG",
+    description: "Convert iPhone HEIC photos to JPEG locally.",
+    category: "image-media",
+    icon: "📱",
+  },
+  {
+    slug: "heic-to-png",
+    name: "HEIC to PNG",
+    description: "Convert HEIC/HEIF images to PNG in the browser.",
+    category: "image-media",
+    icon: "📱",
+  },
+  {
+    slug: "color-palette-generator",
+    name: "Color Palette Generator",
+    description: "Sample dominant colors from an uploaded image.",
+    category: "generators",
+    icon: "🎨",
+  },
+  {
+    slug: "contrast-checker",
+    name: "Contrast Checker",
+    description: "Check WCAG contrast ratio between text and background colors.",
+    category: "generators",
+    icon: "👁️",
+  },
+  {
+    slug: "gradient-generator",
+    name: "CSS Gradient Generator",
+    description: "Build linear gradients and copy CSS.",
+    category: "generators",
+    icon: "🌈",
+  },
+  {
+    slug: "invoice-generator",
+    name: "Invoice Generator",
+    description: "Create invoices with line items and export PDF.",
+    category: "generators",
+    icon: "🧾",
+  },
+  {
+    slug: "receipt-generator",
+    name: "Receipt Generator",
+    description: "Simple receipt maker with PDF download.",
+    category: "generators",
+    icon: "🧾",
+  },
+  {
+    slug: "quote-generator",
+    name: "Quote Generator",
+    description: "Build client quotes with totals and PDF export.",
+    category: "generators",
+    icon: "💬",
+  },
+  {
+    slug: "signature-generator",
+    name: "Signature Generator",
+    description: "Draw or type a signature and download PNG.",
+    category: "generators",
+    icon: "✍️",
+  },
+  {
+    slug: "email-signature-generator",
+    name: "Email Signature Generator",
+    description: "Gmail and Outlook HTML email signature builder.",
+    category: "generators",
+    icon: "📧",
+  },
+  {
+    slug: "meme-generator",
+    name: "Meme Generator",
+    description: "Add top and bottom text to an image and download.",
+    category: "generators",
+    icon: "😂",
+  },
+  {
+    slug: "printable-calendar",
+    name: "Printable Calendar",
+    description: "Pick a year and month, then print a clean calendar page.",
+    category: "generators",
+    icon: "📅",
+  },
+  {
+    slug: "printable-calendar-2026",
+    name: "Printable Calendar 2026",
+    description: "Print-friendly calendar for the year 2026.",
+    category: "generators",
+    icon: "📅",
+  },
+  {
+    slug: "printable-calendar-2027",
+    name: "Printable Calendar 2027",
+    description: "Print-friendly calendar for the year 2027.",
+    category: "generators",
+    icon: "📅",
+  },
+  {
+    slug: "printable-calendar-january-2027",
+    name: "January 2027 Calendar",
+    description: "Printable January 2027 monthly calendar.",
+    category: "generators",
+    icon: "📅",
+  },
+  {
+    slug: "printable-calendar-february-2027",
+    name: "February 2027 Calendar",
+    description: "Printable February 2027 monthly calendar.",
+    category: "generators",
+    icon: "📅",
+  },
+  {
+    slug: "printable-calendar-march-2027",
+    name: "March 2027 Calendar",
+    description: "Printable March 2027 monthly calendar.",
+    category: "generators",
+    icon: "📅",
+  },
+  {
+    slug: "printable-calendar-april-2027",
+    name: "April 2027 Calendar",
+    description: "Printable April 2027 monthly calendar.",
+    category: "generators",
+    icon: "📅",
+  },
+  {
+    slug: "image-to-text",
+    name: "Image to Text (OCR)",
+    description: "Extract text from images using Tesseract.js in your browser.",
+    category: "image-media",
+    icon: "🔍",
+  },
+  {
+    slug: "tdee-calculator",
+    name: "TDEE Calculator",
+    description:
+      "Estimate total daily energy expenditure using Mifflin–St Jeor BMR and activity multipliers.",
+    category: "health",
+    icon: "🔥",
+  },
+  {
+    slug: "bmr-calculator",
+    name: "BMR Calculator",
+    description:
+      "Calculate basal metabolic rate (calories at rest) with the Mifflin–St Jeor equation.",
+    category: "health",
+    icon: "💤",
+  },
+  {
+    slug: "macro-calculator",
+    name: "Macro Calculator",
+    description:
+      "Split daily calories into protein, carbs, and fat grams from your target macro percentages.",
+    category: "health",
+    icon: "🥗",
+  },
+  {
+    slug: "due-date-calculator",
+    name: "Pregnancy Due Date Calculator",
+    description:
+      "Estimate due date and weeks pregnant from last period or conception date.",
+    category: "health",
+    icon: "👶",
+  },
+  {
+    slug: "concrete-calculator",
+    name: "Concrete Calculator",
+    description:
+      "Estimate cubic yards of concrete for a slab from length, width, and depth.",
+    category: "home-diy",
+    icon: "🧱",
+  },
+  {
+    slug: "square-footage-calculator",
+    name: "Square Footage Calculator",
+    description: "Calculate room or floor area in square feet from length and width.",
+    category: "home-diy",
+    icon: "📐",
+  },
+  {
+    slug: "roof-pitch-calculator",
+    name: "Roof Pitch Calculator",
+    description:
+      "Convert rise and run to pitch ratio, roof angle, and approximate rafter length.",
+    category: "home-diy",
+    icon: "🏠",
+  },
+  {
+    slug: "deck-calculator",
+    name: "Deck Board Calculator",
+    description:
+      "Estimate deck boards and linear feet from deck size, board width, and gap.",
+    category: "home-diy",
+    icon: "🪵",
+  },
+  {
+    slug: "mulch-calculator",
+    name: "Mulch Calculator",
+    description:
+      "Calculate mulch volume in cubic yards and bag count from bed dimensions.",
+    category: "home-diy",
+    icon: "🌿",
+  },
+  {
+    slug: "paint-calculator",
+    name: "Paint Calculator",
+    description:
+      "Estimate gallons of paint from wall area, coats, and coverage per gallon.",
+    category: "home-diy",
+    icon: "🎨",
+  },
+  {
+    slug: "tile-calculator",
+    name: "Tile Calculator",
+    description:
+      "Count floor tiles needed from room size, tile dimensions, and waste allowance.",
+    category: "home-diy",
+    icon: "🔲",
+  },
+  {
+    slug: "fence-calculator",
+    name: "Fence Calculator",
+    description:
+      "Estimate fence posts and panel sections from length and spacing.",
+    category: "home-diy",
+    icon: "🚧",
+  },
+  {
+    slug: "paycheck-calculator",
+    name: "Paycheck Calculator",
+    description:
+      "Estimate net pay with simplified federal withholding, FICA, and optional flat state tax.",
+    category: "calculators",
+    icon: "💵",
+  },
+  {
+    slug: "etsy-fee-calculator",
+    name: "Etsy Fee Calculator",
+    description:
+      "Estimate Etsy listing, transaction, and payment processing fees on a sale.",
+    category: "calculators",
+    icon: "🛍️",
+  },
+  {
+    slug: "amazon-fba-fee-calculator",
+    name: "Amazon FBA Fee Calculator",
+    description:
+      "Rough Amazon referral and FBA fulfillment fee estimate for a product price.",
+    category: "calculators",
+    icon: "📦",
+  },
+  {
+    slug: "ebay-fee-calculator",
+    name: "eBay Fee Calculator",
+    description:
+      "Estimate eBay final value and payment processing fees on your sale price.",
+    category: "calculators",
+    icon: "🏷️",
+  },
+  {
+    slug: "paypal-fee-calculator",
+    name: "PayPal Fee Calculator",
+    description:
+      "Calculate PayPal goods-and-services fees from sale amount (rates as of 2026).",
+    category: "calculators",
+    icon: "💳",
+  },
+  {
+    slug: "video-to-mp3",
+    name: "Video to MP3",
+    description:
+      "Extract audio from a video file and download MP3 in your browser with ffmpeg.wasm.",
+    category: "audio-video",
+    icon: "🎵",
+  },
+  {
+    slug: "mp4-to-mp3",
+    name: "MP4 to MP3",
+    description:
+      "Convert MP4 (and other video) files to MP3 audio locally — no upload to a server.",
+    category: "audio-video",
+    icon: "🎬",
+  },
+  {
+    slug: "video-compressor",
+    name: "Video Compressor",
+    description:
+      "Compress video with H.264 CRF and optional scaling using ffmpeg.wasm in the browser.",
+    category: "audio-video",
+    icon: "📹",
+  },
+  {
+    slug: "audio-cutter",
+    name: "Audio Cutter",
+    description:
+      "Trim audio with start/end times and fade in/out, then export a WAV download.",
+    category: "audio-video",
+    icon: "✂️",
+  },
+  {
+    slug: "device-test-mic",
+    name: "Microphone Test",
+    description:
+      "Check your microphone with a live input level meter in the browser.",
+    category: "randomizers",
+    icon: "🎤",
+  },
+  {
+    slug: "device-test-webcam",
+    name: "Webcam Test",
+    description: "Preview your camera feed to verify video and framing.",
+    category: "randomizers",
+    icon: "📷",
+  },
+  {
+    slug: "device-test-keyboard",
+    name: "Keyboard Test",
+    description:
+      "Press keys to confirm they register — useful for new or cleaned keyboards.",
+    category: "randomizers",
+    icon: "⌨️",
+  },
+  {
+    slug: "device-test-cps",
+    name: "CPS Test",
+    description:
+      "Measure clicks per second in a 5-second challenge — mouse and trackpad tester.",
+    category: "randomizers",
+    icon: "🖱️",
+  },
+  {
+    slug: "device-test-dead-pixel",
+    name: "Dead Pixel Test",
+    description:
+      "Full-screen solid colors to help spot stuck or dead pixels on your display.",
+    category: "randomizers",
+    icon: "🖥️",
+  },
+  {
+    slug: "device-test-pack",
+    name: "Device Test Pack",
+    description:
+      "All-in-one mic, webcam, keyboard, CPS, and dead-pixel tests in one page.",
+    category: "randomizers",
+    icon: "🧰",
   },
 ];
 

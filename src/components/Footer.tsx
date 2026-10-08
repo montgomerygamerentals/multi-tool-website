@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SITE_NAME } from "@/lib/site";
 import {
   categoryLabels,
   getCategoryPath,
@@ -16,7 +17,7 @@ export default function Footer() {
         <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-              ToolBox
+              {SITE_NAME}
             </p>
             <p className="mt-2 max-w-md text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
               Fast Free Tools — browser utilities from Ferrari Group LLC. No
@@ -32,7 +33,7 @@ export default function Footer() {
           </Link>
         </div>
 
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {categories.map((category) => {
             const categoryTools = toolsByCategory[category];
             return (

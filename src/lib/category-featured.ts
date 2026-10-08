@@ -35,4 +35,30 @@ export const featuredToolSlugsByCategory: Record<ToolCategory, string[]> = {
     "dice-roller",
     "coin-flip",
   ],
+  health: [
+    "tdee-calculator",
+    "bmr-calculator",
+    "macro-calculator",
+    "due-date-calculator",
+    "height-comparison",
+  ],
+  "home-diy": [
+    "concrete-calculator",
+    "square-footage-calculator",
+    "paint-calculator",
+    "tile-calculator",
+    "fence-calculator",
+  ],
+  "audio-video": [
+    "video-to-mp3",
+    "video-compressor",
+    "audio-cutter",
+  ],
+  generators: [
+    "invoice-generator",
+    "meme-generator",
+    "signature-generator",
+    "color-palette-generator",
+    "printable-calendar",
+  ],
 };

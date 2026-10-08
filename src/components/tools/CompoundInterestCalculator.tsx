@@ -78,9 +78,16 @@ export default function CompoundInterestCalculator() {
     return { futureValue, totalContributions, interestEarned };
   }, [principal, rate, years, compoundsPerYear, monthlyContribution]);
 
+  function clearInputs() {
+    setPrincipal("");
+    setRate("");
+    setYears("");
+    setMonthlyContribution("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Investment details">
+      <ToolPanel title="Investment details" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <FinanceField label="Principal ($)">
             <input

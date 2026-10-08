@@ -32,15 +32,23 @@ export default function RemoveDuplicates() {
 
   const removed = input.split("\n").length - output.split("\n").length;
 
+  const clearInputs = () => {
+    setInput("");
+    setSortAlpha(false);
+    setCaseSensitive(false);
+  };
+
   return (
     <div className="space-y-6">
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        rows={10}
-        placeholder="Paste your list, one item per line…"
-        className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-900"
-      />
+      <ToolPanel title="Input" onClear={clearInputs}>
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          rows={10}
+          placeholder="Paste your list, one item per line…"
+          className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        />
+      </ToolPanel>
       <ToolPanel title="Options">
         <div className="mb-4 flex flex-wrap gap-6">
           <label className="flex items-center gap-2 text-sm">

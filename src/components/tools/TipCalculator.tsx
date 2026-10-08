@@ -6,24 +6,33 @@ import ToolPanel from "@/components/ui/ToolPanel";
 export default function TipCalculator() {
   const [bill, setBill] = useState("");
   const [tipPercent, setTipPercent] = useState(18);
-  const [people, setPeople] = useState(1);
+  const [people, setPeople] = useState("1");
 
   const result = useMemo(() => {
     const billAmount = parseFloat(bill);
-    if (isNaN(billAmount) || billAmount <= 0 || people < 1) return null;
+    const peopleCount = Number(people);
+    if (isNaN(billAmount) || billAmount <= 0 || !Number.isFinite(peopleCount) || peopleCount < 1) {
+      return null;
+    }
 
     const tipAmount = billAmount * (tipPercent / 100);
     const total = billAmount + tipAmount;
-    const perPerson = total / people;
+    const perPerson = total / peopleCount;
 
     return { tipAmount, total, perPerson };
   }, [bill, tipPercent, people]);
 
   const presets = [10, 12, 15, 18, 20, 22, 25, 30];
 
+  function clearInputs() {
+    setBill("");
+    setTipPercent(0);
+    setPeople("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Bill details">
+      <ToolPanel title="Bill details" onClear={clearInputs}>
         <div className="mb-4">
           <label className="mb-1 block text-sm font-medium">Bill amount ($)</label>
           <input
@@ -71,7 +80,7 @@ export default function TipCalculator() {
             value={people}
             min={1}
             max={100}
-            onChange={(e) => setPeople(Math.max(1, Number(e.target.value)))}
+            onChange={(e) => setPeople(e.target.value)}
             className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
           />
         </div>

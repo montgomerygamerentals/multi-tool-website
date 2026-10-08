@@ -147,9 +147,16 @@ export default function LoremIpsum() {
 
   const wordCount = output.trim() ? output.trim().split(/\s+/).length : 0;
 
+  const clearInputs = () => {
+    setAmount(modeConfig.min);
+    setStartWithClassic(false);
+    setRevision(0);
+    setCopied(false);
+  };
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="How much text?">
+      <ToolPanel title="How much text?" onClear={clearInputs}>
         <div className="mb-5 flex flex-wrap gap-2">
           {(Object.keys(MODE_LABELS) as Mode[]).map((m) => (
             <button

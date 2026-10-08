@@ -1,6 +1,718 @@
 import type { ToolExample } from "./tool-guide-types";
 
 export const toolExamples: Record<string, ToolExample[]> = {
+  "spin-the-wheel": [
+    {
+      title: "Classroom cold-call with eight students",
+      body: "List eight names with equal slice sizes, spin once, and remove the winner before the next question so no one is picked twice in a row.",
+    },
+    {
+      title: "Team lunch vote",
+      body: "Add five restaurants as segments, spin for a tie-break when the group is split — faster than debating another ten minutes.",
+    },
+  ],
+  "days-from-today": [
+    {
+      title: "90-day return window",
+      body: "Add 90 days from today to see the last day to ship a warranty return without counting months on a wall calendar.",
+    },
+  ],
+  "profit-margin-calculator": [
+    {
+      title: "Retail price from cost and target margin",
+      body: "Item cost $24, target 40% margin (not markup): revenue must be $40 because profit $16 is 40% of $40. Markup on cost would be 66.7%, not 40%.",
+    },
+  ],
+  "ratio-proportion-calculator": [
+    {
+      title: "Recipe scale 6 → 10 servings",
+      body: "If 6 servings need 2 cups flour, set 6/2 = 10/x → x ≈ 3.33 cups. Keep cups on both sides of the proportion.",
+    },
+  ],
+  "lcm-calculator": [
+    {
+      title: "Common denominator for 5/12 + 7/18",
+      body: "LCM(12, 18) = 36. Convert to 15/36 + 14/36 = 29/36 without guessing a denominator.",
+    },
+  ],
+  "gcf-calculator": [
+    {
+      title: "Simplify 84/126",
+      body: "GCF(84, 126) = 42 → divide to get 2/3 in lowest terms.",
+    },
+  ],
+  "final-grade-calculator": [
+    {
+      title: "Need on final with 85% current, 30% final weight, target 90%",
+      body: "Required final ≈ (90 − 85×0.7) / 0.3 ≈ 101.7%, so a 90% course average is not reachable without extra credit.",
+    },
+  ],
+  "weighted-grade-calculator": [
+    {
+      title: "Exams 50%, homework 30%, final 20%",
+      body: "Exam average 88, homework 92, final 85 → overall 0.5×88 + 0.3×92 + 0.2×85 = 89.0%.",
+    },
+  ],
+  "test-grade-calculator": [
+    {
+      title: "43 correct out of 50",
+      body: "43÷50×100 = 86% — often a high B on a straight scale.",
+    },
+  ],
+  "gpa-calculator": [
+    {
+      title: "Three courses, 4 credits each",
+      body: "Grades A (4.0), B+ (3.3), B (3.0) with 4 credits each → (16+13.2+12)/12 = 3.43 semester GPA.",
+    },
+  ],
+  "prime-factor-calculator": [
+    {
+      title: "Factor 360",
+      body: "360 = 2³ × 3² × 5 — useful for LCM(360, 100) by comparing prime powers.",
+    },
+  ],
+  "slope-calculator": [
+    {
+      title: "Points (2, 3) and (10, 11)",
+      body: "Rise 8, run 8 → slope 1 → line y = x + 1 after solving for b.",
+    },
+  ],
+  "area-of-circle": [
+    {
+      title: "Garden bed, radius 4 ft",
+      body: "A = π×16 ≈ 50.27 ft² of mulch coverage for a full circle.",
+    },
+  ],
+  "area-of-rectangle": [
+    {
+      title: "Room 12 ft × 14 ft",
+      body: "Area 168 ft² for carpet ordering before waste factor.",
+    },
+  ],
+  "area-of-triangle": [
+    {
+      title: "Base 10 m, height 6 m",
+      body: "A = ½×10×6 = 30 m² — height must be perpendicular to the 10 m base.",
+    },
+  ],
+  "area-of-trapezoid": [
+    {
+      title: "Bases 20 ft and 28 ft, height 15 ft",
+      body: "A = ½×(20+28)×15 = 360 ft².",
+    },
+  ],
+  "volume-of-sphere": [
+    {
+      title: "Ball radius 3 cm",
+      body: "V ≈ (4/3)π×27 ≈ 113.1 cm³.",
+    },
+  ],
+  "volume-of-cylinder": [
+    {
+      title: "Tank r = 0.5 m, h = 2 m",
+      body: "V = π×0.25×2 ≈ 1.57 m³ of water when full.",
+    },
+  ],
+  "volume-of-cone": [
+    {
+      title: "Same r and h as cylinder example",
+      body: "Cone volume is one-third of cylinder → ≈ 0.52 m³.",
+    },
+  ],
+  "volume-of-cube": [
+    {
+      title: "Shipping cube s = 18 in",
+      body: "V = 18³ = 5832 in³ — check carrier dimensional weight rules separately.",
+    },
+  ],
+  "volume-of-rectangular-prism": [
+    {
+      title: "Aquarium 30×12×18 in",
+      body: "V = 6480 in³; divide by 231 for approximate US gallons (~28 gal).",
+    },
+  ],
+  "volume-of-pyramid": [
+    {
+      title: "Square base 6 m, height 9 m",
+      body: "V = (1/3)×36×9 = 108 m³.",
+    },
+  ],
+  "number-base-converter": [
+    {
+      title: "Decimal 255 everywhere",
+      body: "Shows binary 11111111, hex FF, octal 377 — one input for permission and color lessons.",
+    },
+  ],
+  "binary-to-decimal": [
+    {
+      title: "Byte 10101010",
+      body: "128+32+8+2 = 170 decimal — common pattern when learning place values.",
+    },
+  ],
+  "decimal-to-binary": [
+    {
+      title: "Decimal 13",
+      body: "13 → 1101 (8+4+1).",
+    },
+  ],
+  "binary-to-hex": [
+    {
+      title: "1111 0000 1010",
+      body: "Groups → F 0 A → hex F0A (pad to nibble boundary first).",
+    },
+  ],
+  "hex-to-binary": [
+    {
+      title: "Hex A5",
+      body: "A=1010, 5=0101 → 10100101 binary.",
+    },
+  ],
+  "decimal-to-hex": [
+    {
+      title: "Decimal 4096",
+      body: "4096 = 0x1000 — one bit set in a 16-bit word.",
+    },
+  ],
+  "hex-to-decimal": [
+    {
+      title: "0xFF",
+      body: "15×16 + 15 = 255 — max unsigned byte.",
+    },
+  ],
+  "decimal-to-octal": [
+    {
+      title: "Decimal 493",
+      body: "493 → 755 octal — matches chmod 755 when interpreted as permission bits.",
+    },
+  ],
+  "octal-to-decimal": [
+    {
+      title: "Octal 644",
+      body: "6×64 + 4×8 + 4 = 420 decimal.",
+    },
+  ],
+  "text-to-binary": [
+    {
+      title: "ASCII letter A",
+      body: "Code 65 → 01000001 in 8-bit binary.",
+    },
+  ],
+  "binary-to-text": [
+    {
+      title: "01001000 01101001",
+      body: "Decodes to Hi — two bytes, two characters in ASCII.",
+    },
+  ],
+  "time-card-calculator": [
+    {
+      title: "Mon 9:00–17:30, 30 min lunch",
+      body: "8.0 hours paid; repeat for five days and sum for weekly total near 40.0.",
+    },
+  ],
+  "military-time-converter": [
+    {
+      title: "3:45 PM meeting",
+      body: "15:45 in 24-hour form — avoids confusing with 03:45 AM.",
+    },
+  ],
+  "scientific-calculator": [
+    {
+      title: "sin(30°) in degree mode",
+      body: "Expect 0.5 exactly; in radian mode sin(30) is sin of 30 radians, not 30 degrees.",
+    },
+  ],
+  "fancy-text-generator": [
+    {
+      title: "Bio headline combo",
+      body: "Type “Summer Tour 2026” and copy script output for an band Linktree while keeping the URL in normal ASCII.",
+    },
+  ],
+  "fancy-text-bold": [
+    {
+      title: "Discord role label",
+      body: "Bold Unicode “MOD” stands out in a channel topic where Markdown bold is disabled.",
+    },
+  ],
+  "fancy-text-italic": [
+    {
+      title: "Quote attribution",
+      body: "Italicize “Walker” in a photo caption credit line without enabling rich text mode.",
+    },
+  ],
+  "fancy-text-script": [
+    {
+      title: "Wedding save-the-date",
+      body: "Script Unicode for first names only; keep dates in plain digits for clarity.",
+    },
+  ],
+  "fancy-text-small-caps": [
+    {
+      title: "Esports matchup",
+      body: "Small caps “team alpha vs team beta” reads cleaner than all caps in a tweet.",
+    },
+  ],
+  "fancy-text-upside-down": [
+    {
+      title: "Puzzle clue",
+      body: "Hide “look behind the couch” as flipped text in a scavenger hunt chat.",
+    },
+  ],
+  "fancy-text-bubble": [
+    {
+      title: "Clan tag flair",
+      body: "Bubble “RNG” three-letter tag for a mobile game profile with strict character limits.",
+    },
+  ],
+  "fancy-text-monospace": [
+    {
+      title: "Dev joke bio",
+      body: "Monospace “hello world” aesthetic for a GitHub profile tagline — display only, not runnable code.",
+    },
+  ],
+  "fancy-text-fullwidth": [
+    {
+      title: "Vaporwave title",
+      body: "Fullwidth “NIGHT DRIVE” spacing for an album announcement image overlay paste.",
+    },
+  ],
+  "word-unscrambler": [
+    {
+      title: "Seven-letter rack",
+      body: "Letters RETSINA unscramble to RETINAS and RETSINA — pick the word crossing your puzzle’s N.",
+    },
+  ],
+  "typing-speed-test": [
+    {
+      title: "60-second sprint",
+      body: "Hit 72 WPM at 98% accuracy on a one-minute test after a week of daily practice.",
+    },
+  ],
+  "typing-speed-test-numbers": [
+    {
+      title: "Invoice row drill",
+      body: "Type “$1,284.50” sequences with symbols to cut errors on finance data entry screens.",
+    },
+  ],
+  "name-generator-band": [
+    {
+      title: "Indie duo names",
+      body: "Generate ten options with keyword “neon” before checking Spotify for collisions.",
+    },
+  ],
+  "name-generator-podcast": [
+    {
+      title: "True crime show",
+      body: "Keyword “midnight” yields titles you can test by saying aloud with co-hosts.",
+    },
+  ],
+  "name-generator-dnd": [
+    {
+      title: "Tavern NPC",
+      body: "Roll an elven surname for a one-shot quest giver in under a minute of prep.",
+    },
+  ],
+  "name-generator-clan": [
+    {
+      title: "Three-letter tag",
+      body: "Theme “storm” produces short tags that fit a 4-character clan limit.",
+    },
+  ],
+  "name-generator-gamer-tag": [
+    {
+      title: "Competitive handle",
+      body: "Add lucky number 7 to generated roots before checking Xbox Live availability.",
+    },
+  ],
+  "name-generator-business": [
+    {
+      title: "Local bakery LLC",
+      body: "Combine “oak” + “flour” style compounds then search state business registry.",
+    },
+  ],
+  "name-generator-baby": [
+    {
+      title: "Sibling pair",
+      body: "Filter Irish names to match an older sibling “Nora” with similar length.",
+    },
+  ],
+  "name-generator-pet": [
+    {
+      title: "Rescue mutt",
+      body: "Personality “chaotic” suggests goofy names; test which one the dog responds to at the shelter.",
+    },
+  ],
+  "text-to-speech": [
+    {
+      title: "Blog proofread",
+      body: "Listen at 1.1× speed to catch duplicated “the the” in a draft post.",
+    },
+  ],
+  "height-comparison": [
+    {
+      title: "Cosplay check",
+      body: "Compare 5'10\" actor to your 5'6\" build to estimate hem length adjustments.",
+    },
+  ],
+  "yaml-to-json": [
+    {
+      title: "K8s fragment",
+      body: "Convert a small Deployment YAML snippet into JSON for a jest fixture.",
+    },
+  ],
+  "csv-to-json": [
+    {
+      title: "Survey import",
+      body: "Semicolon CSV from Excel EU export becomes JSON for a Chart.js bar chart mock.",
+    },
+  ],
+  "xml-to-json": [
+    {
+      title: "RSS sample",
+      body: "Parse two <item> nodes to JSON to prototype a reader UI quickly.",
+    },
+  ],
+  "jwt-decoder": [
+    {
+      title: "Expired token debug",
+      body: "Payload exp in the past explains 401 errors without guessing server clocks.",
+    },
+  ],
+  "url-encoder": [
+    {
+      title: "UTM space fix",
+      body: "Encode “spring sale” in utm_campaign so analytics receives one intact value.",
+    },
+  ],
+  "html-minifier": [
+    {
+      title: "Email footer",
+      body: "Shrink table-based footer HTML to stay under a provider’s size warning threshold.",
+    },
+  ],
+  "css-minifier": [
+    {
+      title: "Landing page CSS",
+      body: "Minify 40 KB custom CSS before inlining critical rules above the fold.",
+    },
+  ],
+  "js-minifier": [
+    {
+      title: "Embed snippet",
+      body: "Minify a 2 KB accordion script for a static GitHub Pages site.",
+    },
+  ],
+  "webp-to-jpg": [
+    {
+      title: "CMS upload fix",
+      body: "A 900 KB WebP product shot becomes JPG at quality 88 so a legacy admin panel that rejects WebP accepts the listing image.",
+    },
+  ],
+  "jpg-to-webp": [
+    {
+      title: "Blog weight cut",
+      body: "A 2.1 MB hero JPEG drops to ~420 KB WebP at quality 80 with no visible banding on a 1440 px-wide layout.",
+    },
+  ],
+  "avif-to-jpg": [
+    {
+      title: "Android share",
+      body: "Phone-exported AVIF vacation photo converts to JPG for a relative on Windows 10 Photos without codec packs.",
+    },
+  ],
+  "avif-to-png": [
+    {
+      title: "Design handoff",
+      body: "Marketing AVIF master becomes PNG so a contractor using older Photoshop can edit layers on a transparent mockup.",
+    },
+  ],
+  "svg-to-png": [
+    {
+      title: "Icon @2x export",
+      body: "512×512 PNG raster of a logo SVG for a slide deck that blocks vector uploads.",
+    },
+  ],
+  "png-to-ico": [
+    {
+      title: "Favicon refresh",
+      body: "Square 256 PNG logo packs into favicon.ico with 16 and 32 px sizes for a static GitHub Pages site.",
+    },
+  ],
+  "tiff-to-jpg": [
+    {
+      title: "Scan email",
+      body: "12 MB grayscale TIFF scan compresses to a 900 KB JPG attachment under a 10 MB mail limit.",
+    },
+  ],
+  "heic-to-jpg": [
+    {
+      title: "Expense portal",
+      body: "iPhone HEIC receipt converts to JPG before upload to a corporate form that only lists image/jpeg.",
+    },
+  ],
+  "heic-to-png": [
+    {
+      title: "Wiki screenshot",
+      body: "HEIC UI screenshot becomes PNG for an internal wiki that strips EXIF and prefers lossless PNG inserts.",
+    },
+  ],
+  "color-palette-generator": [
+    {
+      title: "Typical workflow",
+      body: "Fill sample data, export once, then reuse saved browser defaults for the next client.",
+    },
+  ],
+  "contrast-checker": [
+    {
+      title: "Typical workflow",
+      body: "#2563EB on #FFFFFF yields strong contrast for body links; verify large headings separately.",
+    },
+  ],
+  "gradient-generator": [
+    {
+      title: "Typical workflow",
+      body: "Fill sample data, export once, then reuse saved browser defaults for the next client.",
+    },
+  ],
+  "invoice-generator": [
+    {
+      title: "Typical workflow",
+      body: "Fill sample data, export once, then reuse saved browser defaults for the next client.",
+    },
+  ],
+  "receipt-generator": [
+    {
+      title: "Typical workflow",
+      body: "Fill sample data, export once, then reuse saved browser defaults for the next client.",
+    },
+  ],
+  "quote-generator": [
+    {
+      title: "Typical workflow",
+      body: "Fill sample data, export once, then reuse saved browser defaults for the next client.",
+    },
+  ],
+  "signature-generator": [
+    {
+      title: "Typical workflow",
+      body: "Fill sample data, export once, then reuse saved browser defaults for the next client.",
+    },
+  ],
+  "email-signature-generator": [
+    {
+      title: "Typical workflow",
+      body: "Fill sample data, export once, then reuse saved browser defaults for the next client.",
+    },
+  ],
+  "meme-generator": [
+    {
+      title: "Typical workflow",
+      body: "Fill sample data, export once, then reuse saved browser defaults for the next client.",
+    },
+  ],
+  "printable-calendar": [
+    {
+      title: "Letter-size print",
+      body: "Open print dialog, disable headers/footers, scale 100% — one month per page for binder holes.",
+    },
+  ],
+  "printable-calendar-2026": [
+    {
+      title: "Letter-size print",
+      body: "Open print dialog, disable headers/footers, scale 100% — one month per page for binder holes.",
+    },
+  ],
+  "printable-calendar-2027": [
+    {
+      title: "Letter-size print",
+      body: "Open print dialog, disable headers/footers, scale 100% — one month per page for binder holes.",
+    },
+  ],
+  "printable-calendar-january-2027": [
+    {
+      title: "Letter-size print",
+      body: "Open print dialog, disable headers/footers, scale 100% — one month per page for binder holes.",
+    },
+  ],
+  "printable-calendar-february-2027": [
+    {
+      title: "Letter-size print",
+      body: "Open print dialog, disable headers/footers, scale 100% — one month per page for binder holes.",
+    },
+  ],
+  "printable-calendar-march-2027": [
+    {
+      title: "Letter-size print",
+      body: "Open print dialog, disable headers/footers, scale 100% — one month per page for binder holes.",
+    },
+  ],
+  "image-to-text": [
+    {
+      title: "Typical workflow",
+      body: "Fill sample data, export once, then reuse saved browser defaults for the next client.",
+    },
+  ],
+  "tdee-calculator": [
+    {
+      title: "Moderate deficit",
+      body: "BMR 1600 × activity 1.55 ≈ 2480 TDEE; target 2180 kcal/day for roughly a 300 kcal deficit.",
+    },
+  ],
+  "bmr-calculator": [
+    {
+      title: "Mifflin check",
+      body: "30-year-old, 170 cm, 70 kg — BMR near 1500 kcal before adding exercise calories.",
+    },
+  ],
+  "macro-calculator": [
+    {
+      title: "180 g protein cut",
+      body: "2000 kcal with 40% protein → 200 g protein, 200 g carbs, 67 g fat using 4/4/9 calories per gram.",
+    },
+  ],
+  "due-date-calculator": [
+    {
+      title: "LMP April 10",
+      body: "Naegele estimate places due date around mid-January the following year — ultrasound may adjust by a week.",
+    },
+  ],
+  "concrete-calculator": [
+    {
+      title: "12×16 patio",
+      body: "4 in slab ≈ 2.0 yd³ — about twenty-four 80 lb bags if you skip a ready-mix truck.",
+    },
+  ],
+  "square-footage-calculator": [
+    {
+      title: "L-shaped room",
+      body: "Split into 10×12 and 4×8 sections → 152 ft² total laminate order.",
+    },
+  ],
+  "roof-pitch-calculator": [
+    {
+      title: "4:12 pitch",
+      body: "Rise 4 over run 12 ≈ 18.4° — check against metal roof minimum slope specs.",
+    },
+  ],
+  "deck-calculator": [
+    {
+      title: "20 ft boards",
+      body: "12×20 deck with 5.5 in boards and 1/8 in gaps — plan rows across the 12 ft width before buying 16 ft lumber.",
+    },
+  ],
+  "mulch-calculator": [
+    {
+      title: "Shrub bed",
+      body: "40×5 ft bed at 3 in depth ≈ 1.85 yd³ bulk mulch — one small truck load.",
+    },
+  ],
+  "paint-calculator": [
+    {
+      title: "Two-coat bedroom",
+      body: "384 ft² walls, 350 ft²/gal coverage, two coats ≈ 2.2 gallons round up to 3 for touch-ups.",
+    },
+  ],
+  "tile-calculator": [
+    {
+      title: "Backsplash waste",
+      body: "48 ft² field with 10% waste on 12×12 tiles ≈ 44 tiles before cuts around outlets.",
+    },
+  ],
+  "fence-calculator": [
+    {
+      title: "120 ft privacy",
+      body: "8 ft post spacing → 16 posts; subtract one gate panel width from picket count.",
+    },
+  ],
+  "paycheck-calculator": [
+    {
+      title: "Offer compare",
+      body: "$75k salary biweekly vs $72k with cheaper healthcare — net per pay period may favor the lower gross.",
+    },
+  ],
+  "etsy-fee-calculator": [
+    {
+      title: "$38 mug",
+      body: "Listing, 6.5% transaction, 3% + $0.25 processing, and 15% offsite ads on a promoted sale — net drops fast below $30.",
+    },
+  ],
+  "amazon-fba-fee-calculator": [
+    {
+      title: "Small standard SKU",
+      body: "$24 price, apparel referral 17%, small standard FBA fee — confirm margin before ordering inventory.",
+    },
+  ],
+  "ebay-fee-calculator": [
+    {
+      title: "$250 camera",
+      body: "Final value fee on item + shipping plus promoted 2% — compare to local cash sale net.",
+    },
+  ],
+  "paypal-fee-calculator": [
+    {
+      title: "Invoice gross-up",
+      body: "Need $1000 net on goods/services? Gross about $1030.29 before 2.9% + fixed domestic fee (verify current table).",
+    },
+  ],
+  "video-to-mp3": [
+    {
+      title: "Quick check",
+      body: "Use a 30-second clip first to validate quality before processing a long file.",
+    },
+  ],
+  "mp4-to-mp3": [
+    {
+      title: "Quick check",
+      body: "Use a 30-second clip first to validate quality before processing a long file.",
+    },
+  ],
+  "video-compressor": [
+    {
+      title: "Quick check",
+      body: "Use a 30-second clip first to validate quality before processing a long file.",
+    },
+  ],
+  "audio-cutter": [
+    {
+      title: "Quick check",
+      body: "Use a 30-second clip first to validate quality before processing a long file.",
+    },
+  ],
+  "device-test-mic": [
+    {
+      title: "Quick check",
+      body: "Run once before your meeting; fix issues instead of apologizing on call.",
+    },
+  ],
+  "device-test-webcam": [
+    {
+      title: "Quick check",
+      body: "Run once before your meeting; fix issues instead of apologizing on call.",
+    },
+  ],
+  "device-test-keyboard": [
+    {
+      title: "Quick check",
+      body: "Run once before your meeting; fix issues instead of apologizing on call.",
+    },
+  ],
+  "device-test-cps": [
+    {
+      title: "Quick check",
+      body: "Run once before your meeting; fix issues instead of apologizing on call.",
+    },
+  ],
+  "device-test-dead-pixel": [
+    {
+      title: "Quick check",
+      body: "Run once before your meeting; fix issues instead of apologizing on call.",
+    },
+  ],
+  "device-test-pack": [
+    {
+      title: "Quick check",
+      body: "Run once before your meeting; fix issues instead of apologizing on call.",
+    },
+  ],
   "image-converter": [
     {
       title: "PNG illustration → WebP for a landing page",

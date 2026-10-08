@@ -381,6 +381,21 @@ export default function FaviconGenerator() {
     setPreviewUrl(url);
   }, []);
 
+  const clearInputs = useCallback(() => {
+    handleFileSelect(null);
+    setText("");
+    setFontSize(8);
+    setEmoji("");
+    setTransparentBg(false);
+    setError(null);
+    setCopiedHtml(false);
+    setIsProcessing(false);
+    const previous = packageResultRef.current;
+    if (previous) revokePreviewUrls(previous.previewUrls);
+    packageResultRef.current = null;
+    setPackageResult(null);
+  }, [handleFileSelect]);
+
   const buildPackage = useCallback(async (): Promise<FaviconPackageResult | null> => {
     setIsProcessing(true);
     setError(null);
@@ -551,17 +566,19 @@ export default function FaviconGenerator() {
 
       {/* Mode-specific inputs */}
       {mode === "image" && (
-        <ImageDropzone
-          previewUrl={previewUrl}
-          fileName={sourceFile?.name ?? null}
-          onFileSelect={handleFileSelect}
-          accept="image/*,.svg"
-          hint="PNG, JPG, SVG, WebP, and more"
-        />
+        <ToolPanel title="Image" onClear={clearInputs}>
+          <ImageDropzone
+            previewUrl={previewUrl}
+            fileName={sourceFile?.name ?? null}
+            onFileSelect={handleFileSelect}
+            accept="image/*,.svg"
+            hint="PNG, JPG, SVG, WebP, and more"
+          />
+        </ToolPanel>
       )}
 
       {mode === "text" && (
-        <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+        <ToolPanel title="Text favicon" onClear={clearInputs}>
           <div className="grid gap-6 lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)_minmax(0,1fr)]">
             <div className="space-y-4">
               <div>
@@ -643,11 +660,11 @@ export default function FaviconGenerator() {
               onChange={setBackgroundColor}
             />
           </div>
-        </div>
+        </ToolPanel>
       )}
 
       {mode === "emoji" && (
-        <ToolPanel title="Emoji favicon settings">
+        <ToolPanel title="Emoji favicon settings" onClear={clearInputs}>
           <div className="mb-4">
             <label className="mb-2 block text-sm font-medium">Selected emoji</label>
             <input

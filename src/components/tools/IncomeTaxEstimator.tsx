@@ -78,6 +78,10 @@ export default function IncomeTaxEstimator() {
     return calculateFederalTax(income, filingStatus);
   }, [taxableIncome, filingStatus]);
 
+  function clearInputs() {
+    setTaxableIncome("");
+  }
+
   return (
     <div className="space-y-6">
       <FinanceDisclaimer>
@@ -88,7 +92,7 @@ export default function IncomeTaxEstimator() {
         for your situation.
       </FinanceDisclaimer>
 
-      <ToolPanel title="Tax details">
+      <ToolPanel title="Tax details" onClear={clearInputs}>
         <div className="mb-4">
           <p className="mb-2 text-sm font-medium">Filing status</p>
           <div className="flex flex-wrap gap-2">

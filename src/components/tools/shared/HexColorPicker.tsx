@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { sanitizeHexColor } from "@/lib/numeric-input";
 
 function normalizeHex(value: string): string | null {
   const raw = value.trim().replace(/^#/, "");
@@ -87,8 +88,8 @@ export default function HexColorPicker({
           value={draft}
           spellCheck={false}
           onChange={(e) => {
-            const raw = e.target.value;
-            setDraft(raw);
+            const raw = sanitizeHexColor(e.target.value);
+            setDraft(raw.toUpperCase());
             const next = normalizeHex(raw);
             if (next) onChange(next);
           }}

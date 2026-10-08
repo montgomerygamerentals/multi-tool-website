@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import ToolPanel from "@/components/ui/ToolPanel";
 
 function diffLines(a: string, b: string): { type: "same" | "removed" | "added"; line: string }[] {
   const linesA = a.split("\n");
@@ -37,28 +38,35 @@ export default function TextDiff() {
 
   const prefix = { same: "  ", removed: "- ", added: "+ " };
 
+  const clearInputs = () => {
+    setTextA("");
+    setTextB("");
+  };
+
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div>
-          <label className="mb-2 block text-sm font-medium">Original text</label>
-          <textarea
-            value={textA}
-            onChange={(e) => setTextA(e.target.value)}
-            rows={12}
-            className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-900"
-          />
+      <ToolPanel title="Compare" onClear={clearInputs}>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div>
+            <label className="mb-2 block text-sm font-medium">Original text</label>
+            <textarea
+              value={textA}
+              onChange={(e) => setTextA(e.target.value)}
+              rows={12}
+              className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-900"
+            />
+          </div>
+          <div>
+            <label className="mb-2 block text-sm font-medium">Changed text</label>
+            <textarea
+              value={textB}
+              onChange={(e) => setTextB(e.target.value)}
+              rows={12}
+              className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-900"
+            />
+          </div>
         </div>
-        <div>
-          <label className="mb-2 block text-sm font-medium">Changed text</label>
-          <textarea
-            value={textB}
-            onChange={(e) => setTextB(e.target.value)}
-            rows={12}
-            className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </div>
-      </div>
+      </ToolPanel>
 
       {(textA || textB) && (
         <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">

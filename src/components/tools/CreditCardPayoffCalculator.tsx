@@ -13,6 +13,7 @@ import {
   formatUsd,
   parseAmount,
 } from "@/lib/finance";
+import { sanitizeDecimal } from "@/lib/numeric-input";
 
 const MAX_MONTHS = 600;
 
@@ -86,16 +87,22 @@ export default function CreditCardPayoffCalculator() {
     return simulatePayoff(b, Math.max(0, rate), payment);
   }, [balance, apr, monthlyPayment]);
 
+  function clearInputs() {
+    setBalance("");
+    setApr("");
+    setMonthlyPayment("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Credit card balance">
+      <ToolPanel title="Credit card balance" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-3">
           <FinanceField label="Balance ($)">
             <input
               type="text"
               inputMode="decimal"
               value={balance}
-              onChange={(e) => setBalance(e.target.value)}
+              onChange={(e) => setBalance(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>
@@ -104,7 +111,7 @@ export default function CreditCardPayoffCalculator() {
               type="text"
               inputMode="decimal"
               value={apr}
-              onChange={(e) => setApr(e.target.value)}
+              onChange={(e) => setApr(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>
@@ -113,7 +120,7 @@ export default function CreditCardPayoffCalculator() {
               type="text"
               inputMode="decimal"
               value={monthlyPayment}
-              onChange={(e) => setMonthlyPayment(e.target.value)}
+              onChange={(e) => setMonthlyPayment(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>

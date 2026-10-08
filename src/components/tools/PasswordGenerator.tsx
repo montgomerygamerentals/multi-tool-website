@@ -41,6 +41,12 @@ export default function PasswordGenerator() {
     setCopied(false);
   }, [length, options]);
 
+  const clearInputs = () => {
+    setLength(4);
+    setPassword("");
+    setCopied(false);
+  };
+
   const copy = async () => {
     if (!password) return;
     await navigator.clipboard.writeText(password);
@@ -72,7 +78,7 @@ export default function PasswordGenerator() {
           Generate Password
         </button>
       </ToolPanel>
-      <ToolPanel title="Options">
+      <ToolPanel title="Options" onClear={clearInputs}>
         <label className="mb-4 block text-sm font-medium">
           Length: {length}
         </label>

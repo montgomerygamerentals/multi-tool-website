@@ -15,6 +15,7 @@ import {
   monthlyLoanPayment,
   buildAmortizationSchedule,
 } from "@/lib/finance";
+import { sanitizeDecimal, sanitizeUnsignedInteger } from "@/lib/numeric-input";
 
 export default function RefinanceCalculator() {
   const [balance, setBalance] = useState("250000");
@@ -98,7 +99,7 @@ export default function RefinanceCalculator() {
   ]);
 
   const handlePaymentChange = (value: string) => {
-    setCurrentPayment(value);
+    setCurrentPayment(sanitizeDecimal(value));
     setPaymentManual(true);
   };
 
@@ -109,16 +110,25 @@ export default function RefinanceCalculator() {
     }
   };
 
+  function clearInputs() {
+    setBalance("");
+    setCurrentRate("");
+    setRemainingMonths("");
+    setNewRate("");
+    setNewTermYears("");
+    setClosingCosts("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Current loan">
+      <ToolPanel title="Current loan" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <FinanceField label="Remaining balance ($)">
             <input
               type="text"
               inputMode="decimal"
               value={balance}
-              onChange={(e) => setBalance(e.target.value)}
+              onChange={(e) => setBalance(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>
@@ -127,7 +137,7 @@ export default function RefinanceCalculator() {
               type="text"
               inputMode="decimal"
               value={currentRate}
-              onChange={(e) => setCurrentRate(e.target.value)}
+              onChange={(e) => setCurrentRate(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>
@@ -136,7 +146,9 @@ export default function RefinanceCalculator() {
               type="number"
               min={1}
               value={remainingMonths}
-              onChange={(e) => setRemainingMonths(e.target.value)}
+              onChange={(e) =>
+                setRemainingMonths(sanitizeUnsignedInteger(e.target.value))
+              }
               className={financeInputClass}
             />
           </FinanceField>
@@ -171,7 +183,7 @@ export default function RefinanceCalculator() {
               type="text"
               inputMode="decimal"
               value={newRate}
-              onChange={(e) => setNewRate(e.target.value)}
+              onChange={(e) => setNewRate(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>
@@ -180,7 +192,7 @@ export default function RefinanceCalculator() {
               type="text"
               inputMode="decimal"
               value={newTermYears}
-              onChange={(e) => setNewTermYears(e.target.value)}
+              onChange={(e) => setNewTermYears(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>
@@ -189,7 +201,7 @@ export default function RefinanceCalculator() {
               type="text"
               inputMode="decimal"
               value={closingCosts}
-              onChange={(e) => setClosingCosts(e.target.value)}
+              onChange={(e) => setClosingCosts(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>

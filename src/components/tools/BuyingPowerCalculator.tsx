@@ -22,6 +22,7 @@ import {
   convertBuyingPower,
   getCpi,
 } from "@/lib/us-cpi";
+import { sanitizeDecimal } from "@/lib/numeric-input";
 
 export default function BuyingPowerCalculator() {
   const [amount, setAmount] = useState("100");
@@ -60,9 +61,15 @@ export default function BuyingPowerCalculator() {
 
   const yearOptions = CPI_YEARS;
 
+  function clearInputs() {
+    setAmount("");
+    setFromYear("");
+    setToYear("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Dollar buying power">
+      <ToolPanel title="Dollar buying power" onClear={clearInputs}>
         <p className="mb-4 text-sm text-zinc-500">
           Find out how much money from one year is worth in another using historical U.S.
           inflation (CPI) data — e.g. what $100 in 1990 buys in {CPI_MAX_YEAR}.
@@ -73,7 +80,7 @@ export default function BuyingPowerCalculator() {
               type="text"
               inputMode="decimal"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>

@@ -56,6 +56,11 @@ export default function PercentageCalculator() {
     },
   };
 
+  function clearInputs() {
+    setA("");
+    setB("");
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-2">
@@ -74,7 +79,7 @@ export default function PercentageCalculator() {
           </button>
         ))}
       </div>
-      <ToolPanel title={labels[mode].title}>
+      <ToolPanel title={labels[mode].title} onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="mb-1 block text-sm font-medium">{labels[mode].a}</label>

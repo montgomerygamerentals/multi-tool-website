@@ -41,9 +41,11 @@ export default function AgeCalculator() {
     return calculateAge(date);
   }, [birthdate]);
 
+  const clearInputs = () => setBirthdate("");
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Birthdate">
+      <ToolPanel title="Birthdate" onClear={clearInputs}>
         <input
           type="date"
           value={birthdate}

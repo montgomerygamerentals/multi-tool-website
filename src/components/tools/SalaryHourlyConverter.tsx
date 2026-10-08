@@ -12,6 +12,7 @@ import {
   formatUsd,
   parseAmount,
 } from "@/lib/finance";
+import { sanitizeDecimal } from "@/lib/numeric-input";
 
 type LastEdited = "annual" | "hourly";
 
@@ -52,6 +53,7 @@ export default function SalaryHourlyConverter() {
   }, [annual, hourly, hoursPerWeek, weeksPerYear, lastEdited]);
 
   const handleAnnualChange = (value: string) => {
+    value = sanitizeDecimal(value);
     setAnnual(value);
     setLastEdited("annual");
     const a = parseAmount(value);
@@ -63,6 +65,7 @@ export default function SalaryHourlyConverter() {
   };
 
   const handleHourlyChange = (value: string) => {
+    value = sanitizeDecimal(value);
     setHourly(value);
     setLastEdited("hourly");
     const h = parseAmount(value);
@@ -73,9 +76,16 @@ export default function SalaryHourlyConverter() {
     }
   };
 
+  function clearInputs() {
+    setAnnual("");
+    setHourly("");
+    setHoursPerWeek("");
+    setWeeksPerYear("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Salary & hourly wage">
+      <ToolPanel title="Salary & hourly wage" onClear={clearInputs}>
         <p className="mb-4 text-sm text-zinc-500">
           Enter either annual salary or hourly wage — the other updates automatically.
         </p>

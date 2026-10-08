@@ -13,6 +13,7 @@ import {
   formatPct,
   parseAmount,
 } from "@/lib/finance";
+import { sanitizeDecimal } from "@/lib/numeric-input";
 
 type Mode = "price-percent" | "price-amount" | "amount-percent";
 type LastEdited = "price" | "percent" | "amount";
@@ -60,18 +61,21 @@ export default function DownPaymentCalculator() {
   };
 
   const handlePriceChange = (value: string) => {
+    value = sanitizeDecimal(value);
     setHomePrice(value);
     setLastEdited("price");
     syncFields("price", value, downPercent, downAmount);
   };
 
   const handlePercentChange = (value: string) => {
+    value = sanitizeDecimal(value);
     setDownPercent(value);
     setLastEdited("percent");
     syncFields("percent", homePrice, value, downAmount);
   };
 
   const handleAmountChange = (value: string) => {
+    value = sanitizeDecimal(value);
     setDownAmount(value);
     setLastEdited("amount");
     syncFields("amount", homePrice, downPercent, value);
@@ -117,6 +121,12 @@ export default function DownPaymentCalculator() {
     },
   ];
 
+  function clearInputs() {
+    setHomePrice("");
+    setDownPercent("");
+    setDownAmount("");
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-2">
@@ -136,7 +146,7 @@ export default function DownPaymentCalculator() {
         ))}
       </div>
 
-      <ToolPanel title="Down payment">
+      <ToolPanel title="Down payment" onClear={clearInputs}>
         <p className="mb-4 text-sm text-zinc-500">
           {modes.find((m) => m.id === mode)?.hint}
         </p>

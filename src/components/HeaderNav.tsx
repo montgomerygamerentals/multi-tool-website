@@ -7,6 +7,8 @@ import {
   categoryNavLabels,
   getCategoryPath,
   getToolsByCategory,
+  primaryNavCategories,
+  secondaryNavCategories,
   type Tool,
   type ToolCategory,
 } from "@/lib/tools";
@@ -124,6 +126,66 @@ function CategoryDropdown({
   );
 }
 
+function MoreCategoriesMenu() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleClick = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-label="More tool categories"
+        className="whitespace-nowrap text-sm font-medium text-zinc-600 transition-colors hover:text-indigo-600 dark:text-zinc-400 dark:hover:text-indigo-400"
+      >
+        More
+      </button>
+      {open && (
+        <div className="absolute top-full right-0 z-50 mt-2 w-64 rounded-xl border border-zinc-200 bg-white p-2 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+          {secondaryNavCategories.map((category) => (
+            <div key={category} className="border-b border-zinc-100 last:border-0 dark:border-zinc-800">
+              <Link
+                href={getCategoryPath(category)}
+                className="block px-3 py-2 text-sm font-semibold text-zinc-800 hover:text-indigo-600 dark:text-zinc-200 dark:hover:text-indigo-400"
+                onClick={() => setOpen(false)}
+              >
+                {categoryNavLabels[category]}
+              </Link>
+              <ToolLinks
+                tools={toolsByCategory[category]}
+                onNavigate={() => setOpen(false)}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function HeaderNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileRef = useRef<HTMLDivElement>(null);
@@ -159,10 +221,11 @@ export default function HeaderNav() {
         All Tools
       </Link>
 
-      <div className="hidden items-center gap-3 xl:gap-4 lg:flex">
-        {categories.map((category) => (
+      <div className="hidden items-center gap-2 xl:gap-3 lg:flex">
+        {primaryNavCategories.map((category) => (
           <CategoryDropdown key={category} category={category} />
         ))}
+        <MoreCategoriesMenu />
       </div>
 
       <div ref={mobileRef} className="relative lg:hidden">

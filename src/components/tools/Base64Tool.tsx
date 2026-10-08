@@ -17,6 +17,12 @@ export default function Base64Tool() {
     }
   };
 
+  const clearInputs = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
   const decode = () => {
     setError(null);
     try {
@@ -29,13 +35,15 @@ export default function Base64Tool() {
 
   return (
     <div className="space-y-6">
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        rows={8}
-        placeholder="Enter text or Base64 string…"
-        className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-900"
-      />
+      <ToolPanel title="Input" onClear={clearInputs}>
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          rows={8}
+          placeholder="Enter text or Base64 string…"
+          className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        />
+      </ToolPanel>
       <div className="flex flex-wrap gap-2">
         <button
           type="button"

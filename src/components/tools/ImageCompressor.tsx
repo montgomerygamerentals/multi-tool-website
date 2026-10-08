@@ -90,6 +90,12 @@ export default function ImageCompressor() {
     }
   }, [sourceFile, previewUrl, format, quality]);
 
+  const clearInputs = useCallback(() => {
+    handleFileSelect(null);
+    setQuality(0.1);
+    setIsProcessing(false);
+  }, [handleFileSelect]);
+
   const savings =
     originalSize && compressedSize
       ? Math.round((1 - compressedSize / originalSize) * 100)
@@ -97,11 +103,13 @@ export default function ImageCompressor() {
 
   return (
     <div className="space-y-6">
-      <ImageDropzone
-        previewUrl={previewUrl}
-        fileName={sourceFile?.name ?? null}
-        onFileSelect={handleFileSelect}
-      />
+      <ToolPanel title="Image" onClear={clearInputs}>
+        <ImageDropzone
+          previewUrl={previewUrl}
+          fileName={sourceFile?.name ?? null}
+          onFileSelect={handleFileSelect}
+        />
+      </ToolPanel>
       {error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 dark:bg-red-950/30 dark:text-red-400">
           {error}

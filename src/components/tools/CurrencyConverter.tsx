@@ -12,6 +12,7 @@ import {
   financeInputClass,
   parseAmount,
 } from "@/lib/finance";
+import { sanitizeDecimal } from "@/lib/numeric-input";
 
 const CURRENCIES = [
   "USD",
@@ -73,16 +74,21 @@ export default function CurrencyConverter() {
     }
   };
 
+  const clearInputs = () => {
+    setAmount("");
+    setRate("");
+  };
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Convert currency">
+      <ToolPanel title="Convert currency" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <FinanceField label="Amount">
             <input
               type="text"
               inputMode="decimal"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>
@@ -92,7 +98,7 @@ export default function CurrencyConverter() {
                 type="text"
                 inputMode="decimal"
                 value={rate}
-                onChange={(e) => setRate(e.target.value)}
+                onChange={(e) => setRate(sanitizeDecimal(e.target.value))}
                 className={financeInputClass}
               />
               <button

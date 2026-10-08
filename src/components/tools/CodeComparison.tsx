@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import { diffArrays, diffWords, diffWordsWithSpace } from "diff";
+import ToolPanel from "@/components/ui/ToolPanel";
 
 type CellType = "same" | "removed" | "added" | "empty";
 
@@ -442,9 +443,11 @@ export default function CodeComparison() {
     setModified(original);
   };
 
-  const clear = () => {
+  const clearInputs = () => {
     setOriginal("");
     setModified("");
+    setIgnoreWhitespace(false);
+    setCopiedSide(null);
   };
 
   const copySide = async (side: "original" | "modified") => {
@@ -468,70 +471,64 @@ export default function CodeComparison() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div>
-          <label
-            htmlFor="code-original"
-            className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-          >
-            Original
-          </label>
-          <textarea
-            id="code-original"
-            value={original}
-            onChange={(e) => setOriginal(e.target.value)}
-            rows={12}
-            spellCheck={false}
-            placeholder="Paste original code…"
-            className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 font-mono text-sm text-zinc-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-          />
+      <ToolPanel title="Compare" onClear={clearInputs}>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div>
+            <label
+              htmlFor="code-original"
+              className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+            >
+              Original
+            </label>
+            <textarea
+              id="code-original"
+              value={original}
+              onChange={(e) => setOriginal(e.target.value)}
+              rows={12}
+              spellCheck={false}
+              placeholder="Paste original code…"
+              className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 font-mono text-sm text-zinc-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="code-modified"
+              className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+            >
+              Modified
+            </label>
+            <textarea
+              id="code-modified"
+              value={modified}
+              onChange={(e) => setModified(e.target.value)}
+              rows={12}
+              spellCheck={false}
+              placeholder="Paste modified code…"
+              className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 font-mono text-sm text-zinc-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            />
+          </div>
         </div>
-        <div>
-          <label
-            htmlFor="code-modified"
-            className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-          >
-            Modified
-          </label>
-          <textarea
-            id="code-modified"
-            value={modified}
-            onChange={(e) => setModified(e.target.value)}
-            rows={12}
-            spellCheck={false}
-            placeholder="Paste modified code…"
-            className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 font-mono text-sm text-zinc-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-          />
-        </div>
-      </div>
 
-      <div className="flex flex-wrap items-center gap-3">
-        <label className="flex cursor-pointer items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-          <input
-            type="checkbox"
-            checked={ignoreWhitespace}
-            onChange={(e) => setIgnoreWhitespace(e.target.checked)}
-            className="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
-          />
-          Ignore whitespace differences
-        </label>
-        <button
-          type="button"
-          onClick={swap}
-          disabled={!hasInput}
-          className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
-        >
-          Swap sides
-        </button>
-        <button
-          type="button"
-          onClick={clear}
-          disabled={!hasInput}
-          className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
-        >
-          Clear
-        </button>
-      </div>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+            <input
+              type="checkbox"
+              checked={ignoreWhitespace}
+              onChange={(e) => setIgnoreWhitespace(e.target.checked)}
+              className="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
+            />
+            Ignore whitespace differences
+          </label>
+          <button
+            type="button"
+            onClick={swap}
+            disabled={!hasInput}
+            className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          >
+            Swap sides
+          </button>
+        </div>
+      </ToolPanel>
 
       {hasInput && (
         <div className="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">

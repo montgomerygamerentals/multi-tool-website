@@ -74,9 +74,14 @@ export default function BudgetCalculator() {
     );
   };
 
+  function clearInputs() {
+    setIncome("");
+    setExpenses([createRow("", "")]);
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Monthly income">
+      <ToolPanel title="Monthly income" onClear={clearInputs}>
         <FinanceField label="Income ($)">
           <input
             type="number"

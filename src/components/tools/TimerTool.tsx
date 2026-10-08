@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import ToolPanel from "@/components/ui/ToolPanel";
+import { sanitizeUnsignedInteger } from "@/lib/numeric-input";
 
 type Mode = "stopwatch" | "countdown";
 
@@ -95,10 +96,8 @@ export default function TimerTool() {
   };
 
   const setCountdownFromInputs = (minutes: string, seconds: string) => {
-    const cleanMinutes =
-      minutes === "" || /^\d*$/.test(minutes) ? minutes : minutesInput;
-    let cleanSeconds =
-      seconds === "" || /^\d*$/.test(seconds) ? seconds : secondsInput;
+    const cleanMinutes = sanitizeUnsignedInteger(minutes);
+    let cleanSeconds = sanitizeUnsignedInteger(seconds);
 
     if (cleanSeconds !== "" && Number(cleanSeconds) > 59) {
       cleanSeconds = "59";
@@ -117,6 +116,20 @@ export default function TimerTool() {
   };
 
   const display = mode === "stopwatch" ? elapsed : remaining;
+
+  const clearInputs = () => {
+    setMinutesInput("");
+    setSecondsInput("");
+    setRunning(false);
+    setDone(false);
+    startedAt.current = null;
+    baseElapsed.current = 0;
+    setElapsed(0);
+    setCountdownMs(0);
+    setRemaining(0);
+    setLaps([]);
+    clearFrame();
+  };
 
   return (
     <div className="space-y-6">
@@ -140,7 +153,7 @@ export default function TimerTool() {
         ))}
       </div>
 
-      <ToolPanel>
+      <ToolPanel onClear={clearInputs}>
         <p
           className={`mb-6 text-center font-mono text-5xl font-semibold tracking-tight tabular-nums sm:text-6xl ${
             done ? "text-emerald-600 dark:text-emerald-400" : "text-zinc-900 dark:text-zinc-50"

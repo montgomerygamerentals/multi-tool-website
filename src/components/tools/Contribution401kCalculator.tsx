@@ -89,9 +89,18 @@ export default function Contribution401kCalculator() {
     showProjection,
   ]);
 
+  function clearInputs() {
+    setSalary("");
+    setEmployeeDeferralPct("");
+    setMatchRatePct("");
+    setMatchLimitPct("");
+    setExpectedReturn("");
+    setYears("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Salary & contributions">
+      <ToolPanel title="Salary & contributions" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <FinanceField label="Annual salary ($)">
             <input

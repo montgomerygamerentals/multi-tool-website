@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import ToolPanel from "@/components/ui/ToolPanel";
+import { sanitizeDecimal, sanitizeInteger } from "@/lib/numeric-input";
 
 type Mode = "decimal-to-fraction" | "fraction-to-decimal";
 
@@ -189,6 +190,13 @@ export default function FractionDecimalConverter() {
     };
   }, [whole, numerator, denominator]);
 
+  const clearInputs = () => {
+    setDecimal("");
+    setWhole("");
+    setNumerator("");
+    setDenominator("");
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-2">
@@ -217,7 +225,7 @@ export default function FractionDecimalConverter() {
       </div>
 
       {mode === "decimal-to-fraction" ? (
-        <ToolPanel title="Convert decimal to fraction">
+        <ToolPanel title="Convert decimal to fraction" onClear={clearInputs}>
           <div>
             <label
               htmlFor="decimal-input"
@@ -230,7 +238,7 @@ export default function FractionDecimalConverter() {
               type="text"
               inputMode="decimal"
               value={decimal}
-              onChange={(e) => setDecimal(e.target.value)}
+              onChange={(e) => setDecimal(sanitizeDecimal(e.target.value))}
               placeholder="e.g. 0.75 or 2.5"
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             />
@@ -275,14 +283,14 @@ export default function FractionDecimalConverter() {
           )}
         </ToolPanel>
       ) : (
-        <ToolPanel title="Convert fraction to decimal">
+        <ToolPanel title="Convert fraction to decimal" onClear={clearInputs}>
           <div className="flex flex-wrap items-center justify-center gap-4 py-6">
             <input
               id="fraction-whole"
               type="text"
               inputMode="numeric"
               value={whole}
-              onChange={(e) => setWhole(e.target.value)}
+              onChange={(e) => setWhole(sanitizeInteger(e.target.value))}
               aria-label="Whole number (optional)"
               title="Whole number (optional)"
               className="h-14 w-16 rounded-lg border border-zinc-300 bg-white text-center text-3xl font-semibold tabular-nums dark:border-zinc-700 dark:bg-zinc-800"
@@ -294,7 +302,7 @@ export default function FractionDecimalConverter() {
                 type="text"
                 inputMode="numeric"
                 value={numerator}
-                onChange={(e) => setNumerator(e.target.value)}
+                onChange={(e) => setNumerator(sanitizeInteger(e.target.value))}
                 aria-label="Numerator"
                 title="Numerator"
                 className="h-12 w-20 rounded-lg border border-zinc-300 bg-white text-center text-2xl font-semibold tabular-nums dark:border-zinc-700 dark:bg-zinc-800"
@@ -308,7 +316,7 @@ export default function FractionDecimalConverter() {
                 type="text"
                 inputMode="numeric"
                 value={denominator}
-                onChange={(e) => setDenominator(e.target.value)}
+                onChange={(e) => setDenominator(sanitizeInteger(e.target.value))}
                 aria-label="Denominator"
                 title="Denominator"
                 className="h-12 w-20 rounded-lg border border-zinc-300 bg-white text-center text-2xl font-semibold tabular-nums dark:border-zinc-700 dark:bg-zinc-800"

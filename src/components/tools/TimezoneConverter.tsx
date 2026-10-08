@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ToolPanel from "@/components/ui/ToolPanel";
 
 const FALLBACK_ZONES = [
@@ -121,9 +121,13 @@ export default function TimezoneConverter() {
     setToZone(fromZone);
   };
 
+  const clearInputs = useCallback(() => {
+    setDateValue("");
+  }, []);
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Convert">
+      <ToolPanel title="Convert" onClear={clearInputs}>
         <div className="mb-4 grid gap-4 sm:grid-cols-2">
           <label className="block text-sm">
             <span className="mb-1 block font-medium">From time zone</span>

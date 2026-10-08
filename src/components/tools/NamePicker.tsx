@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import ToolPanel from "@/components/ui/ToolPanel";
 
 const WHEEL_COLORS = [
   "#6366f1",
@@ -227,6 +228,15 @@ export default function NamePicker() {
     cancelEditing();
   }, [cancelEditing]);
 
+  const clearInputs = useCallback(() => {
+    setEntries([{ id: createId(), name: "", color: defaultColor(0) }]);
+    setNameInput("");
+    setNewColor(defaultColor(0));
+    setWinner(null);
+    setRotation(0);
+    cancelEditing();
+  }, [cancelEditing]);
+
   const randomizeNames = useCallback(() => {
     if (isSpinning || entries.length < 2) return;
 
@@ -332,7 +342,7 @@ export default function NamePicker() {
           <div className="w-full lg:hidden">{spinButton}</div>
         </div>
 
-        <div className="w-full flex-1 space-y-4">
+        <ToolPanel title="Names" className="w-full flex-1" onClear={clearInputs}>
           <div>
             <label
               htmlFor="name-input"
@@ -465,7 +475,7 @@ export default function NamePicker() {
           </div>
 
           <div className="hidden lg:block">{spinButton}</div>
-        </div>
+        </ToolPanel>
       </div>
 
       {winner && (

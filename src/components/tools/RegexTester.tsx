@@ -69,9 +69,15 @@ export default function RegexTester() {
     return parts;
   }, [result, text]);
 
+  const clearInputs = () => {
+    setPattern("");
+    setFlags({ g: false, i: false, m: false, s: false, u: false });
+    setText("");
+  };
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Pattern">
+      <ToolPanel title="Pattern" onClear={clearInputs}>
         <label className="mb-3 block text-sm">
           <span className="mb-1 block font-medium">Regular expression</span>
           <div className="flex items-center gap-2">

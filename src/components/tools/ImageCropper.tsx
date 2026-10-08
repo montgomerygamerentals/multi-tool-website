@@ -319,6 +319,12 @@ export default function ImageCropper() {
     }
   }, [sourceFile, previewUrl, crop, shape]);
 
+  const clearInputs = useCallback(() => {
+    handleFileSelect(null);
+    setAspect(null);
+    setIsProcessing(false);
+  }, [handleFileSelect]);
+
   const handles: Handle[] = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
   const isCircle = shape === "circle";
   const activeAspect = isCircle ? 1 : aspect;
@@ -326,13 +332,15 @@ export default function ImageCropper() {
   return (
     <div className="space-y-6">
       {!previewUrl ? (
-        <ImageDropzone
-          previewUrl={null}
-          fileName={null}
-          onFileSelect={handleFileSelect}
-        />
+        <ToolPanel title="Image" onClear={clearInputs}>
+          <ImageDropzone
+            previewUrl={null}
+            fileName={null}
+            onFileSelect={handleFileSelect}
+          />
+        </ToolPanel>
       ) : (
-        <ToolPanel title="Adjust crop">
+        <ToolPanel title="Adjust crop" onClear={clearInputs}>
           <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
             Drag the {isCircle ? "circle" : "box"} to move it. Use the corners
             and edges to resize. The bright area is what you&apos;ll keep

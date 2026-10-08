@@ -62,9 +62,16 @@ export default function BreakEvenCalculator() {
     };
   }, [fixedCosts, variableCost, pricePerUnit, unitsSold]);
 
+  function clearInputs() {
+    setFixedCosts("");
+    setVariableCost("");
+    setPricePerUnit("");
+    setUnitsSold("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Cost structure">
+      <ToolPanel title="Cost structure" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-3">
           <FinanceField label="Fixed costs ($)">
             <input

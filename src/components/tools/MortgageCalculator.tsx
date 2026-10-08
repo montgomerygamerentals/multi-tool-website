@@ -62,9 +62,18 @@ export default function MortgageCalculator() {
     };
   }, [homePrice, downPayment, rate, years, propertyTax, insurance]);
 
+  function clearInputs() {
+    setHomePrice("");
+    setDownPayment("");
+    setRate("");
+    setYears("");
+    setPropertyTax("");
+    setInsurance("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Mortgage details">
+      <ToolPanel title="Mortgage details" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <FinanceField label="Home price ($)">
             <input

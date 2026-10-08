@@ -47,7 +47,7 @@ function createEmojiRain(emojis: string[], count = 40): RainEmoji[] {
 }
 
 export default function DiceRoller() {
-  const [diceCount, setDiceCount] = useState(2);
+  const [diceCount, setDiceCount] = useState("");
   const [sides, setSides] = useState(6);
   const [displayValues, setDisplayValues] = useState<number[]>(() =>
     Array.from({ length: 2 }, () => 1),
@@ -88,8 +88,10 @@ export default function DiceRoller() {
   }, []);
 
   useEffect(() => {
+    const count = Number(diceCount);
+    const len = Number.isFinite(count) && count > 0 ? Math.min(10, Math.floor(count)) : 0;
     setDisplayValues((prev) =>
-      Array.from({ length: diceCount }, (_, i) => {
+      Array.from({ length: len }, (_, i) => {
         const value = prev[i] ?? 1;
         return Math.min(value, sides);
       }),
@@ -100,18 +102,22 @@ export default function DiceRoller() {
   const roll = useCallback(() => {
     clearTimers();
 
-    const final = Array.from({ length: diceCount }, () => rollDie(sides));
+    const count = Number(diceCount);
+    if (!Number.isFinite(count) || count < 1) return;
+    const diceN = Math.min(10, Math.floor(count));
+
+    const final = Array.from({ length: diceN }, () => rollDie(sides));
     const rollSides = sides;
 
     setPhase("rolling");
     setFinalValues([]);
     setDisplayValues(
-      Array.from({ length: diceCount }, () => rollDie(sides)),
+      Array.from({ length: diceN }, () => rollDie(sides)),
     );
 
     intervalRef.current = setInterval(() => {
       setDisplayValues(
-        Array.from({ length: diceCount }, () => rollDie(sides)),
+        Array.from({ length: diceN }, () => rollDie(sides)),
       );
     }, 80);
 
@@ -159,6 +165,20 @@ export default function DiceRoller() {
     finalValues[0] === finalValues[1];
   const isSnakeEyes = isDoubles && finalValues[0] === 1;
 
+  const clearInputs = useCallback(() => {
+    clearTimers();
+    if (rainTimeoutRef.current) {
+      clearTimeout(rainTimeoutRef.current);
+      rainTimeoutRef.current = null;
+    }
+    setRain([]);
+    setDiceCount("");
+    setDisplayValues([]);
+    setFinalValues([]);
+    setPhase("idle");
+    setHistory([]);
+  }, [clearTimers]);
+
   return (
     <div className="space-y-6">
       {rain.length > 0 && (
@@ -186,7 +206,7 @@ export default function DiceRoller() {
         </div>
       )}
 
-      <ToolPanel title="Settings">
+      <ToolPanel title="Settings" onClear={clearInputs}>
         <div className="mb-4 grid grid-cols-2 gap-4">
           <div>
             <label className="mb-1 block text-sm font-medium">Number of dice</label>
@@ -195,7 +215,7 @@ export default function DiceRoller() {
               value={diceCount}
               min={1}
               max={10}
-              onChange={(e) => setDiceCount(Number(e.target.value))}
+              onChange={(e) => setDiceCount(e.target.value)}
               disabled={isRolling}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
             />

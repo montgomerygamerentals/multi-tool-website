@@ -24,6 +24,8 @@ export default function WordCounter() {
     return { words, characters, charactersNoSpaces, paragraphs, sentences, readingTime };
   }, [text]);
 
+  const clearInputs = () => setText("");
+
   const statItems = [
     { label: "Words", value: stats.words },
     { label: "Characters", value: stats.characters },
@@ -35,13 +37,15 @@ export default function WordCounter() {
 
   return (
     <div className="space-y-6">
-      <textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        rows={12}
-        placeholder="Paste or type your text here…"
-        className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-      />
+      <ToolPanel title="Your text" onClear={clearInputs}>
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          rows={12}
+          placeholder="Paste or type your text here…"
+          className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        />
+      </ToolPanel>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {statItems.map((item) => (
           <ToolPanel key={item.label}>

@@ -278,7 +278,7 @@ export async function renderEmojiToCanvas(
   return canvas;
 }
 
-function encodeIco(images: { size: number; data: ArrayBuffer }[]): ArrayBuffer {
+export function encodeIco(images: { size: number; data: ArrayBuffer }[]): ArrayBuffer {
   const count = images.length;
   const headerSize = 6 + count * 16;
   let offset = headerSize;
@@ -310,6 +310,18 @@ function encodeIco(images: { size: number; data: ArrayBuffer }[]): ArrayBuffer {
 export interface FaviconPackageResult {
   blobs: Map<string, ArrayBuffer>;
   previewUrls: Map<string, string>;
+}
+
+export async function buildIcoFromCanvas(
+  sourceCanvas: HTMLCanvasElement,
+): Promise<ArrayBuffer> {
+  const icoImages = await Promise.all(
+    ICO_SIZES.map(async (size) => ({
+      size,
+      data: await canvasToPngBlob(await resizeCanvas(sourceCanvas, size)),
+    })),
+  );
+  return encodeIco(icoImages);
 }
 
 export async function generateFaviconPackage(

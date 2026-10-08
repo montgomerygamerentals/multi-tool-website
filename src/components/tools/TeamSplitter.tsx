@@ -84,7 +84,7 @@ export default function TeamSplitter() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const clearList = () => {
+  const clearInputs = () => {
     setInput("");
     setTeams([]);
     setCopied(false);
@@ -92,7 +92,7 @@ export default function TeamSplitter() {
 
   return (
     <div className="space-y-6">
-      <ToolPanel title="Your list">
+      <ToolPanel title="Your list" onClear={clearInputs}>
         <label htmlFor="team-splitter-input" className="mb-2 block text-sm text-zinc-600 dark:text-zinc-400">
           Enter one name per line.
         </label>
@@ -108,20 +108,9 @@ export default function TeamSplitter() {
           placeholder={"Alice\nBob\nCharlie\nDiana"}
           className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 font-mono text-sm dark:border-zinc-700 dark:bg-zinc-800"
         />
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm">
-          <span className="text-zinc-500">
-            {items.length} name{items.length !== 1 ? "s" : ""} ready
-          </span>
-          {input && (
-            <button
-              type="button"
-              onClick={clearList}
-              className="font-medium text-zinc-500 transition-colors hover:text-red-600 dark:hover:text-red-400"
-            >
-              Clear list
-            </button>
-          )}
-        </div>
+        <p className="mt-3 text-sm text-zinc-500">
+          {items.length} name{items.length !== 1 ? "s" : ""} ready
+        </p>
         {items.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
             {items.map((item, index) => (

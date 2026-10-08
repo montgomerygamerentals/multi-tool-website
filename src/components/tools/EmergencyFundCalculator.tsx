@@ -44,9 +44,15 @@ export default function EmergencyFundCalculator() {
     setMonthsCoverage(String(months));
   };
 
+  function clearInputs() {
+    setMonthlyExpenses("");
+    setMonthsCoverage("");
+    setCurrentSavings("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Emergency fund details">
+      <ToolPanel title="Emergency fund details" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <FinanceField label="Monthly essential expenses ($)">
             <input

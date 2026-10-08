@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import ToolPanel from "@/components/ui/ToolPanel";
+import { sanitizeHexColor } from "@/lib/numeric-input";
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const match = hex.replace("#", "").match(/^([0-9a-f]{3}|[0-9a-f]{6})$/i);
@@ -73,8 +74,9 @@ export default function ColorConverter() {
   };
 
   const updateFromHex = (value: string) => {
-    setHex(value);
-    const rgb = hexToRgb(value);
+    const sanitized = sanitizeHexColor(value);
+    setHex(sanitized);
+    const rgb = hexToRgb(sanitized);
     if (rgb) {
       setR(rgb.r);
       setG(rgb.g);
@@ -87,6 +89,14 @@ export default function ColorConverter() {
     setG(ng);
     setB(nb);
     setHex(rgbToHex(nr, ng, nb));
+  };
+
+  const clearInputs = () => {
+    setHex("");
+    setR(0);
+    setG(0);
+    setB(0);
+    setCopiedLabel(null);
   };
 
   const values = [
@@ -102,7 +112,7 @@ export default function ColorConverter() {
         style={{ backgroundColor: hex }}
       />
       <div className="grid gap-6 lg:grid-cols-2">
-        <ToolPanel title="HEX">
+        <ToolPanel title="HEX" onClear={clearInputs}>
           <input
             type="text"
             value={hex}

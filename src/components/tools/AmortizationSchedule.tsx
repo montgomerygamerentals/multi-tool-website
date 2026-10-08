@@ -14,6 +14,7 @@ import {
   monthlyLoanPayment,
   buildAmortizationSchedule,
 } from "@/lib/finance";
+import { sanitizeDecimal } from "@/lib/numeric-input";
 
 export default function AmortizationSchedule() {
   const [principal, setPrincipal] = useState("250000");
@@ -54,16 +55,22 @@ export default function AmortizationSchedule() {
     URL.revokeObjectURL(url);
   }, [result]);
 
+  function clearInputs() {
+    setPrincipal("");
+    setRate("");
+    setYears("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Loan details">
+      <ToolPanel title="Loan details" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-3">
           <FinanceField label="Principal ($)">
             <input
               type="text"
               inputMode="decimal"
               value={principal}
-              onChange={(e) => setPrincipal(e.target.value)}
+              onChange={(e) => setPrincipal(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>
@@ -72,7 +79,7 @@ export default function AmortizationSchedule() {
               type="text"
               inputMode="decimal"
               value={rate}
-              onChange={(e) => setRate(e.target.value)}
+              onChange={(e) => setRate(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>
@@ -81,7 +88,7 @@ export default function AmortizationSchedule() {
               type="text"
               inputMode="decimal"
               value={years}
-              onChange={(e) => setYears(e.target.value)}
+              onChange={(e) => setYears(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>

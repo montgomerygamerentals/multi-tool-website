@@ -47,9 +47,15 @@ export default function RoiCalculator() {
     return { finalValue, gain, roiPct, annualizedRoiPct };
   }, [initial, valueMode, finalOrGain, years]);
 
+  function clearInputs() {
+    setInitial("");
+    setFinalOrGain("");
+    setYears("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Investment details">
+      <ToolPanel title="Investment details" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <FinanceField label="Initial investment ($)">
             <input

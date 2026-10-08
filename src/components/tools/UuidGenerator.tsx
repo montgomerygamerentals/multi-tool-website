@@ -16,7 +16,7 @@ function makeUuid(): string {
 }
 
 export default function UuidGenerator() {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState("");
   const [uppercase, setUppercase] = useState(false);
   const [hyphens, setHyphens] = useState(true);
   const [uuids, setUuids] = useState<string[]>([]);
@@ -34,7 +34,9 @@ export default function UuidGenerator() {
   );
 
   const generate = () => {
-    const n = Math.min(100, Math.max(1, count));
+    const parsed = Number(count);
+    if (!Number.isFinite(parsed) || parsed < 1) return;
+    const n = Math.min(100, Math.max(1, parsed));
     setUuids(Array.from({ length: n }, () => format(makeUuid())));
     setCopiedAll(false);
     setCopiedIndex(null);
@@ -48,6 +50,15 @@ export default function UuidGenerator() {
     setTimeout(() => setCopiedAll(false), 1500);
   };
 
+  const clearInputs = () => {
+    setCount("");
+    setUppercase(false);
+    setHyphens(false);
+    setUuids([]);
+    setCopiedAll(false);
+    setCopiedIndex(null);
+  };
+
   const copyOne = async (id: string, index: number) => {
     await navigator.clipboard.writeText(id);
     setCopiedIndex(index);
@@ -59,7 +70,7 @@ export default function UuidGenerator() {
 
   return (
     <div className="space-y-6">
-      <ToolPanel title="Options">
+      <ToolPanel title="Options" onClear={clearInputs}>
         <label className="mb-4 block text-sm">
           <span className="mb-1 block font-medium">How many (1–100)</span>
           <input
@@ -67,7 +78,7 @@ export default function UuidGenerator() {
             min={1}
             max={100}
             value={count}
-            onChange={(e) => setCount(Number(e.target.value))}
+            onChange={(e) => setCount(e.target.value)}
             className="w-full rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-800"
           />
         </label>

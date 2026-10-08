@@ -54,6 +54,15 @@ export default function ExifViewer() {
     }
   };
 
+  const clearInputs = () => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setFileName("");
+    setPreviewUrl("");
+    setRows([]);
+    setError("");
+    setBusy(false);
+  };
+
   const downloadStripped = async () => {
     if (!previewUrl) return;
     setBusy(true);
@@ -94,7 +103,7 @@ export default function ExifViewer() {
 
   return (
     <div className="space-y-6">
-      <ToolPanel title="Image">
+      <ToolPanel title="Image" onClear={clearInputs}>
         <input
           type="file"
           accept="image/*"

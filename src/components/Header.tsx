@@ -2,6 +2,7 @@ import Link from "next/link";
 import HeaderNav from "@/components/HeaderNav";
 import ThemeToggle from "@/components/ThemeToggle";
 import ToolSearch from "@/components/ToolSearch";
+import { SITE_NAME } from "@/lib/site";
 
 export default function Header() {
   return (
@@ -9,10 +10,10 @@ export default function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 pr-14 sm:gap-4 sm:px-6 sm:pr-16">
         <Link href="/" className="flex shrink-0 items-center gap-2.5">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-lg font-bold text-white">
-            T
+            F
           </span>
           <span className="hidden text-lg font-semibold tracking-tight text-zinc-900 sm:inline dark:text-zinc-50">
-            ToolBox
+            {SITE_NAME}
           </span>
         </Link>
         <div className="min-w-[12rem] flex-1 basis-64 sm:min-w-[18rem] sm:basis-80 md:min-w-[22rem]">

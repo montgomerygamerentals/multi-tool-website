@@ -13,6 +13,7 @@ import {
   formatUsd,
   parseAmount,
 } from "@/lib/finance";
+import { sanitizeDecimal } from "@/lib/numeric-input";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -46,9 +47,16 @@ export default function InflationCalculator() {
     };
   }, [amount, startYear, endYear, inflationRate]);
 
+  function clearInputs() {
+    setAmount("");
+    setStartYear("");
+    setEndYear("");
+    setInflationRate("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Inflation calculator">
+      <ToolPanel title="Inflation calculator" onClear={clearInputs}>
         <p className="mb-4 text-sm text-zinc-500">
           Compound purchasing power using an average annual inflation rate. If the end year is
           before the start year, the amount is deflated.
@@ -59,7 +67,7 @@ export default function InflationCalculator() {
               type="text"
               inputMode="decimal"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>
@@ -68,7 +76,7 @@ export default function InflationCalculator() {
               type="text"
               inputMode="decimal"
               value={inflationRate}
-              onChange={(e) => setInflationRate(e.target.value)}
+              onChange={(e) => setInflationRate(sanitizeDecimal(e.target.value))}
               className={financeInputClass}
             />
           </FinanceField>

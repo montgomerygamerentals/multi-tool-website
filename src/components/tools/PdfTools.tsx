@@ -61,7 +61,7 @@ export default function PdfTools() {
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [splitPage, setSplitPage] = useState(1);
+  const [splitPage, setSplitPage] = useState("");
   const [pageCount, setPageCount] = useState(0);
 
   const accept = mode === "images" ? "image/png,image/jpeg,image/jpg,image/webp" : "application/pdf";
@@ -80,7 +80,7 @@ export default function PdfTools() {
           const doc = await PDFDocument.load(bytes);
           const count = doc.getPageCount();
           setPageCount(count);
-          setSplitPage(1);
+          setSplitPage("");
         } catch {
           setError("Could not read that PDF.");
           setPageCount(0);
@@ -103,6 +103,12 @@ export default function PdfTools() {
     setFiles([]);
     setPageCount(0);
     setError("");
+  };
+
+  const clearInputs = () => {
+    clearFiles();
+    setSplitPage("");
+    setBusy(false);
   };
 
   const modes = useMemo(
@@ -132,13 +138,14 @@ export default function PdfTools() {
         if (!files[0]) throw new Error("Choose a PDF to split.");
         const src = await PDFDocument.load(await files[0].arrayBuffer());
         const count = src.getPageCount();
-        if (splitPage < 1 || splitPage > count) {
+        const pageNum = Number(splitPage);
+        if (!Number.isFinite(pageNum) || pageNum < 1 || pageNum > count) {
           throw new Error(`Page must be between 1 and ${count}.`);
         }
         const out = await PDFDocument.create();
-        const [page] = await out.copyPages(src, [splitPage - 1]);
+        const [page] = await out.copyPages(src, [pageNum - 1]);
         out.addPage(page);
-        downloadBytes(await out.save(), `page-${splitPage}.pdf`);
+        downloadBytes(await out.save(), `page-${pageNum}.pdf`);
       } else {
         if (!files.length) throw new Error("Add one or more images.");
         const doc = await PDFDocument.create();
@@ -205,7 +212,7 @@ export default function PdfTools() {
         ))}
       </div>
 
-      <ToolPanel title="Files">
+      <ToolPanel title="Files" onClear={clearInputs}>
         <label className="mb-4 block">
           <span className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
             {mode === "merge"
@@ -276,7 +283,7 @@ export default function PdfTools() {
               min={1}
               max={pageCount}
               value={splitPage}
-              onChange={(e) => setSplitPage(Number(e.target.value))}
+              onChange={(e) => setSplitPage(e.target.value)}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-800"
             />
           </label>

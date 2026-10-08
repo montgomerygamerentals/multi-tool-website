@@ -57,9 +57,16 @@ export default function RetirementCalculator() {
     return { projectedBalance, totalContributions, growth };
   }, [currentSavings, monthlyContribution, annualReturn, years]);
 
+  function clearInputs() {
+    setCurrentSavings("");
+    setMonthlyContribution("");
+    setAnnualReturn("");
+    setYears("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Retirement plan">
+      <ToolPanel title="Retirement plan" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <FinanceField label="Current savings ($)">
             <input

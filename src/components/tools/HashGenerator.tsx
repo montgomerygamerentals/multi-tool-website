@@ -53,6 +53,14 @@ export default function HashGenerator() {
     }
   }, [algorithm, fileBuffer, mode, text]);
 
+  const clearInputs = () => {
+    setText("");
+    setFileName("");
+    setFileBuffer(null);
+    setHash("");
+    setCopied(false);
+  };
+
   const copy = async () => {
     if (!hash) return;
     await navigator.clipboard.writeText(hash);
@@ -62,7 +70,7 @@ export default function HashGenerator() {
 
   return (
     <div className="space-y-6">
-      <ToolPanel title="Input">
+      <ToolPanel title="Input" onClear={clearInputs}>
         <div className="mb-4 flex gap-2">
           {(["text", "file"] as const).map((id) => (
             <button

@@ -3,17 +3,22 @@
 import { useCallback, useRef, useState } from "react";
 import ImageDropzone from "@/components/tools/shared/ImageDropzone";
 import ToolPanel from "@/components/ui/ToolPanel";
+import { buildIcoFromCanvas } from "@/lib/favicon/package";
 
-type OutputFormat = "image/png" | "image/jpeg" | "image/webp";
+export type OutputFormat = "image/png" | "image/jpeg" | "image/webp" | "image/x-icon";
 
 interface FormatConverterProps {
   defaultOutputFormat: OutputFormat;
   accept?: string;
   lockFormat?: boolean;
   label?: string;
+  /** Pre-process HEIC/HEIF uploads before drawing to canvas */
+  heicSource?: boolean;
+  /** Load SVG via blob URL (rasterize to PNG/JPEG/WebP) */
+  svgSource?: boolean;
 }
 
-const formatExt: Record<OutputFormat, string> = {
+const formatExt: Record<Exclude<OutputFormat, "image/x-icon">, string> = {
   "image/png": "png",
   "image/jpeg": "jpg",
   "image/webp": "webp",
@@ -29,11 +34,40 @@ async function loadImage(url: string): Promise<HTMLImageElement> {
   return img;
 }
 
+async function fileToDrawableUrl(
+  file: File,
+  previewUrl: string,
+  opts: { heicSource?: boolean; svgSource?: boolean },
+): Promise<string> {
+  const name = file.name.toLowerCase();
+  const isHeic =
+    opts.heicSource ||
+    file.type === "image/heic" ||
+    file.type === "image/heif" ||
+    name.endsWith(".heic") ||
+    name.endsWith(".heif");
+
+  if (isHeic) {
+    const heic2any = (await import("heic2any")).default;
+    const result = await heic2any({ blob: file, toType: "image/png" });
+    const blob = Array.isArray(result) ? result[0] : result;
+    return URL.createObjectURL(blob as Blob);
+  }
+
+  if (opts.svgSource || file.type === "image/svg+xml" || name.endsWith(".svg")) {
+    return previewUrl;
+  }
+
+  return previewUrl;
+}
+
 export default function FormatConverter({
   defaultOutputFormat,
   accept = "image/*",
   lockFormat = true,
   label,
+  heicSource = false,
+  svgSource = false,
 }: FormatConverterProps) {
   const [sourceFile, setSourceFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -42,36 +76,67 @@ export default function FormatConverter({
   const [isConverting, setIsConverting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const previewRef = useRef<string | null>(null);
+  const decodeUrlRef = useRef<string | null>(null);
 
-  const handleFileSelect = useCallback((file: File | null) => {
-    if (previewRef.current) URL.revokeObjectURL(previewRef.current);
-    setError(null);
-
-    if (!file) {
-      setSourceFile(null);
-      setPreviewUrl(null);
-      previewRef.current = null;
-      return;
+  const revokeDecodeUrl = useCallback(() => {
+    if (decodeUrlRef.current) {
+      URL.revokeObjectURL(decodeUrlRef.current);
+      decodeUrlRef.current = null;
     }
-
-    if (!file.type.startsWith("image/")) {
-      setError("Please select a valid image file.");
-      return;
-    }
-
-    const url = URL.createObjectURL(file);
-    previewRef.current = url;
-    setSourceFile(file);
-    setPreviewUrl(url);
   }, []);
+
+  const handleFileSelect = useCallback(
+    (file: File | null) => {
+      if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+      revokeDecodeUrl();
+      setError(null);
+
+      if (!file) {
+        setSourceFile(null);
+        setPreviewUrl(null);
+        previewRef.current = null;
+        return;
+      }
+
+      const name = file.name.toLowerCase();
+      const okType =
+        file.type.startsWith("image/") ||
+        heicSource ||
+        svgSource ||
+        name.endsWith(".heic") ||
+        name.endsWith(".heif") ||
+        name.endsWith(".svg");
+
+      if (!okType) {
+        setError("Please select a valid image file.");
+        return;
+      }
+
+      const url = URL.createObjectURL(file);
+      previewRef.current = url;
+      setSourceFile(file);
+      setPreviewUrl(url);
+    },
+    [heicSource, svgSource, revokeDecodeUrl],
+  );
 
   const convert = useCallback(async () => {
     if (!sourceFile || !previewUrl) return;
     setIsConverting(true);
     setError(null);
 
+    let drawableUrl: string | null = null;
+
     try {
-      const img = await loadImage(previewUrl);
+      drawableUrl = await fileToDrawableUrl(sourceFile, previewUrl, {
+        heicSource,
+        svgSource,
+      });
+      if (drawableUrl !== previewUrl) {
+        decodeUrlRef.current = drawableUrl;
+      }
+
+      const img = await loadImage(drawableUrl);
       const canvas = document.createElement("canvas");
       canvas.width = img.naturalWidth;
       canvas.height = img.naturalHeight;
@@ -84,6 +149,19 @@ export default function FormatConverter({
       }
       ctx.drawImage(img, 0, 0);
 
+      const baseName = sourceFile.name.replace(/\.[^.]+$/, "");
+
+      if (outputFormat === "image/x-icon") {
+        const ico = await buildIcoFromCanvas(canvas);
+        const url = URL.createObjectURL(new Blob([ico], { type: "image/x-icon" }));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${baseName}.ico`;
+        a.click();
+        URL.revokeObjectURL(url);
+        return;
+      }
+
       const blob = await new Promise<Blob | null>((resolve) => {
         canvas.toBlob(
           (b) => resolve(b),
@@ -91,40 +169,71 @@ export default function FormatConverter({
           outputFormat === "image/png" ? undefined : quality,
         );
       });
-      if (!blob) throw new Error("Conversion failed");
+      if (!blob) {
+        throw new Error(
+          "This browser cannot encode that format. Try PNG or a different source image.",
+        );
+      }
 
       const ext = formatExt[outputFormat];
-      const baseName = sourceFile.name.replace(/\.[^.]+$/, "");
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = `${baseName}.${ext}`;
       a.click();
       URL.revokeObjectURL(url);
-    } catch {
-      setError("Conversion failed. Please try again.");
+    } catch (e) {
+      const msg =
+        e instanceof Error
+          ? e.message
+          : "Conversion failed. Your browser may not decode this format (AVIF/TIFF need native support).";
+      setError(msg.includes("Failed") ? msg : "Conversion failed. Please try another file or format.");
     } finally {
+      revokeDecodeUrl();
       setIsConverting(false);
     }
-  }, [sourceFile, previewUrl, outputFormat, quality]);
+  }, [
+    sourceFile,
+    previewUrl,
+    outputFormat,
+    quality,
+    heicSource,
+    svgSource,
+    revokeDecodeUrl,
+  ]);
+
+  const clearInputs = useCallback(() => {
+    handleFileSelect(null);
+    setQuality(0.1);
+    setIsConverting(false);
+  }, [handleFileSelect]);
+
+  const selectableFormats: OutputFormat[] =
+    defaultOutputFormat === "image/x-icon"
+      ? ["image/x-icon"]
+      : lockFormat
+        ? [defaultOutputFormat]
+        : ["image/png", "image/jpeg", "image/webp"];
 
   return (
     <div className="space-y-6">
-      <ImageDropzone
-        previewUrl={previewUrl}
-        fileName={sourceFile?.name ?? null}
-        onFileSelect={handleFileSelect}
-        accept={accept}
-      />
+      <ToolPanel title="Image" onClear={clearInputs}>
+        <ImageDropzone
+          previewUrl={previewUrl}
+          fileName={sourceFile?.name ?? null}
+          onFileSelect={handleFileSelect}
+          accept={accept}
+        />
+      </ToolPanel>
       {error && (
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 dark:bg-red-950/30 dark:text-red-400">
           {error}
         </p>
       )}
       <ToolPanel title={label ?? "Output Settings"}>
-        {!lockFormat && (
+        {!lockFormat && selectableFormats.length > 1 && (
           <div className="mb-4 flex flex-wrap gap-2">
-            {(["image/png", "image/jpeg", "image/webp"] as OutputFormat[]).map((f) => (
+            {selectableFormats.map((f) => (
               <button
                 key={f}
                 type="button"
@@ -135,12 +244,12 @@ export default function FormatConverter({
                     : "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
                 }`}
               >
-                {formatExt[f].toUpperCase()}
+                {f === "image/x-icon" ? "ICO" : formatExt[f].toUpperCase()}
               </button>
             ))}
           </div>
         )}
-        {outputFormat !== "image/png" && (
+        {outputFormat !== "image/png" && outputFormat !== "image/x-icon" && (
           <div className="mb-4">
             <label className="mb-2 block text-sm font-medium">
               Quality: {Math.round(quality * 100)}%

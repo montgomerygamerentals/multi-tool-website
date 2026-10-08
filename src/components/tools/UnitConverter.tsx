@@ -74,6 +74,10 @@ export default function UnitConverter() {
     setToUnit(ids[1]?.id ?? ids[0].id);
   };
 
+  const clearInputs = () => {
+    setValue("");
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-2">
@@ -92,7 +96,7 @@ export default function UnitConverter() {
           </button>
         ))}
       </div>
-      <ToolPanel title="Convert">
+      <ToolPanel title="Convert" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="mb-1 block text-sm font-medium">From</label>

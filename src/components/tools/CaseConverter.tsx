@@ -51,15 +51,22 @@ export default function CaseConverter() {
     setOutput(fn(input));
   };
 
+  const clearInputs = () => {
+    setInput("");
+    setOutput("");
+  };
+
   return (
     <div className="space-y-6">
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        rows={6}
-        placeholder="Enter text to convert…"
-        className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-      />
+      <ToolPanel title="Input" onClear={clearInputs}>
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          rows={6}
+          placeholder="Enter text to convert…"
+          className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        />
+      </ToolPanel>
       <ToolPanel title="Convert to">
         <div className="flex flex-wrap gap-2">
           {converters.map((c) => (

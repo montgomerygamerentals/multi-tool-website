@@ -21,15 +21,15 @@ export default function AboutPage() {
         About {SITE_NAME}
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
-        {SITE_NAME} is the public name of {SITE_ALTERNATE_NAME} (
+        {SITE_NAME} (also written {SITE_ALTERNATE_NAME}) is a site of{" "}
+        {tools.length} small utilities that run in your web browser at{" "}
         <a
           href={SITE_URL}
           className="font-medium text-indigo-600 hover:underline dark:text-indigo-400"
         >
           fastfreetools.net
         </a>
-        ), a site of {tools.length} small utilities that run in your web
-        browser. It is operated by {SITE_LEGAL_NAME}.
+        . It is operated by {SITE_LEGAL_NAME}.
       </p>
       <h2 className="mt-10 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
         Why these pages exist

@@ -39,9 +39,14 @@ export default function SalesTaxCalculator() {
     return { taxAmount, subtotal, total: value };
   }, [mode, amount, taxRate]);
 
+  function clearInputs() {
+    setAmount("");
+    setTaxRate("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Sales tax">
+      <ToolPanel title="Sales tax" onClear={clearInputs}>
         <div className="mb-4">
           <p className="mb-2 text-sm font-medium">Calculation mode</p>
           <div className="flex flex-wrap gap-2">

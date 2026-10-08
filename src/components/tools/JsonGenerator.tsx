@@ -202,9 +202,17 @@ export default function JsonGenerator() {
     window.setTimeout(() => setCopied(false), 2000);
   };
 
+  const clearInputs = () => {
+    setFields([{ id: crypto.randomUUID(), key: "", type: "string" }]);
+    setCount(1);
+    setPretty(false);
+    setRevision(0);
+    setCopied(false);
+  };
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Schema">
+      <ToolPanel title="Schema" onClear={clearInputs}>
         <div className="space-y-3">
           {fields.map((field) => (
             <div key={field.id} className="flex flex-wrap items-center gap-2">

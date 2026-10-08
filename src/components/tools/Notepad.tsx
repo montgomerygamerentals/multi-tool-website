@@ -84,7 +84,7 @@ export default function Notepad() {
 
   return (
     <div className="space-y-4">
-      <ToolPanel>
+      <ToolPanel title="Notes" onClear={clear}>
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
             Notes autosave in this browser.
@@ -112,14 +112,6 @@ export default function Notepad() {
               className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
             >
               Download .txt
-            </button>
-            <button
-              type="button"
-              onClick={clear}
-              disabled={!text}
-              className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-red-800 dark:hover:bg-red-950/30 dark:hover:text-red-400"
-            >
-              Clear
             </button>
           </div>
         </div>

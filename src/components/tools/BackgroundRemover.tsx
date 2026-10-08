@@ -332,6 +332,13 @@ export default function BackgroundRemover() {
     revokeResult();
   };
 
+  const clearInputs = useCallback(() => {
+    handleFileSelect(null);
+    setTolerance(0);
+    setSoftEdges(false);
+    setIsProcessing(false);
+  }, [handleFileSelect]);
+
   const idleBtn =
     "rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700";
   const activeBtn =
@@ -339,12 +346,14 @@ export default function BackgroundRemover() {
 
   return (
     <div className="space-y-6">
-      <ImageDropzone
-        previewUrl={null}
-        fileName={sourceFile?.name ?? null}
-        onFileSelect={handleFileSelect}
-        hint="PNG, JPEG, WebP — best with solid or simple backgrounds"
-      />
+      <ToolPanel title="Image" onClear={clearInputs}>
+        <ImageDropzone
+          previewUrl={null}
+          fileName={sourceFile?.name ?? null}
+          onFileSelect={handleFileSelect}
+          hint="PNG, JPEG, WebP — best with solid or simple backgrounds"
+        />
+      </ToolPanel>
 
       {previewUrl && (
         <div className="grid gap-4 sm:grid-cols-2">

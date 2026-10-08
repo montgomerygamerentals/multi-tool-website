@@ -26,8 +26,8 @@ export default function ImageResizer() {
   const [sourceFile, setSourceFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [naturalSize, setNaturalSize] = useState({ w: 0, h: 0 });
-  const [width, setWidth] = useState(800);
-  const [height, setHeight] = useState(600);
+  const [width, setWidth] = useState("");
+  const [height, setHeight] = useState("");
   const [lockAspect, setLockAspect] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,24 +57,26 @@ export default function ImageResizer() {
     try {
       const img = await loadImage(url);
       setNaturalSize({ w: img.naturalWidth, h: img.naturalHeight });
-      setWidth(img.naturalWidth);
-      setHeight(img.naturalHeight);
+      setWidth(String(img.naturalWidth));
+      setHeight(String(img.naturalHeight));
     } catch {
       setError("Failed to load image.");
     }
   }, []);
 
-  const handleWidthChange = (w: number) => {
-    setWidth(w);
-    if (lockAspect && naturalSize.w > 0) {
-      setHeight(Math.round((w / naturalSize.w) * naturalSize.h));
+  const handleWidthChange = (raw: string) => {
+    setWidth(raw);
+    const w = Number(raw);
+    if (lockAspect && naturalSize.w > 0 && Number.isFinite(w)) {
+      setHeight(String(Math.round((w / naturalSize.w) * naturalSize.h)));
     }
   };
 
-  const handleHeightChange = (h: number) => {
-    setHeight(h);
-    if (lockAspect && naturalSize.h > 0) {
-      setWidth(Math.round((h / naturalSize.h) * naturalSize.w));
+  const handleHeightChange = (raw: string) => {
+    setHeight(raw);
+    const h = Number(raw);
+    if (lockAspect && naturalSize.h > 0 && Number.isFinite(h)) {
+      setWidth(String(Math.round((h / naturalSize.h) * naturalSize.w)));
     }
   };
 
@@ -86,11 +88,16 @@ export default function ImageResizer() {
     try {
       const img = await loadImage(previewUrl);
       const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
+      const w = Number(width);
+      const h = Number(height);
+      if (!Number.isFinite(w) || !Number.isFinite(h) || w < 1 || h < 1) {
+        throw new Error("Enter valid width and height.");
+      }
+      canvas.width = w;
+      canvas.height = h;
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Canvas not supported");
-      ctx.drawImage(img, 0, 0, width, height);
+      ctx.drawImage(img, 0, 0, w, h);
 
       const blob = await new Promise<Blob | null>((resolve) => {
         canvas.toBlob((b) => resolve(b), "image/png");
@@ -101,7 +108,7 @@ export default function ImageResizer() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${baseName}-${width}x${height}.png`;
+      a.download = `${baseName}-${w}x${h}.png`;
       a.click();
       URL.revokeObjectURL(url);
     } catch {
@@ -111,13 +118,24 @@ export default function ImageResizer() {
     }
   }, [sourceFile, previewUrl, width, height]);
 
+  const clearInputs = useCallback(() => {
+    handleFileSelect(null);
+    setNaturalSize({ w: 0, h: 0 });
+    setWidth("");
+    setHeight("");
+    setLockAspect(true);
+    setIsProcessing(false);
+  }, [handleFileSelect]);
+
   return (
     <div className="space-y-6">
-      <ImageDropzone
-        previewUrl={previewUrl}
-        fileName={sourceFile?.name ?? null}
-        onFileSelect={handleFileSelect}
-      />
+      <ToolPanel title="Image" onClear={clearInputs}>
+        <ImageDropzone
+          previewUrl={previewUrl}
+          fileName={sourceFile?.name ?? null}
+          onFileSelect={handleFileSelect}
+        />
+      </ToolPanel>
       {naturalSize.w > 0 && (
         <p className="text-center text-sm text-zinc-500">
           Original size: {naturalSize.w} × {naturalSize.h} px
@@ -135,8 +153,8 @@ export default function ImageResizer() {
               key={p.label}
               type="button"
               onClick={() => {
-                setWidth(p.width);
-                setHeight(p.height);
+                setWidth(String(p.width));
+                setHeight(String(p.height));
               }}
               className="rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
             >
@@ -151,7 +169,7 @@ export default function ImageResizer() {
               type="number"
               value={width}
               min={1}
-              onChange={(e) => handleWidthChange(Number(e.target.value))}
+              onChange={(e) => handleWidthChange(e.target.value)}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             />
           </div>
@@ -161,7 +179,7 @@ export default function ImageResizer() {
               type="number"
               value={height}
               min={1}
-              onChange={(e) => handleHeightChange(Number(e.target.value))}
+              onChange={(e) => handleHeightChange(e.target.value)}
               className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             />
           </div>

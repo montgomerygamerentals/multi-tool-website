@@ -295,9 +295,18 @@ export default function DebtPayoffCalculator() {
     );
   };
 
+  function clearInputs() {
+    setDebts([createDebt()]);
+    setExtraMonthly("");
+    setExtraYearly("");
+    setOneTimeAmount("");
+    setOneTimeMonth("");
+    setFixedTotal(false);
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Your debts">
+      <ToolPanel title="Your debts" onClear={clearInputs}>
         <p className="mb-4 text-sm text-zinc-500">
           Uses the debt avalanche method (highest interest rate first) for the
           most cost-efficient payoff order.

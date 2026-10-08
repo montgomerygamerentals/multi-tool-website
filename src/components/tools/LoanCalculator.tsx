@@ -34,9 +34,15 @@ export default function LoanCalculator() {
   const format = (n: number) =>
     n.toLocaleString(undefined, { style: "currency", currency: "USD" });
 
+  function clearInputs() {
+    setPrincipal("");
+    setRate("");
+    setYears("");
+  }
+
   return (
     <div className="space-y-6">
-      <ToolPanel title="Loan details">
+      <ToolPanel title="Loan details" onClear={clearInputs}>
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
             <label className="mb-1 block text-sm font-medium">Loan amount ($)</label>

@@ -78,13 +78,19 @@ export default function NetWorthCalculator() {
     setList((prev) => prev.filter((item) => item.id !== id));
   };
 
+  function clearInputs() {
+    setAssets([createItem("")]);
+    setLiabilities([createItem("")]);
+  }
+
   const renderList = (
     title: string,
     items: LineItem[],
     setList: (value: LineItem[] | ((prev: LineItem[]) => LineItem[])) => void,
     total: number,
+    onClear?: () => void,
   ) => (
-    <ToolPanel title={title}>
+    <ToolPanel title={title} onClear={onClear}>
       <div className="space-y-3">
         <div className="hidden grid-cols-[2fr_1.2fr_auto] gap-2 text-xs font-medium uppercase tracking-wide text-zinc-500 sm:grid">
           <span>Name</span>
@@ -150,7 +156,7 @@ export default function NetWorthCalculator() {
 
   return (
     <div className="space-y-6">
-      {renderList("Assets", assets, setAssets, result.totalAssets)}
+      {renderList("Assets", assets, setAssets, result.totalAssets, clearInputs)}
       {renderList(
         "Liabilities",
         liabilities,

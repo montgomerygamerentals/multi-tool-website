@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
-import {
-  SITE_LEGAL_NAME,
-  SITE_NAME,
-  SITE_URL,
-} from "@/lib/site";
+import { brandedTitle, SITE_LEGAL_NAME, SITE_NAME, SITE_URL } from "@/lib/site";
+
+const contactTitle = brandedTitle("Contact");
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: { absolute: contactTitle },
   description: `Contact ${SITE_NAME} (${SITE_LEGAL_NAME}) about the free tools on fastfreetools.net.`,
   alternates: { canonical: `${SITE_URL}/contact` },
+  openGraph: {
+    title: contactTitle,
+    siteName: SITE_NAME,
+    url: `${SITE_URL}/contact`,
+  },
 };
 
 export default function ContactPage() {

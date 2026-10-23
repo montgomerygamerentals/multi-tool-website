@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import ToolCard from "@/components/ToolCard";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { HOME_TITLE, SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   categoryDescriptions,
   categoryLabels,
@@ -12,7 +12,8 @@ import {
 } from "@/lib/tools";
 
 export const metadata: Metadata = {
-  description: `Free online utility tools — image converters, calculators, text utilities, and randomizers. ${tools.length}+ tools that run in your browser with no sign-up.`,
+  title: { absolute: HOME_TITLE },
+  description: `Free online utility tools from ${SITE_NAME} — image converters, calculators, text utilities, and randomizers. ${tools.length}+ tools that run in your browser with no sign-up.`,
   alternates: {
     canonical: "/",
   },
@@ -21,8 +22,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — Free Online Utilities`,
-    description: `Free online utility tools — image converters, calculators, text utilities, and randomizers. ${tools.length}+ tools that run in your browser.`,
+    title: HOME_TITLE,
+    description: `Free online utility tools from ${SITE_NAME} — image converters, calculators, text utilities, and randomizers. ${tools.length}+ tools that run in your browser.`,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_TITLE,
+    description: `Free online utility tools from ${SITE_NAME}. ${tools.length}+ tools that run in your browser.`,
   },
 };
 
@@ -37,9 +43,10 @@ export default function Home() {
           Free Online Tools
         </h1>
         <p className="mx-auto max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
-          {tools.length} utilities for images, text, everyday math, and random
-          picks. Each page is a working tool with a unique explanation and
-          worked example. Processing stays in your browser — no account.
+          {SITE_NAME} has {tools.length} utilities for images, text, everyday
+          math, and random picks. Each page is a working tool with a unique
+          explanation and worked example. Processing stays in your browser — no
+          account.
         </p>
         <p className="mt-4">
           <Link

@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { featuredToolSlugsByCategory } from "@/lib/category-featured";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { categoryHubs } from "@/lib/category-hubs";
+import { brandedTitle, SITE_NAME, SITE_URL } from "@/lib/site";
 import {
-  categoryDescriptions,
-  categoryIntros,
   categoryLabels,
   getToolBySlug,
   getToolsByCategory,
@@ -32,11 +31,13 @@ export async function generateMetadata({
   if (!isToolCategory(category)) return { title: "Category Not Found" };
 
   const label = categoryLabels[category];
-  const description = `${categoryIntros[category]} Browse every ${label.toLowerCase()} tool on ${SITE_NAME}.`;
+  const hub = categoryHubs[category];
+  const title = brandedTitle(`${label} — Free Online Tools`);
+  const description = `${hub.summary} Part of ${SITE_NAME}.`;
   const url = `${SITE_URL}/category/${category}`;
 
   return {
-    title: `${label} — Free Online Tools`,
+    title: { absolute: title },
     description,
     alternates: { canonical: url },
     openGraph: {
@@ -44,12 +45,12 @@ export async function generateMetadata({
       locale: "en_US",
       url,
       siteName: SITE_NAME,
-      title: `${label} | ${SITE_NAME}`,
+      title,
       description,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${label} | ${SITE_NAME}`,
+      title,
       description,
     },
     robots: {
@@ -70,8 +71,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!isToolCategory(category)) notFound();
 
   const label = categoryLabels[category];
+  const hub = categoryHubs[category];
   const toolsInCategory = getToolsByCategory()[category];
   const url = `${SITE_URL}/category/${category}`;
+  const pageTitle = brandedTitle(`${label} — Free Online Tools`);
   const featured = (featuredToolSlugsByCategory[category] ?? [])
     .map((slug) => getToolBySlug(slug))
     .filter((tool): tool is NonNullable<typeof tool> => Boolean(tool));
@@ -79,8 +82,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: `${label} | ${SITE_NAME}`,
-    description: categoryIntros[category],
+    name: pageTitle,
+    description: hub.lead,
     url,
     isPartOf: {
       "@type": "WebSite",
@@ -139,13 +142,52 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           {label}
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
-          {categoryIntros[category]}
+          {hub.lead}
+        </p>
+        <p className="mt-3 text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
+          {hub.supporting}
         </p>
         <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-          {categoryDescriptions[category]} {toolsInCategory.length} tools in
-          this category.
+          {toolsInCategory.length} tools in this category on {SITE_NAME}.
         </p>
       </header>
+
+      <section className="mb-12 max-w-3xl" aria-labelledby="why-local-heading">
+        <h2
+          id="why-local-heading"
+          className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50"
+        >
+          {hub.whyHeading}
+        </h2>
+        {hub.why.map((paragraph) => (
+          <p
+            key={paragraph}
+            className="mt-3 leading-relaxed text-zinc-600 dark:text-zinc-400"
+          >
+            {paragraph}
+          </p>
+        ))}
+        <ul className="mt-6 space-y-5">
+          {hub.points.map((point) => (
+            <li key={point.title}>
+              <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
+                {point.title}
+              </h3>
+              <p className="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                {point.body}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 text-sm text-zinc-500 dark:text-zinc-400">
+          <Link
+            href="/privacy"
+            className="font-medium text-indigo-600 hover:underline dark:text-indigo-400"
+          >
+            How {SITE_NAME} handles files and data
+          </Link>
+        </p>
+      </section>
 
       {featured.length > 0 ? (
         <section className="mb-12" aria-labelledby="featured-heading">

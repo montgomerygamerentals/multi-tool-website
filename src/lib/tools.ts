@@ -73,25 +73,6 @@ export const categoryDescriptions: Record<ToolCategory, string> = {
     "Invoices, signatures, memes, name ideas, calendars, and color palettes — built locally.",
 };
 
-export const categoryIntros: Record<ToolCategory, string> = {
-  "image-media":
-    "Free browser-based image tools for PNG/WebP/JPEG conversion, compression, cropping, aspect-ratio checks, EXIF inspection, favicons, and QR codes. Each converter and editor runs locally so your files are not uploaded to a remote farm. Start with the tool you need, then move to a related utility from the same category.",
-  randomizers:
-    "Fair randomizers for classrooms, giveaways, game nights, and workshops — name pickers, random number generators, dice, list shufflers, and team splitters. Paste your own list, generate a result, and keep names on this device.",
-  "text-writing":
-    "Text and developer utilities for code comparison, JSON formatting and mock data, regex testing, Markdown preview, hashes, UUIDs, Base64, word counts, and case conversion. Paste locally when drafts or configs should not leave your machine.",
-  calculators:
-    "Payment, tax, ROI, budget, down payment, mortgage, savings, and everyday math calculators. Each page shows how the math works, with worked examples you can verify before you rely on a result. No account required.",
-  health:
-    "Browser-based health calculators for daily calories and TDEE, BMR, macros, height comparison, and pregnancy due dates. Enter your numbers locally — nothing is stored on a server.",
-  "home-diy":
-    "Project estimators for concrete volume, square footage, roof pitch, decks, mulch, paint coverage, tile, and fencing. Use them to ballpark materials before you order — then confirm with a pro for structural work.",
-  "audio-video":
-    "Client-side audio and video utilities powered by your browser (and ffmpeg.wasm where needed). Convert video to MP3, compress clips, and cut ringtones without uploading files to a remote encoder.",
-  generators:
-    "Create invoices, quotes, receipts, e-signatures, email signatures, memes, printable calendars, name ideas, and color palettes. Exports and drafts stay on this device unless a page says otherwise.",
-};
-
 export function isToolCategory(value: string): value is ToolCategory {
   return Object.prototype.hasOwnProperty.call(categoryLabels, value);
 }

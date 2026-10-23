@@ -2,6 +2,7 @@ import Link from "next/link";
 import RelatedTools from "@/components/RelatedTools";
 import ToolGuide from "@/components/ToolGuide";
 import {
+  brandedTitle,
   CONTENT_UPDATED,
   SITE_ALTERNATE_NAME,
   SITE_LEGAL_NAME,
@@ -65,7 +66,7 @@ export default function ToolPageLayout({
       "@type": "WebPage",
       "@id": `${toolUrl}#webpage`,
       url: toolUrl,
-      name: seo.title,
+      name: brandedTitle(seo.title),
       description: seo.description,
       dateModified: isoModified,
       isPartOf: {

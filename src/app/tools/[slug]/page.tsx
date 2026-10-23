@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ToolPageLayout from "@/components/ToolPageLayout";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { brandedTitle, SITE_NAME, SITE_URL } from "@/lib/site";
 import { toolComponents } from "@/lib/tool-components";
 import { getToolSeo } from "@/lib/tool-seo";
 import { getToolBySlug, tools } from "@/lib/tools";
@@ -24,9 +24,10 @@ export async function generateMetadata({
 
   const seo = getToolSeo(tool);
   const url = `${SITE_URL}/tools/${tool.slug}`;
+  const title = brandedTitle(seo.title);
 
   return {
-    title: seo.title,
+    title: { absolute: title },
     description: seo.description,
     alternates: {
       canonical: url,
@@ -36,12 +37,12 @@ export async function generateMetadata({
       locale: "en_US",
       url,
       siteName: SITE_NAME,
-      title: seo.title,
+      title,
       description: seo.description,
     },
     twitter: {
       card: "summary_large_image",
-      title: seo.title,
+      title,
       description: seo.description,
     },
     robots: {

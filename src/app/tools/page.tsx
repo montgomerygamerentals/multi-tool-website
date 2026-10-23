@@ -8,10 +8,12 @@ import {
   tools,
   type ToolCategory,
 } from "@/lib/tools";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { brandedTitle, SITE_NAME, SITE_URL } from "@/lib/site";
+
+const directoryTitle = brandedTitle("All Tools Directory");
 
 export const metadata: Metadata = {
-  title: "All Tools Directory",
+  title: { absolute: directoryTitle },
   description: `Browse every free online tool on ${SITE_NAME} — image converters, calculators, text utilities, randomizers, and more. Fully interlinked directory for easy discovery.`,
   alternates: {
     canonical: "/tools",
@@ -21,12 +23,12 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: `${SITE_URL}/tools`,
     siteName: SITE_NAME,
-    title: `All Tools Directory | ${SITE_NAME}`,
+    title: directoryTitle,
     description: `Browse every free online tool on ${SITE_NAME}. Image, text, calculator, and randomizer utilities that run in your browser.`,
   },
   twitter: {
     card: "summary_large_image",
-    title: `All Tools Directory | ${SITE_NAME}`,
+    title: directoryTitle,
     description: `Browse every free online tool on ${SITE_NAME}.`,
   },
   robots: {
@@ -42,7 +44,7 @@ export default function ToolsDirectoryPage() {
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: `All Tools Directory | ${SITE_NAME}`,
+    name: directoryTitle,
     description: `Complete directory of ${tools.length} free browser-based utility tools.`,
     url: `${SITE_URL}/tools`,
     isPartOf: {

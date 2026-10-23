@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SITE_LEGAL_NAME, SITE_NAME, SITE_URL } from "@/lib/site";
+import { brandedTitle, SITE_LEGAL_NAME, SITE_NAME, SITE_URL } from "@/lib/site";
+
+const privacyTitle = brandedTitle("Privacy Policy");
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: { absolute: privacyTitle },
   description: `How ${SITE_NAME} handles data. Most tools process files and numbers in your browser. This policy covers cookies, ads, and the few network requests we make.`,
   alternates: { canonical: `${SITE_URL}/privacy` },
+  openGraph: {
+    title: privacyTitle,
+    siteName: SITE_NAME,
+    url: `${SITE_URL}/privacy`,
+  },
 };
 
 export default function PrivacyPage() {

@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  SITE_ALTERNATE_NAME,
-  SITE_LEGAL_NAME,
-  SITE_NAME,
-  SITE_URL,
-} from "@/lib/site";
+import { brandedTitle, SITE_LEGAL_NAME, SITE_NAME, SITE_URL } from "@/lib/site";
 import { tools } from "@/lib/tools";
 
+const aboutTitle = brandedTitle("About");
+
 export const metadata: Metadata = {
-  title: "About",
-  description: `${SITE_NAME} (${SITE_ALTERNATE_NAME}) is a free collection of browser-based utilities operated by ${SITE_LEGAL_NAME}. Learn who we are and how the tools work.`,
+  title: { absolute: aboutTitle },
+  description: `${SITE_NAME} is a free collection of browser-based utilities operated by ${SITE_LEGAL_NAME}. Learn who we are and how the tools work.`,
   alternates: { canonical: `${SITE_URL}/about` },
+  openGraph: {
+    title: aboutTitle,
+    siteName: SITE_NAME,
+    url: `${SITE_URL}/about`,
+    description: `${SITE_NAME} is a free collection of browser-based utilities operated by ${SITE_LEGAL_NAME}.`,
+  },
 };
 
 export default function AboutPage() {
@@ -21,8 +24,8 @@ export default function AboutPage() {
         About {SITE_NAME}
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
-        {SITE_NAME} (also written {SITE_ALTERNATE_NAME}) is a site of{" "}
-        {tools.length} small utilities that run in your web browser at{" "}
+        {SITE_NAME} is a site of {tools.length} small utilities that run in
+        your web browser at{" "}
         <a
           href={SITE_URL}
           className="font-medium text-indigo-600 hover:underline dark:text-indigo-400"

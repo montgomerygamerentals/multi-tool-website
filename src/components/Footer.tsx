@@ -20,7 +20,7 @@ export default function Footer() {
               {SITE_NAME}
             </p>
             <p className="mt-2 max-w-md text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-              Fast Free Tools — browser utilities from Ferrari Group LLC. No
+              {SITE_NAME} — browser utilities from Ferrari Group LLC. No
               sign-up required. Files and numbers you enter stay on your device
               unless a page says otherwise.
             </p>

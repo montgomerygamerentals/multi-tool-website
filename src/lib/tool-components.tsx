@@ -48,6 +48,7 @@ import PasswordGenerator from "@/components/tools/PasswordGenerator";
 import PdfTools from "@/components/tools/PdfTools";
 import PercentageCalculator from "@/components/tools/PercentageCalculator";
 import QrCodeGenerator from "@/components/tools/QrCodeGenerator";
+import WifiQrCodeGenerator from "@/components/tools/WifiQrCodeGenerator";
 import RandomNumberGenerator from "@/components/tools/RandomNumberGenerator";
 import RefinanceCalculator from "@/components/tools/RefinanceCalculator";
 import RegexTester from "@/components/tools/RegexTester";
@@ -152,6 +153,7 @@ export const toolComponents: Record<string, ComponentType> = {
     />
   ),
   "qr-code-generator": QrCodeGenerator,
+  "wifi-qr-code-generator": WifiQrCodeGenerator,
   "color-converter": ColorConverter,
   "pdf-tools": PdfTools,
   "exif-viewer": ExifViewer,

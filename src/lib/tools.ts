@@ -179,6 +179,14 @@ export const tools: Tool[] = [
     icon: "📱",
   },
   {
+    slug: "wifi-qr-code-generator",
+    name: "Wi‑Fi QR Code Generator",
+    description:
+      "Create a QR code guests can scan to join your Wi‑Fi automatically. Enter the network name and password, then download a PNG.",
+    category: "image-media",
+    icon: "📶",
+  },
+  {
     slug: "color-converter",
     name: "Color Converter",
     description:

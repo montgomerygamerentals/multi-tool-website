@@ -5270,7 +5270,7 @@ export const toolGuides: Record<string, ToolGuide> = {
     faqs: [
       {
         question: `Can I make a Wi‑Fi QR code?`,
-        answer: `Yes, when Wi‑Fi mode is available — guests can scan to join without typing the password.`,
+        answer: `Yes — or use the dedicated Wi‑Fi QR Code Generator for a form that builds the WIFI: payload for you.`,
       },
       {
         question: `How much text can a QR code hold?`,
@@ -5279,6 +5279,41 @@ export const toolGuides: Record<string, ToolGuide> = {
       {
         question: `Do you store what I encode?`,
         answer: `No. Generation happens in your browser.`,
+      },
+    ],
+  },
+  "wifi-qr-code-generator": {
+    whatItDoes: `Wi‑Fi QR Code Generator builds a scannable code from your network name (SSID), password, and security type. Phones that support Wi‑Fi QR codes can join the network after one scan.`,
+    whyUse: `Spelling a long passphrase for every guest is slow and error-prone. A QR code on a card, fridge, or lobby display lets visitors connect without seeing you type the password — and generation stays in your browser so credentials are not uploaded.`,
+    howToUse: [
+      `Enter the exact Wi‑Fi network name (SSID).`,
+      `Choose security (WPA/WPA2/WPA3, WEP, or open) and enter the password if required.`,
+      `Optionally mark the network as hidden if it does not broadcast its name.`,
+      `Preview the code, download the PNG, and test with your phone before printing.`,
+    ],
+    useCases: [
+      `Put a guest-network code on an Airbnb or hotel welcome card.`,
+      `Share office visitor Wi‑Fi without writing the password on a whiteboard.`,
+      `Print a fridge magnet or table tent for friends and family.`,
+      `Display a lobby kiosk QR that you can regenerate when the password rotates.`,
+    ],
+    supportedFormats: [
+      `Input: SSID, password, security type (WPA, WEP, or open), optional hidden flag`,
+      `Output: PNG QR code using the standard WIFI: payload`,
+    ],
+    privacy: `This tool runs entirely in your browser. Your Wi‑Fi name and password never leave your device — nothing is uploaded to our servers.`,
+    faqs: [
+      {
+        question: `Will every phone connect automatically?`,
+        answer: `Most modern iPhone and Android cameras recognize Wi‑Fi QR codes and offer to join. Older phones may need a QR reader app that supports the WIFI: format.`,
+      },
+      {
+        question: `Should I use my main network password?`,
+        answer: `Prefer a guest network when you can. Anyone who can scan or photograph the code has the credentials — treat the PNG like the password itself.`,
+      },
+      {
+        question: `Is my password uploaded?`,
+        answer: `No. The QR is generated locally in your browser.`,
       },
     ],
   },

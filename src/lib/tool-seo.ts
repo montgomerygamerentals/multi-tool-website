@@ -656,6 +656,11 @@ const seo: Record<string, ToolSeo> = {
     description:
       "Create a PNG QR code for a URL, plain text, or Wi‑Fi login. Choose size and colors, test with your phone, and download.",
   },
+  "wifi-qr-code-generator": {
+    title: "Wi‑Fi QR Code Generator",
+    description:
+      "Generate a scannable Wi‑Fi QR code from your network name and password. Guests join automatically — download a PNG for print or share.",
+  },
   "color-converter": {
     title: "HEX RGB HSL Color Converter",
     description:

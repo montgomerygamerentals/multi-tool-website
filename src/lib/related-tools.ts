@@ -83,6 +83,18 @@ export const relatedToolSlugs: Record<string, string[]> = {
   "avif-to-png": ["avif-to-jpg", "png-to-jpg", "image-converter", "svg-to-png"],
   "svg-to-png": ["png-to-ico", "favicon-generator", "image-converter", "avif-to-png"],
   "png-to-ico": ["favicon-generator", "svg-to-png", "png-to-jpg", "image-converter"],
+  "qr-code-generator": [
+    "wifi-qr-code-generator",
+    "favicon-generator",
+    "image-converter",
+    "password-generator",
+  ],
+  "wifi-qr-code-generator": [
+    "qr-code-generator",
+    "password-generator",
+    "favicon-generator",
+    "image-converter",
+  ],
   "tiff-to-jpg": ["heic-to-jpg", "webp-to-jpg", "image-converter", "jpg-to-png"],
   "heic-to-jpg": ["heic-to-png", "tiff-to-jpg", "jpg-to-png", "image-converter"],
   "heic-to-png": ["heic-to-jpg", "png-to-jpg", "image-converter", "avif-to-png"],

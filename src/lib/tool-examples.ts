@@ -801,6 +801,16 @@ export const toolExamples: Record<string, ToolExample[]> = {
       body: "A WIFI: payload includes SSID, type (WPA/WPA2), and password. Short SSIDs scan more reliably. Do not put the admin password on a public poster — use a guest network.",
     },
   ],
+  "wifi-qr-code-generator": [
+    {
+      title: "Airbnb guest card on the fridge",
+      body: "Enter the guest network SSID and password, choose WPA/WPA2, export at 512 px, and print ~2 inches square. Guests open Camera, scan once, and join without typing a long passphrase. Prefer a guest SSID so you can rotate that password without locking yourself out of the main network.",
+    },
+    {
+      title: "Office lobby kiosk",
+      body: "Use a dedicated visitor SSID with WPA2. Mark the network Hidden only if it truly does not broadcast — most guest networks should leave Hidden off. Laminate the PNG or display it on a tablet; re-generate when you change the password.",
+    },
+  ],
   "color-converter": [
     {
       title: "Brand HEX → RGB for email",
